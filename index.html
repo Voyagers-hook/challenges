@@ -201,10 +201,17 @@
             )}
 
             {status === 'not_started' && (
-              <div className="card-actions justify-end mt-3">
-                <button className="btn brand-btn btn-sm" onClick={() => onSubmit(challenge)}>
-                  Submit Catch
-                </button>
+              <div className="card-actions justify-end mt-3 gap-2">
+                {challenge.quizUrl && (
+                  <a href={challenge.quizUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm" style={{borderColor:'#0097b2',color:'#0097b2'}}>
+                    Take Quiz
+                  </a>
+                )}
+                {!challenge.quizUrl && (
+                  <button className="btn brand-btn btn-sm" onClick={() => onSubmit(challenge)}>
+                    Submit Catch
+                  </button>
+                )}
               </div>
             )}
 
@@ -364,6 +371,10 @@
                       <input type="number" min={0} max={100} className="input input-bordered w-full" value={editing.discount} onChange={e => setEditing({ ...editing, discount: Number(e.target.value) })} />
                     </div>
                   )}
+                  <div>
+                    <label className="label pb-0"><span className="label-text text-xs">Quiz URL (optional — links to a Google Form)</span></label>
+                    <input className="input input-bordered w-full" placeholder="https://forms.gle/..." value={editing.quizUrl||''} onChange={e => setEditing({ ...editing, quizUrl: e.target.value })} />
+                  </div>
                   <div className="flex items-center gap-3 pt-1">
                     <input type="checkbox" className="toggle toggle-success" checked={editing.active} onChange={e => setEditing({ ...editing, active: e.target.checked })} />
                     <span className="text-sm">Active (visible to members)</span>
