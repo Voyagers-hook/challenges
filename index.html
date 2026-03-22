@@ -29,7 +29,21 @@
   <script src="https://unpkg.com/lucide-react/dist/umd/lucide-react.js"></script>
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
-    const { Tag, Ticket, Hash, Share2, Copy, Check, ChevronDown, ChevronUp, Camera, X, CheckCircle, XCircle, RefreshCw, Users } = LucideReact || {};
+    const safeIcon = (name) => (LucideReact && LucideReact[name]) ? LucideReact[name] : () => null;
+    const Tag = safeIcon('Tag');
+    const Ticket = safeIcon('Ticket');
+    const Hash = safeIcon('Hash');
+    const Share2 = safeIcon('Share2');
+    const Copy = safeIcon('Copy');
+    const Check = safeIcon('Check');
+    const ChevronDown = safeIcon('ChevronDown');
+    const ChevronUp = safeIcon('ChevronUp');
+    const Camera = safeIcon('Camera');
+    const X = safeIcon('X');
+    const CheckCircle = safeIcon('CheckCircle');
+    const XCircle = safeIcon('XCircle');
+    const RefreshCw = safeIcon('RefreshCw');
+    const Users = safeIcon('Users');
 
     // ── Error Boundary ────────────────────────────────────────────────────────
     class ErrorBoundary extends React.Component {
