@@ -1,1981 +1,1258 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="theme-color" content="#0097b2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="VH Challenges">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <title>Voyager's Hook — Challenges</title>
+  <meta name="theme-color" content="#26241f">
+  <title>Voyager's Hook - Members</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root {
-      --dark: #26241f;
-      --dark2: #1c1b17;
-      --teal: #0097b2;
-      --light-teal: #00b8d9;
-      --amber: #f59e0b;
-      --green: #22c55e;
-      --red: #ef4444;
-      --card-bg: #ffffff;
-      --text: #1a1a1a;
-      --text-muted: #6b7280;
-      --border: #e5e7eb;
-      --shadow: 0 2px 12px rgba(0,0,0,0.08);
-      --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
-      --radius: 12px;
-      --radius-sm: 8px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f3f4f6;
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    #app {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ===== INSTALL BANNER ===== */
-    .install-banner {
-      background: linear-gradient(135deg, var(--teal), var(--light-teal));
-      color: white;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 14px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      animation: slideDown 0.3s ease;
-    }
-    .install-banner button {
-      background: white;
-      color: var(--teal);
-      border: none;
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-    }
-    .install-banner .dismiss {
-      background: none;
-      color: white;
-      padding: 4px 8px;
-      font-size: 18px;
-      font-weight: 300;
-    }
-
-    /* ===== REFERRAL BANNER ===== */
-    .referral-banner {
-      background: linear-gradient(135deg, #16a34a, #22c55e);
-      color: white;
-      padding: 12px 16px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 500;
-    }
-    .referral-banner a {
-      color: white;
-      font-weight: 700;
-      text-decoration: underline;
-    }
-
-    /* ===== HEADER ===== */
-    .header {
-      background: linear-gradient(135deg, var(--dark), #3a3830);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-    .header-logo {
-      height: 40px;
-      width: auto;
-      object-fit: contain;
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .header-name {
-      color: white;
-      font-size: 14px;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-    .admin-badge {
-      background: var(--teal);
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* ===== LOGIN VIEW ===== */
-    .login-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 20px;
-      min-height: 100vh;
-      background: linear-gradient(160deg, var(--dark) 0%, #3a3830 100%);
-    }
-    .login-logo {
-      width: 130px;
-      margin-bottom: 8px;
-    }
-    .login-club-name {
-      color: var(--light-teal);
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 32px;
-      opacity: 0.85;
-    }
-    .login-card {
-      background: white;
-      border-radius: 20px;
-      padding: 28px 24px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-    }
-    .login-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 6px;
-    }
-    .login-subtitle {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 24px;
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .form-input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 16px;
-      color: var(--text);
-      background: white;
-      transition: border-color 0.2s;
-      outline: none;
-    }
-    .form-input:focus {
-      border-color: var(--teal);
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 13px 20px;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-      text-decoration: none;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--teal), var(--light-teal));
-      color: white;
-      width: 100%;
-      box-shadow: 0 4px 12px rgba(0,151,178,0.35);
-    }
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(0,151,178,0.45);
-    }
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-    .btn-secondary {
-      background: var(--border);
-      color: var(--text);
-    }
-    .btn-secondary:hover {
-      background: #d1d5db;
-    }
-    .btn-danger {
-      background: #fee2e2;
-      color: var(--red);
-    }
-    .btn-danger:hover {
-      background: #fecaca;
-    }
-    .btn-success {
-      background: #dcfce7;
-      color: #16a34a;
-    }
-    .btn-success:hover {
-      background: #bbf7d0;
-    }
-    .btn-sm {
-      padding: 7px 14px;
-      font-size: 13px;
-    }
-    .btn-full { width: 100%; }
-    .admin-link {
-      display: block;
-      text-align: center;
-      margin-top: 20px;
-      color: var(--text-muted);
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    .admin-link:hover { color: var(--teal); }
-    .login-error {
-      background: #fee2e2;
-      color: var(--red);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
-    .login-info {
-      background: #e0f2fe;
-      color: #0369a1;
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
-    .not-member-link {
-      display: block;
-      text-align: center;
-      margin-top: 16px;
-      color: var(--teal);
-      font-size: 14px;
-      font-weight: 500;
-    }
-    .not-member-link:hover { text-decoration: underline; }
-
-    /* ===== MAIN CONTENT ===== */
-    .main-content {
-      flex: 1;
-      padding: 16px;
-      padding-bottom: 80px;
-      max-width: 600px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .main-content.no-bottom-nav {
-      padding-bottom: 24px;
-    }
-
-    /* ===== BOTTOM NAV ===== */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top: 1px solid var(--border);
-      display: flex;
-      z-index: 50;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
-    }
-    .nav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 0 12px;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 500;
-      gap: 3px;
-      transition: color 0.15s;
-      border: none;
-      background: none;
-    }
-    .nav-item.active {
-      color: var(--teal);
-    }
-    .nav-icon {
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    /* ===== ADMIN TABS ===== */
-    .admin-tabs {
-      display: flex;
-      background: white;
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .admin-tabs::-webkit-scrollbar { display: none; }
-    .tab-btn {
-      flex-shrink: 0;
-      padding: 14px 18px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      border: none;
-      background: none;
-      border-bottom: 3px solid transparent;
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
-    .tab-btn.active {
-      color: var(--teal);
-      border-bottom-color: var(--teal);
-    }
-    .tab-btn:hover { color: var(--teal); }
-    .tab-logout {
-      margin-left: auto;
-      color: var(--red);
-    }
-
-    /* ===== CARDS ===== */
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      margin-bottom: 14px;
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-    .card-sub {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* ===== HOME TAB ===== */
-    .welcome-card {
-      background: linear-gradient(135deg, var(--dark), #3a3830);
-      color: white;
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 14px;
-      position: relative;
-      overflow: hidden;
-    }
-    .welcome-card::after {
-      content: '🎣';
-      position: absolute;
-      right: 20px;
-      bottom: 10px;
-      font-size: 64px;
-      opacity: 0.1;
-    }
-    .welcome-greeting {
-      font-size: 14px;
-      opacity: 0.7;
-      margin-bottom: 4px;
-    }
-    .welcome-name {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-    .points-big {
-      font-size: 52px;
-      font-weight: 800;
-      color: var(--light-teal);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .points-label {
-      font-size: 13px;
-      opacity: 0.7;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .progress-section {
-      margin-top: 20px;
-    }
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      opacity: 0.7;
-      margin-bottom: 6px;
-    }
-    .progress-bar-bg {
-      background: rgba(255,255,255,0.15);
-      border-radius: 99px;
-      height: 8px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--teal), var(--light-teal));
-      border-radius: 99px;
-      transition: width 0.6s ease;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .stat-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-    .stat-value {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--teal);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    /* ===== CHALLENGE CARDS ===== */
-    .challenge-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 16px 16px 16px 20px;
-      box-shadow: var(--shadow);
-      margin-bottom: 12px;
-      border-left: 4px solid var(--teal);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: box-shadow 0.2s;
-    }
-    .challenge-card:hover {
-      box-shadow: var(--shadow-md);
-    }
-    .challenge-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .challenge-info { flex: 1; }
-    .challenge-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 4px;
-    }
-    .challenge-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-    .points-badge {
-      background: linear-gradient(135deg, var(--teal), var(--light-teal));
-      color: white;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .challenge-card-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .reward-text {
-      font-size: 12px;
-      color: var(--teal);
-      font-weight: 500;
-    }
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .status-pending {
-      background: #fef3c7;
-      color: #92400e;
-    }
-    .status-approved {
-      background: #dcfce7;
-      color: #15803d;
-    }
-    .status-rejected {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    /* ===== PROFILE TAB ===== */
-    .profile-field {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .profile-field:last-child { border-bottom: none; }
-    .profile-field-label {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .profile-field-value {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--dark);
-      text-align: right;
-      max-width: 55%;
-      word-break: break-all;
-    }
-    .voucher-value {
-      color: var(--teal);
-      font-size: 16px;
-    }
-
-    /* ===== REFERRAL SECTION ===== */
-    .referral-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--teal);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 4px 0;
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-    }
-    .referral-toggle:hover { opacity: 0.8; }
-    .referral-expanded {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-    .referral-link-box {
-      background: #f0f9ff;
-      border: 1px solid #bae6fd;
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 13px;
-      color: var(--dark);
-      word-break: break-all;
-      margin-bottom: 12px;
-      font-family: monospace;
-    }
-    .referral-share-btns {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .btn-whatsapp {
-      background: #25d366;
-      color: white;
-    }
-    .btn-whatsapp:hover { background: #1fba58; }
-    .btn-email {
-      background: #4f46e5;
-      color: white;
-    }
-    .btn-email:hover { background: #4338ca; }
-    .btn-copy {
-      background: var(--border);
-      color: var(--dark);
-    }
-    .btn-copy:hover { background: #d1d5db; }
-
-    /* ===== MODAL ===== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      animation: fadeIn 0.2s ease;
-    }
-    .modal-sheet {
-      background: white;
-      border-radius: 20px 20px 0 0;
-      width: 100%;
-      max-width: 600px;
-      max-height: 92vh;
-      overflow-y: auto;
-      padding: 24px 20px;
-      animation: slideUp 0.3s ease;
-    }
-    .modal-handle {
-      width: 40px;
-      height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin: 0 auto 20px;
-    }
-    .modal-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 6px;
-    }
-    .modal-sub {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-    .upload-area {
-      border: 2px dashed var(--border);
-      border-radius: var(--radius);
-      padding: 32px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s;
-      margin-bottom: 16px;
-      position: relative;
-    }
-    .upload-area:hover { border-color: var(--teal); }
-    .upload-area input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
-    .upload-icon { font-size: 40px; margin-bottom: 8px; }
-    .upload-text { font-size: 14px; color: var(--text-muted); }
-    .upload-preview {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-      margin-bottom: 16px;
-    }
-    .form-textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      color: var(--text);
-      background: white;
-      transition: border-color 0.2s;
-      outline: none;
-      resize: vertical;
-      min-height: 90px;
-      font-family: inherit;
-    }
-    .form-textarea:focus { border-color: var(--teal); }
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .modal-success {
-      text-align: center;
-      padding: 20px 0;
-    }
-    .modal-success-icon { font-size: 56px; margin-bottom: 12px; }
-    .modal-success-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 6px;
-    }
-    .modal-success-sub { font-size: 14px; color: var(--text-muted); }
-
-    /* ===== ADMIN VIEW ===== */
-    .submission-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 12px;
-      border-left: 4px solid var(--amber);
-    }
-    .submission-card.approved { border-left-color: var(--green); }
-    .submission-card.rejected { border-left-color: var(--red); }
-    .submission-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-    .submission-member {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--dark);
-    }
-    .submission-challenge {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-    .submission-time {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .submission-photo {
-      width: 100%;
-      max-height: 180px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-      margin: 10px 0;
-    }
-    .submission-notes {
-      font-size: 13px;
-      color: var(--text);
-      font-style: italic;
-      margin: 8px 0;
-      background: #f9fafb;
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-    }
-    .submission-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-    .points-input {
-      width: 80px;
-      padding: 7px 10px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--dark);
-      outline: none;
-    }
-    .points-input:focus { border-color: var(--teal); }
-    .referral-admin-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .referral-info { flex: 1; }
-    .referral-referrer {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--dark);
-      margin-bottom: 2px;
-    }
-    .referral-new-member {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    /* ===== CHALLENGE MANAGER ===== */
-    .challenge-admin-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .challenge-admin-info { flex: 1; }
-    .challenge-admin-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--dark);
-    }
-    .challenge-admin-meta {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    .challenge-admin-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    /* ===== CHALLENGE FORM ===== */
-    .challenge-form-card {
-      background: white;
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      margin-bottom: 14px;
-    }
-    .challenge-form-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: var(--dark);
-    }
-
-    /* ===== SETUP SCREEN ===== */
-    .setup-card {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 14px;
-    }
-    .setup-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #9a3412;
-      margin-bottom: 8px;
-    }
-    .setup-desc {
-      font-size: 13px;
-      color: #7c2d12;
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-    }
-    .empty-icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-    .empty-sub { font-size: 14px; }
-
-    /* ===== SECTION HEADING ===== */
-    .section-heading {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      margin-top: 20px;
-    }
-    .section-heading:first-child { margin-top: 0; }
-
-    /* ===== LOADING ===== */
-    .loading-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px 20px;
-      gap: 12px;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid var(--border);
-      border-top-color: var(--teal);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-
-    /* ===== DIVIDER ===== */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 14px 0;
-    }
-
-    /* ===== ANIMATIONS ===== */
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-
-    /* ===== RESPONSIVE ===== */
-    @media (min-width: 600px) {
-      .main-content { padding: 24px; padding-bottom: 24px; }
-      .stats-grid { grid-template-columns: repeat(3, 1fr); }
-      .modal-overlay { align-items: center; }
-      .modal-sheet { border-radius: 20px; max-height: 85vh; }
-    }
+    .brand-header-bg { background: #26241f !important; }
+    .brand-btn { background-color: #0097b2 !important; border-color: #0097b2 !important; color: #ffffff !important; }
+    .brand-btn:hover { background-color: #007a91 !important; }
+    .brand-text-teal { color: #0097b2 !important; }
+    .brand-login-bg { background: linear-gradient(to bottom, #26241f, #3d3930) !important; }
   </style>
 </head>
 <body>
-  <div id="app"></div>
-  <script>
-  // ===== CONFIG =====
-  const ADMIN_EMAIL = 'info@voyagershook.com';
-  const ADMIN_PASSWORD = 'voyagershook';
-  const REFERRAL_PARAM = 'ref';
-  const MEMBERSHIP_URL = 'https://www.voyagershook.com/memberships';
-  const SPREADSHEET_ID = '1loWRLLaoJyeRrK8YwJqCQPeIyZ5EGLByr7_D2b5qgUY';
-  const LOGO_URL = 'https://voyagers-hook.github.io/images/logo%20trans.png';
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide-react/dist/umd/lucide-react.js"></script>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const { Tag, Ticket, Hash, Share2, Copy, Check, ChevronDown, ChevronUp, Camera, X, CheckCircle, XCircle, RefreshCw, Users } = LucideReact;
 
-  const DEFAULT_CHALLENGES = [
-    { id: 'species-trio', title: 'Species Trio', desc: 'Catch 3 of these 5 species: Carp, Pike, Tench, Perch, Bream', points: 500, type: 'species', reward: '500 Points' },
-    { id: 'specimen-carp', title: 'Specimen Carp', desc: 'Catch a carp weighing 10lb or more', points: 200, type: 'weight', reward: '200 Points + 10% Off Voucher' },
-    { id: 'specimen-pike', title: 'Specimen Pike', desc: 'Catch a pike weighing 15lb or more', points: 300, type: 'weight', reward: '300 Points' },
-    { id: 'specimen-tench', title: 'Specimen Tench', desc: 'Catch a tench weighing 5lb or more', points: 250, type: 'weight', reward: '250 Points' },
-    { id: 'local-legend', title: 'Local Legend', desc: 'Catch fish from 3 different waters', points: 400, type: 'location', reward: '400 Points' },
-    { id: 'big-catch', title: 'Big Catch of the Month', desc: 'Catch the biggest fish of the month', points: 1000, type: 'monthly', reward: '1000 Points' },
-    { id: 'seasonal-slam', title: 'Seasonal Slam', desc: 'Catch 4 different species across the seasons', points: 600, type: 'seasonal', reward: '600 Points' },
-    { id: 'gear-guru', title: 'Gear Guru Quiz', desc: 'Complete the tackle knowledge quiz', points: 100, type: 'quiz', reward: '100 Points' }
-  ];
+    // ── Constants ─────────────────────────────────────────────────────────────
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzBuiob4jDSUQAmcbxd7lrQ_JhuPCDnr8P4WlocCG3-Eu_FWQdDoDF-vnCHRwNqKA0wIw/exec';
+    const LOGO_URL = 'https://voyagers-hook.github.io/images/logo%20trans.png';
+    const ADMIN_EMAIL = 'info@voyagershook.com';
+    const ADMIN_PASS = 'voyagershook';
+    const MEMBERSHIPS_URL = 'https://www.voyagershook.com/memberships';
 
-  // ===== STATE =====
-  let state = {
-    view: 'login',
-    member: null,
-    challenges: [],
-    submissions: [],
-    referrals: [],
-    referralExpanded: false,
-    activeTab: 'home',
-    modal: null,
-    loading: false,
-    error: null,
-    adminError: null,
-    pendingReferrer: null,
-    appsScriptUrl: localStorage.getItem('vh_apps_script_url') || 'https://script.google.com/macros/s/AKfycbzBuiob4jDSUQAmcbxd7lrQ_JhuPCDnr8P4WlocCG3-Eu_FWQdDoDF-vnCHRwNqKA0wIw/exec',
-    showAdminPassword: false,
-    adminPasswordInput: '',
-    emailInput: '',
-    passwordInput: '',
-    submitPhoto: null,
-    submitPhotoData: null,
-    submitNotes: '',
-    submitLoading: false,
-    submitSuccess: false,
-    showInstallBanner: false,
-    urlSetupInput: '',
-    challengeForm: null,
-    editingChallenge: null,
-    adminData: null
-  };
+    // ── Default Challenges ────────────────────────────────────────────────────
+    const DEFAULT_CHALLENGES = [
+      { id: 'species-trio', title: 'The Species Trio', description: 'Catch any 3 of these 5 species in a single month: Perch, Pike, Tench, Bream, or Roach. Submit a photo of each catch.', icon: '\u{1F41F}', reward: { type: 'points', points: 500, description: '500 Points' }, criteria: ['Catch 3 different species from: Perch, Pike, Tench, Bream, Roach', 'All 3 must be caught within the same calendar month', 'Photo proof required for each catch'], active: true },
+      { id: 'specimen-carp', title: 'Specimen Hunter: Carp', description: 'Land a Common or Mirror Carp weighing 10lb or over. A true specimen worth celebrating!', icon: '\u{1F3C6}', reward: { type: 'discount', discount: 10, description: '10% Off Next Order' }, criteria: ['Carp must weigh 10lb or more', 'Weight to be verified with scales in photo', 'Any water permitted'], active: true },
+      { id: 'specimen-pike', title: 'Specimen Hunter: Pike', description: 'Catch a Pike of 15lb or more. The apex predator deserves a serious reward.', icon: '\u26A1', reward: { type: 'both', points: 200, discount: 15, description: '15% Off + 200 Points' }, criteria: ['Pike must weigh 15lb or more', 'Weight to be verified with scales in photo', 'Handle with care and return safely'], active: true },
+      { id: 'specimen-tench', title: 'Specimen Hunter: Tench', description: 'A tench of 5lb or more — the "Doctor Fish" at its finest.', icon: '\u{1F33F}', reward: { type: 'points', points: 150, description: '150 Points' }, criteria: ['Tench must weigh 5lb or more', 'Photo proof required'], active: true },
+      { id: 'local-legend', title: 'The Local Legend', description: 'Catch a target species from 3 different local waters. Show you know the area!', icon: '\u{1F4CD}', reward: { type: 'points', points: 400, description: '400 Points' }, criteria: ['Catch any species from 3 different named waters', 'Each water must be a different location', 'Submit one photo per water'], active: true },
+      { id: 'big-catch', title: 'Big Catch of the Month', description: 'Submit your biggest catch of the month. The heaviest single fish wins top prize!', icon: '\u{1F3A3}', reward: { type: 'both', points: 500, discount: 15, description: '500 Points + 15% Off (Winner)' }, criteria: ['Submit your biggest single catch this month', 'Include weight and species', 'Heaviest fish at month end wins', 'All valid entries receive 100 points'], active: true },
+      { id: 'seasonal-slam', title: 'The Seasonal Slam', description: 'Catch one target species each season across the full year. Complete all 4 for a massive reward!', icon: '\u{1F305}', reward: { type: 'both', points: 1000, discount: 20, description: '1000 Points + 20% Off (Full Year)' }, criteria: ['Spring: Catch a Tench', 'Summer: Catch a Carp', 'Autumn: Catch a Pike', 'Winter: Catch a Grayling', 'Photo proof required for each'], active: true },
+      { id: 'gear-guru', title: 'Gear Guru Quiz', description: 'A monthly quiz about fishing techniques, gear, and local waters. First 5 members to get all answers right win!', icon: '\u2753', reward: { type: 'both', points: 100, discount: 5, description: '100 Points + 5% Off' }, criteria: ['Complete the monthly quiz', 'Achieve 100% correct answers', 'First 5 correct entries each month win'], active: true },
+    ];
 
-  let deferredPrompt = null;
-
-  // ===== PWA INSTALL PROMPT =====
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    deferredPrompt = e;
-    setTimeout(() => {
-      if (!localStorage.getItem('vh_install_dismissed')) {
-        state.showInstallBanner = true;
-        render();
-      }
-    }, 3000);
-  });
-
-  // ===== LOAD CHALLENGES FROM LOCALSTORAGE =====
-  function loadChallenges() {
-    const stored = localStorage.getItem('vh_challenges');
-    if (stored) {
-      try { state.challenges = JSON.parse(stored); return; } catch(e) {}
+    // ── Photo Compression ─────────────────────────────────────────────────────
+    function compressPhoto(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let w = img.width, h = img.height;
+            if (w > 400) { h = h * 400 / w; w = 400; }
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', 0.55));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
     }
-    state.challenges = JSON.parse(JSON.stringify(DEFAULT_CHALLENGES));
-    saveChallenges();
-  }
-  function saveChallenges() {
-    localStorage.setItem('vh_challenges', JSON.stringify(state.challenges));
-  }
 
-  // ===== LOCAL SUBMISSIONS (demo/fallback) =====
-  function loadLocalSubmissions() {
-    const stored = localStorage.getItem('vh_submissions');
-    if (stored) {
-      try { return JSON.parse(stored); } catch(e) {}
+    // ── Storage Utilities ─────────────────────────────────────────────────────
+    const CHALLENGES_KEY = 'vh_challenges';
+    function getChallenges() {
+      const s = localStorage.getItem(CHALLENGES_KEY);
+      if (!s) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(DEFAULT_CHALLENGES)); return DEFAULT_CHALLENGES; }
+      return JSON.parse(s);
     }
-    return [];
-  }
-  function saveLocalSubmission(sub) {
-    const subs = loadLocalSubmissions();
-    subs.push(sub);
-    localStorage.setItem('vh_submissions', JSON.stringify(subs));
-  }
-
-  // ===== REFERRAL DETECTION =====
-  function detectReferral() {
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get(REFERRAL_PARAM);
-    if (ref) {
-      state.pendingReferrer = ref;
-      localStorage.setItem('vh_referrer', ref);
-    } else {
-      const stored = localStorage.getItem('vh_referrer');
-      if (stored) state.pendingReferrer = stored;
+    function saveChallenges(ch) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(ch)); }
+    function getMemberStatus(email) {
+      const s = localStorage.getItem('vh_status_' + email);
+      return s ? JSON.parse(s) : [];
     }
-  }
-
-  // ===== API CALLS =====
-  async function apiGet(action, params = {}) {
-    if (!state.appsScriptUrl) return { demo: true };
-    try {
-      const url = new URL(state.appsScriptUrl);
-      url.searchParams.set('action', action);
-      Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-      const res = await fetch(url.toString());
-      return await res.json();
-    } catch(e) {
-      return { error: e.message };
+    function saveMemberStatus(email, statuses) {
+      localStorage.setItem('vh_status_' + email, JSON.stringify(statuses));
     }
-  }
 
-  async function apiPost(action, data) {
-    if (!state.appsScriptUrl) return { demo: true };
-    try {
-      await fetch(state.appsScriptUrl, {
+    // ── GAS Helpers ───────────────────────────────────────────────────────────
+    async function gasGet(params) {
+      const url = GAS_URL + '?' + new URLSearchParams(params).toString();
+      const r = await fetch(url, { redirect: 'follow' });
+      return r.json();
+    }
+    async function gasPost(data) {
+      const r = await fetch(GAS_URL, {
         method: 'POST',
-        body: JSON.stringify({ action, ...data })
+        redirect: 'follow',
+        body: JSON.stringify(data),
       });
-      return { success: true };
-    } catch(e) {
-      return { error: e.message };
+      return r.json();
     }
-  }
 
-  // ===== IMAGE COMPRESSION =====
-  function compressImage(file, callback) {
-    const canvas = document.createElement('canvas');
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      let w = img.width, h = img.height;
-      const max = 800;
-      if (w > max || h > max) {
-        if (w > h) { h = Math.round(h * max / w); w = max; }
-        else { w = Math.round(w * max / h); h = max; }
+    // ── ChallengeCard ─────────────────────────────────────────────────────────
+    function ChallengeCard({ challenge, memberChallenge, onSubmit }) {
+      const status = memberChallenge?.status ?? 'not_started';
+
+      function statusBadge() {
+        if (status === 'completed') return <span className="badge badge-success gap-1">&#x2705; Completed</span>;
+        if (status === 'pending_approval') return <span className="badge badge-warning gap-1">&#x23F3; Pending Approval</span>;
+        return <span className="badge badge-ghost gap-1">&#x1F3AF; Active</span>;
       }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      callback(canvas.toDataURL('image/jpeg', 0.7));
-      URL.revokeObjectURL(url);
-    };
-    img.onerror = () => { callback(null); URL.revokeObjectURL(url); };
-    img.src = url;
-  }
 
-  // ===== ACTIONS =====
-
-  async function handleLogin() {
-    const email = state.emailInput.trim().toLowerCase();
-    if (!email) { state.error = 'Please enter your email address.'; render(); return; }
-    state.loading = true; state.error = null; render();
-
-    if (email === ADMIN_EMAIL.toLowerCase()) {
-      state.loading = false;
-      state.error = 'Use the Admin login below.';
-      render(); return;
-    }
-
-    const data = await apiGet('getMember', { email });
-
-    if (data.demo) {
-      // Demo mode - simulate member
-      state.member = {
-        name: 'Demo Member',
-        email: email,
-        memberNumber: 'DEMO001',
-        pointsTotal: 350,
-        pointsNeeded: 1000,
-        voucher: '',
-        discountCode: ''
-      };
-      state.loading = false;
-      state.view = 'member';
-      state.activeTab = 'home';
-      if (state.pendingReferrer) {
-        localStorage.removeItem('vh_referrer');
+      function rewardBadge() {
+        const r = challenge.reward;
+        if (r.type === 'points') return <span className="badge badge-info badge-sm">&#x2B50; {r.points} pts</span>;
+        if (r.type === 'discount') return <span className="badge badge-secondary badge-sm">&#x1F3F7;&#xFE0F; {r.discount}% off</span>;
+        return (
+          <span className="flex gap-1">
+            <span className="badge badge-info badge-sm">&#x2B50; {r.points} pts</span>
+            <span className="badge badge-secondary badge-sm">&#x1F3F7;&#xFE0F; {r.discount}% off</span>
+          </span>
+        );
       }
-      render(); return;
-    }
 
-    if (data.error || !data.success) {
-      state.loading = false;
-      state.error = data.error === 'Member not found'
-        ? null
-        : (data.error || 'Unable to find your account.');
-      if (data.error === 'Member not found') {
-        state.error = 'notfound';
+      function cardBorderClass() {
+        if (status === 'completed') return 'border-success border-2';
+        if (status === 'pending_approval') return 'border-warning border-2';
+        return 'border-base-200 border';
       }
-      render(); return;
-    }
 
-    state.member = data;
-    state.loading = false;
-    state.view = 'member';
-    state.activeTab = 'home';
-
-    // Log referral if pending
-    if (state.pendingReferrer && state.pendingReferrer !== data.memberNumber) {
-      apiPost('logReferral', {
-        referrerMemberNumber: state.pendingReferrer,
-        referrerName: '',
-        newMemberEmail: data.email
-      });
-      localStorage.removeItem('vh_referrer');
-      state.pendingReferrer = null;
-    }
-
-    render();
-  }
-
-  async function handleAdminLogin() {
-    if (state.adminPasswordInput !== ADMIN_PASSWORD) {
-      state.error = 'Incorrect admin password.';
-      render(); return;
-    }
-    state.view = 'admin';
-    state.activeTab = 'pending';
-    state.error = null;
-    state.loading = true;
-    render();
-    await loadAdminData();
-    state.loading = false;
-    render();
-  }
-
-  async function loadAdminData() {
-    const data = await apiGet('getAdminData');
-    if (data.demo) {
-      state.submissions = loadLocalSubmissions();
-      state.referrals = [];
-    } else if (!data.error) {
-      state.submissions = data.submissions || [];
-      state.referrals = data.referrals || [];
-      // Merge local submissions (demo ones)
-      const localSubs = loadLocalSubmissions();
-      localSubs.forEach(ls => {
-        if (!state.submissions.find(s => s.id === ls.id)) state.submissions.push(ls);
-      });
-    }
-  }
-
-  async function handleSubmitChallenge() {
-    if (!state.submitPhotoData) {
-      alert('Please add a photo of your catch!');
-      return;
-    }
-    const challenge = state.challenges.find(c => c.id === state.modal.challengeId);
-    if (!challenge) return;
-
-    state.submitLoading = true; render();
-
-    const payload = {
-      memberEmail: state.member.email,
-      memberName: state.member.name,
-      challengeId: challenge.id,
-      challengeTitle: challenge.title,
-      notes: state.submitNotes,
-      photo: state.submitPhotoData,
-      points: challenge.points
-    };
-
-    if (!state.appsScriptUrl) {
-      // Save locally
-      const sub = {
-        id: Date.now().toString(),
-        timestamp: new Date().toISOString(),
-        ...payload,
-        status: 'pending'
-      };
-      saveLocalSubmission(sub);
-    } else {
-      await apiPost('submitChallenge', payload);
-    }
-
-    state.submitLoading = false;
-    state.submitSuccess = true;
-    render();
-  }
-
-  async function handleApprove(sub, points) {
-    await apiPost('approveSubmission', {
-      submissionId: sub.id,
-      memberEmail: sub.memberEmail,
-      points: points
-    });
-    // Update local state
-    const idx = state.submissions.findIndex(s => s.id === sub.id);
-    if (idx > -1) state.submissions[idx].status = 'approved';
-    // Also update in localStorage
-    const localSubs = loadLocalSubmissions();
-    const li = localSubs.findIndex(s => s.id === sub.id);
-    if (li > -1) { localSubs[li].status = 'approved'; localStorage.setItem('vh_submissions', JSON.stringify(localSubs)); }
-    render();
-  }
-
-  async function handleReject(sub) {
-    await apiPost('rejectSubmission', { submissionId: sub.id });
-    const idx = state.submissions.findIndex(s => s.id === sub.id);
-    if (idx > -1) state.submissions[idx].status = 'rejected';
-    const localSubs = loadLocalSubmissions();
-    const li = localSubs.findIndex(s => s.id === sub.id);
-    if (li > -1) { localSubs[li].status = 'rejected'; localStorage.setItem('vh_submissions', JSON.stringify(localSubs)); }
-    render();
-  }
-
-  async function handleAwardReferral(ref) {
-    await apiPost('awardReferralPoints', {
-      row: ref.row,
-      referrerMemberNumber: ref.referrerMemberNumber
-    });
-    const idx = state.referrals.findIndex(r => r.row === ref.row);
-    if (idx > -1) { state.referrals[idx].status = 'awarded'; state.referrals[idx].pointsAwarded = 100; }
-    render();
-  }
-
-  function logout() {
-    state.view = 'login';
-    state.member = null;
-    state.submissions = [];
-    state.referrals = [];
-    state.emailInput = '';
-    state.adminPasswordInput = '';
-    state.showAdminPassword = false;
-    state.activeTab = 'home';
-    state.error = null;
-    render();
-  }
-
-  function openModal(challengeId) {
-    state.modal = { challengeId };
-    state.submitPhoto = null;
-    state.submitPhotoData = null;
-    state.submitNotes = '';
-    state.submitSuccess = false;
-    state.submitLoading = false;
-    render();
-  }
-
-  function closeModal() {
-    state.modal = null;
-    render();
-  }
-
-  function saveAppsScriptUrl() {
-    const url = state.urlSetupInput.trim();
-    if (!url) { alert('Please paste a valid URL.'); return; }
-    state.appsScriptUrl = url;
-    localStorage.setItem('vh_apps_script_url', url);
-    state.urlSetupInput = '';
-    loadAdminData().then(() => render());
-    render();
-  }
-
-  function deleteChallengeById(id) {
-    if (!confirm('Delete this challenge?')) return;
-    state.challenges = state.challenges.filter(c => c.id !== id);
-    saveChallenges();
-    render();
-  }
-
-  function startEditChallenge(ch) {
-    state.editingChallenge = ch ? ch.id : null;
-    state.challengeForm = ch
-      ? { ...ch }
-      : { id: 'ch_' + Date.now(), title: '', desc: '', points: 100, type: 'custom', reward: '' };
-    render();
-    setTimeout(() => {
-      const el = document.getElementById('challenge-form-scroll');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  }
-
-  function saveChallengeForm() {
-    const f = state.challengeForm;
-    if (!f.title.trim()) { alert('Title is required.'); return; }
-    if (!f.points || isNaN(Number(f.points))) { alert('Points must be a number.'); return; }
-    f.points = Number(f.points);
-    if (state.editingChallenge) {
-      const idx = state.challenges.findIndex(c => c.id === state.editingChallenge);
-      if (idx > -1) state.challenges[idx] = { ...f };
-    } else {
-      state.challenges.push({ ...f });
-    }
-    saveChallenges();
-    state.challengeForm = null;
-    state.editingChallenge = null;
-    render();
-  }
-
-  function getMemberSubmissions() {
-    if (!state.member) return [];
-    const all = loadLocalSubmissions();
-    const email = state.member.email.toLowerCase();
-    return all.filter(s => s.memberEmail && s.memberEmail.toLowerCase() === email);
-  }
-
-  function getSubmissionForChallenge(challengeId) {
-    const subs = getMemberSubmissions();
-    return subs.find(s => s.challengeId === challengeId) || null;
-  }
-
-  function referralUrl() {
-    const base = window.location.href.split('?')[0];
-    return base + '?' + REFERRAL_PARAM + '=' + (state.member ? state.member.memberNumber : '');
-  }
-
-  function formatDate(ts) {
-    if (!ts) return '';
-    try {
-      return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    } catch(e) { return ts; }
-  }
-
-  // ===== RENDER HELPERS =====
-
-  function renderInstallBanner() {
-    if (!state.showInstallBanner) return '';
-    return `
-      <div class="install-banner">
-        <span>📲 Add to your Home Screen for the best experience</span>
-        <div style="display:flex;gap:6px;flex-shrink:0">
-          <button onclick="installApp()">Install</button>
-          <button class="dismiss" onclick="dismissInstall()">✕</button>
-        </div>
-      </div>`;
-  }
-
-  function installApp() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => {
-        deferredPrompt = null;
-        state.showInstallBanner = false;
-        render();
-      });
-    }
-  }
-
-  function dismissInstall() {
-    localStorage.setItem('vh_install_dismissed', '1');
-    state.showInstallBanner = false;
-    render();
-  }
-
-  function renderLoginView() {
-    const refBanner = state.pendingReferrer
-      ? `<div class="referral-banner">🎣 You've been referred! <a href="${MEMBERSHIP_URL}" target="_blank">Sign up to join Voyager's Hook →</a></div>`
-      : '';
-
-    const demoNotice = !state.appsScriptUrl
-      ? `<div class="login-info">ℹ️ <strong>Demo mode:</strong> Live data not yet configured. You can still explore the app.</div>`
-      : '';
-
-    const errorHtml = state.error && state.error !== 'notfound'
-      ? `<div class="login-error">⚠️ ${state.error}</div>`
-      : '';
-
-    const notFoundHtml = state.error === 'notfound'
-      ? `<div class="login-error">⚠️ No account found for that email address.</div><a class="not-member-link" href="${MEMBERSHIP_URL}" target="_blank">Not a member yet? Join here →</a>`
-      : '';
-
-    const adminSection = state.showAdminPassword
-      ? `<div class="form-group" style="margin-top:12px">
-           <label class="form-label">Admin Password</label>
-           <input class="form-input" type="password" placeholder="Enter admin password" value="${escHtml(state.adminPasswordInput)}"
-             oninput="state.adminPasswordInput=this.value"
-             onkeydown="if(event.key==='Enter')handleAdminLogin()">
-         </div>
-         <button class="btn btn-primary" style="margin-top:4px" onclick="handleAdminLogin()">🔐 Admin Login</button>`
-      : `<span class="admin-link" onclick="state.showAdminPassword=true;render()">Admin login</span>`;
-
-    return `
-      ${renderInstallBanner()}
-      ${refBanner}
-      <div class="login-wrap">
-        <img src="${LOGO_URL}" class="login-logo" alt="Voyager's Hook logo">
-        <span class="login-club-name">Voyager's Hook</span>
-        <div class="login-card">
-          <div class="login-title">Member Login 🎣</div>
-          <div class="login-subtitle">Sign in with your membership email</div>
-          ${demoNotice}
-          ${errorHtml}
-          ${notFoundHtml}
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input class="form-input" type="email" placeholder="you@example.com"
-              autocomplete="email" inputmode="email"
-              value="${escHtml(state.emailInput)}"
-              oninput="state.emailInput=this.value;state.error=null"
-              onkeydown="if(event.key==='Enter')handleLogin()">
-          </div>
-          ${state.loading
-            ? `<div class="loading-wrap"><div class="spinner"></div><span>Checking membership...</span></div>`
-            : `<button class="btn btn-primary" onclick="handleLogin()">Log In</button>`}
-          ${adminSection}
-        </div>
-      </div>`;
-  }
-
-  function renderHeader(showAdmin) {
-    const right = showAdmin
-      ? `<span class="admin-badge">Admin</span>`
-      : `<span class="header-name">${escHtml(state.member ? state.member.name.split(' ')[0] : '')}</span>`;
-    return `
-      <div class="header">
-        <img src="${LOGO_URL}" class="header-logo" alt="Voyager's Hook">
-        <div class="header-right">${right}</div>
-      </div>`;
-  }
-
-  function renderBottomNav() {
-    const tabs = [
-      { id: 'home', icon: '🏠', label: 'Home' },
-      { id: 'challenges', icon: '🎣', label: 'Challenges' },
-      { id: 'profile', icon: '👤', label: 'Profile' }
-    ];
-    return `
-      <nav class="bottom-nav">
-        ${tabs.map(t => `
-          <button class="nav-item ${state.activeTab === t.id ? 'active' : ''}" onclick="setTab('${t.id}')">
-            <span class="nav-icon">${t.icon}</span>
-            <span>${t.label}</span>
-          </button>`).join('')}
-      </nav>`;
-  }
-
-  function setTab(tab) {
-    state.activeTab = tab;
-    render();
-  }
-
-  function renderHomeTab() {
-    const m = state.member;
-    const pts = m.pointsTotal || 0;
-    const needed = m.pointsNeeded || 1000;
-    const pct = Math.min(100, Math.round((pts / needed) * 100));
-    const mySubs = getMemberSubmissions();
-    const pendingCount = mySubs.filter(s => s.status === 'pending').length;
-    const approvedCount = mySubs.filter(s => s.status === 'approved').length;
-
-    const recentSubs = mySubs.slice(-3).reverse();
-    const recentHtml = recentSubs.length
-      ? recentSubs.map(s => {
-          const ch = state.challenges.find(c => c.id === s.challengeId);
-          return `
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
-              <div>
-                <div style="font-size:14px;font-weight:600">${escHtml(ch ? ch.title : s.challengeId)}</div>
-                <div style="font-size:12px;color:var(--text-muted)">${formatDate(s.timestamp)}</div>
-              </div>
-              <span class="status-badge status-${s.status}">${statusIcon(s.status)} ${capitalize(s.status)}</span>
-            </div>`;
-        }).join('')
-      : `<div class="empty-state" style="padding:20px 0"><div class="empty-icon">📋</div><div class="empty-title">No submissions yet</div><div class="empty-sub">Start catching fish and submit your challenges!</div></div>`;
-
-    return `
-      <div class="main-content">
-        <div class="welcome-card">
-          <div class="welcome-greeting">Welcome back,</div>
-          <div class="welcome-name">${escHtml(m.name)} 👋</div>
-          <div class="points-big">${pts}</div>
-          <div class="points-label">Total Points</div>
-          <div class="progress-section">
-            <div class="progress-label">
-              <span>Progress to next reward</span>
-              <span>${pts} / ${needed} pts</span>
-            </div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" style="width:${pct}%"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value">${state.challenges.length}</div>
-            <div class="stat-label">Challenges</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${pendingCount}</div>
-            <div class="stat-label">Pending</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${approvedCount}</div>
-            <div class="stat-label">Completed ✅</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Recent Submissions</div>
-          ${recentHtml}
-        </div>
-
-        ${!state.appsScriptUrl ? `
-          <div class="card" style="border-left:4px solid var(--amber)">
-            <div style="font-size:14px;font-weight:600;color:#92400e;margin-bottom:4px">⚙️ Demo Mode Active</div>
-            <div style="font-size:13px;color:var(--text-muted)">The app is running in demo mode. Your admin needs to connect the Google Apps Script for live data.</div>
-          </div>` : ''}
-      </div>`;
-  }
-
-  function statusIcon(status) {
-    if (status === 'approved') return '✅';
-    if (status === 'rejected') return '❌';
-    return '⏳';
-  }
-
-  function capitalize(str) {
-    return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
-  }
-
-  function renderChallengesTab() {
-    return `
-      <div class="main-content">
-        <div class="section-heading">Active Challenges 🏆</div>
-        ${state.challenges.map(ch => {
-          const sub = getSubmissionForChallenge(ch.id);
-          const submitted = !!sub;
-          return `
-            <div class="challenge-card">
-              <div class="challenge-card-top">
-                <div class="challenge-info">
-                  <div class="challenge-title">${escHtml(ch.title)}</div>
-                  <div class="challenge-desc">${escHtml(ch.desc)}</div>
+      return (
+        <div className={`card bg-base-100 shadow-sm rounded-xl ${cardBorderClass()} transition-all`}>
+          <div className="card-body p-4">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2 flex-1">
+                <span className="text-3xl">{challenge.icon}</span>
+                <div>
+                  <h3 className="font-bold text-base leading-tight">{challenge.title}</h3>
+                  <div className="mt-1">{rewardBadge()}</div>
                 </div>
-                <div class="points-badge">${ch.points} pts</div>
               </div>
-              <div class="challenge-card-bottom">
-                <div class="reward-text">🏅 ${escHtml(ch.reward)}</div>
-                ${submitted
-                  ? `<span class="status-badge status-${sub.status}">${statusIcon(sub.status)} ${capitalize(sub.status)}</span>`
-                  : `<button class="btn btn-primary btn-sm" onclick="openModal('${ch.id}')">Submit Catch</button>`}
+              <div className="shrink-0">{statusBadge()}</div>
+            </div>
+
+            <p className="text-sm text-base-content/60 mt-2">{challenge.description}</p>
+
+            <div className="mt-2">
+              <p className="text-xs font-semibold text-base-content/40 uppercase tracking-wide mb-1">Requirements</p>
+              <ul className="space-y-0.5">
+                {challenge.criteria.map((c, i) => (
+                  <li key={i} className="text-xs text-base-content/60 flex items-start gap-1.5">
+                    <span className="opacity-40 mt-0.5">&bull;</span>
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {status === 'completed' && (
+              <div className="mt-3 bg-success/10 rounded-lg p-2 text-center text-sm text-success font-medium">
+                &#x1F389; Challenge Complete! Your reward has been applied.
               </div>
-            </div>`;
-        }).join('')}
-        ${state.challenges.length === 0 ? `<div class="empty-state"><div class="empty-icon">🎣</div><div class="empty-title">No challenges yet</div><div class="empty-sub">The admin hasn't added any challenges yet.</div></div>` : ''}
-      </div>`;
-  }
+            )}
 
-  function renderProfileTab() {
-    const m = state.member;
-    const link = referralUrl();
-    const waMsg = encodeURIComponent(`Hey! I'm a member at Voyager's Hook Fishing Club 🎣 I think you'd love it! Sign up here: ${MEMBERSHIP_URL} — and use my personal referral link: ${link}`);
-    const emailSubject = encodeURIComponent(`Join me at Voyager's Hook Fishing Club!`);
-    const emailBody = encodeURIComponent(`Hey!\n\nI'm a member at Voyager's Hook Fishing Club and I think you'd love it! 🎣\n\nSign up here: ${MEMBERSHIP_URL}\n\nAnd use my personal referral link when you join:\n${link}\n\nSee you on the bank!`);
+            {status === 'not_started' && (
+              <div className="card-actions justify-end mt-3">
+                <button className="btn brand-btn btn-sm" onClick={() => onSubmit(challenge)}>
+                  Submit Catch
+                </button>
+              </div>
+            )}
 
-    const referralExpanded = state.referralExpanded ? `
-      <div class="referral-expanded">
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Share your unique referral link:</div>
-        <div class="referral-link-box">${escHtml(link)}</div>
-        <div class="referral-share-btns">
-          <button class="btn btn-sm btn-whatsapp" onclick="window.open('https://wa.me/?text=${waMsg}','_blank')">💬 WhatsApp</button>
-          <button class="btn btn-sm btn-email" onclick="window.open('mailto:?subject=${emailSubject}&body=${emailBody}','_blank')">📧 Email</button>
-          <button class="btn btn-sm btn-copy" onclick="copyReferralLink('${escHtml(link)}',this)">📋 Copy Link</button>
+            {status === 'pending_approval' && (
+              <div className="mt-3 bg-warning/10 rounded-lg p-2 text-center text-sm text-warning font-medium">
+                &#x23F3; Waiting for admin to verify your submission.
+              </div>
+            )}
+          </div>
         </div>
-      </div>` : '';
+      );
+    }
 
-    return `
-      <div class="main-content">
-        <div class="section-heading">Your Profile</div>
-        <div class="card">
-          <div class="profile-field">
-            <span class="profile-field-label">Full Name</span>
-            <span class="profile-field-value">${escHtml(m.name)}</span>
+    // ── ChallengeManager ──────────────────────────────────────────────────────
+    function ChallengeManager({ challenges, onRefresh }) {
+      const [editing, setEditing] = useState(null);
+      const [isNew, setIsNew] = useState(false);
+
+      function blankEdit() {
+        return { id: 'c-' + Date.now(), title: '', description: '', icon: '\u{1F3A3}', criteria: [''], rewardType: 'points', points: 100, discount: 0, active: true };
+      }
+
+      function openEdit(challenge) {
+        setIsNew(false);
+        setEditing({
+          id: challenge.id, title: challenge.title, description: challenge.description,
+          icon: challenge.icon, criteria: [...challenge.criteria],
+          rewardType: challenge.reward.type, points: challenge.reward.points ?? 0,
+          discount: challenge.reward.discount ?? 0, active: challenge.active,
+        });
+      }
+
+      function openNew() { setIsNew(true); setEditing(blankEdit()); }
+
+      function toggleActive(challenge) {
+        const all = getChallenges();
+        const idx = all.findIndex(c => c.id === challenge.id);
+        if (idx !== -1) { all[idx].active = !all[idx].active; saveChallenges(all); }
+        onRefresh();
+      }
+
+      function deleteChallenge(id) {
+        saveChallenges(getChallenges().filter(c => c.id !== id));
+        onRefresh();
+      }
+
+      function saveEdit() {
+        if (!editing || !editing.title.trim()) return;
+        const reward = { type: editing.rewardType };
+        if (editing.rewardType === 'points') { reward.points = editing.points; reward.description = editing.points + ' Points'; }
+        else if (editing.rewardType === 'discount') { reward.discount = editing.discount; reward.description = editing.discount + '% Off'; }
+        else { reward.points = editing.points; reward.discount = editing.discount; reward.description = editing.points + ' Points + ' + editing.discount + '% Off'; }
+
+        const updated = {
+          id: editing.id, title: editing.title, description: editing.description,
+          icon: editing.icon, criteria: editing.criteria.filter(c => c.trim() !== ''),
+          reward, active: editing.active,
+        };
+
+        const all = getChallenges();
+        if (isNew) { all.push(updated); }
+        else { const idx = all.findIndex(c => c.id === updated.id); if (idx !== -1) all[idx] = updated; }
+        saveChallenges(all);
+        setEditing(null);
+        onRefresh();
+      }
+
+      function updateCriteria(i, val) {
+        if (!editing) return;
+        const c = [...editing.criteria]; c[i] = val;
+        setEditing({ ...editing, criteria: c });
+      }
+
+      function removeCriteria(i) {
+        if (!editing) return;
+        setEditing({ ...editing, criteria: editing.criteria.filter((_, j) => j !== i) });
+      }
+
+      function addCriteria() {
+        if (!editing) return;
+        setEditing({ ...editing, criteria: [...editing.criteria, ''] });
+      }
+
+      return (
+        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <h2 className="font-semibold text-base-content">All Challenges ({challenges.length})</h2>
+            <button className="btn brand-btn btn-sm" onClick={openNew}>+ New Challenge</button>
           </div>
-          <div class="profile-field">
-            <span class="profile-field-label">Email</span>
-            <span class="profile-field-value">${escHtml(m.email)}</span>
-          </div>
-          <div class="profile-field">
-            <span class="profile-field-label">Member #</span>
-            <span class="profile-field-value">${escHtml(m.memberNumber || 'N/A')}</span>
-          </div>
-          <div class="profile-field">
-            <span class="profile-field-label">Points Total</span>
-            <span class="profile-field-value" style="color:var(--teal);font-size:18px;font-weight:800">${m.pointsTotal || 0}</span>
-          </div>
-          ${m.voucher ? `
-          <div class="profile-field">
-            <span class="profile-field-label">🎁 Voucher</span>
-            <span class="profile-field-value voucher-value">${escHtml(m.voucher)}</span>
-          </div>` : ''}
-          ${m.discountCode ? `
-          <div class="profile-field">
-            <span class="profile-field-label">🏷️ Discount Code</span>
-            <span class="profile-field-value voucher-value">${escHtml(m.discountCode)}</span>
-          </div>` : ''}
+
+          {challenges.map(ch => (
+            <div key={ch.id} className={`card bg-base-100 border shadow-sm rounded-xl ${ch.active ? 'border-base-200' : 'border-base-300 opacity-60'}`}>
+              <div className="card-body p-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">{ch.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm truncate">{ch.title}</h3>
+                    <p className="text-xs text-base-content/60">{ch.reward.description}</p>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <span className={`badge badge-sm ${ch.active ? 'badge-success' : 'badge-ghost'}`}>{ch.active ? 'Active' : 'Off'}</span>
+                    <button className="btn btn-ghost btn-xs" title={ch.active ? 'Deactivate' : 'Activate'} onClick={() => toggleActive(ch)}>{ch.active ? '&#9646;' : '&#9654;'}</button>
+                    <button className="btn btn-ghost btn-xs" title="Edit" onClick={() => openEdit(ch)}>&#x270F;&#xFE0F;</button>
+                    <button className="btn btn-ghost btn-xs text-error" title="Delete" onClick={() => deleteChallenge(ch.id)}>&#x1F5D1;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {editing && (
+            <div className="modal modal-open">
+              <div className="modal-box max-w-lg max-h-[90vh] overflow-y-auto">
+                <h3 className="font-bold text-lg mb-4">{isNew ? '\u2728 New Challenge' : '\u270F\uFE0F Edit Challenge'}</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <div className="w-24">
+                      <label className="label pb-0"><span className="label-text text-xs">Icon (emoji)</span></label>
+                      <input className="input input-bordered w-full text-center text-xl" value={editing.icon} onChange={e => setEditing({ ...editing, icon: e.target.value })} />
+                    </div>
+                    <div className="flex-1">
+                      <label className="label pb-0"><span className="label-text text-xs">Title *</span></label>
+                      <input className="input input-bordered w-full" placeholder="e.g. Specimen Hunter: Carp" value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="label pb-0"><span className="label-text text-xs">Description</span></label>
+                    <textarea className="textarea textarea-bordered w-full text-sm" rows={2} placeholder="Describe what members need to do..." value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="label pb-0"><span className="label-text text-xs">Requirements</span></label>
+                    {editing.criteria.map((c, i) => (
+                      <div key={i} className="flex gap-1 mb-1">
+                        <input className="input input-bordered input-sm flex-1" placeholder={`Requirement ${i + 1}`} value={c} onChange={e => updateCriteria(i, e.target.value)} />
+                        <button className="btn btn-ghost btn-sm text-error" onClick={() => removeCriteria(i)}>&times;</button>
+                      </div>
+                    ))}
+                    <button className="btn btn-ghost btn-xs mt-1" onClick={addCriteria}>+ Add requirement</button>
+                  </div>
+                  <div>
+                    <label className="label pb-0"><span className="label-text text-xs">Reward Type</span></label>
+                    <select className="select select-bordered w-full" value={editing.rewardType} onChange={e => setEditing({ ...editing, rewardType: e.target.value })}>
+                      <option value="points">Points only</option>
+                      <option value="discount">Discount only</option>
+                      <option value="both">Points + Discount</option>
+                    </select>
+                  </div>
+                  {(editing.rewardType === 'points' || editing.rewardType === 'both') && (
+                    <div>
+                      <label className="label pb-0"><span className="label-text text-xs">Points awarded</span></label>
+                      <input type="number" min={0} className="input input-bordered w-full" value={editing.points} onChange={e => setEditing({ ...editing, points: Number(e.target.value) })} />
+                    </div>
+                  )}
+                  {(editing.rewardType === 'discount' || editing.rewardType === 'both') && (
+                    <div>
+                      <label className="label pb-0"><span className="label-text text-xs">Discount % awarded</span></label>
+                      <input type="number" min={0} max={100} className="input input-bordered w-full" value={editing.discount} onChange={e => setEditing({ ...editing, discount: Number(e.target.value) })} />
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 pt-1">
+                    <input type="checkbox" className="toggle toggle-success" checked={editing.active} onChange={e => setEditing({ ...editing, active: e.target.checked })} />
+                    <span className="text-sm">Active (visible to members)</span>
+                  </div>
+                </div>
+                <div className="modal-action">
+                  <button className="btn btn-ghost" onClick={() => setEditing(null)}>Cancel</button>
+                  <button className="btn brand-btn" onClick={saveEdit} disabled={!editing.title.trim()}>Save Challenge</button>
+                </div>
+              </div>
+              <div className="modal-backdrop" onClick={() => setEditing(null)} />
+            </div>
+          )}
         </div>
+      );
+    }
 
-        <div class="card">
-          <button class="referral-toggle" onclick="state.referralExpanded=!state.referralExpanded;render()">
-            🎣 Know a fellow angler? Refer them ${state.referralExpanded ? '▲' : '→'}
-          </button>
-          ${referralExpanded}
+    // ── SubmitModal ───────────────────────────────────────────────────────────
+    function SubmitModal({ challenge, member, onClose, onSubmitted }) {
+      const [species, setSpecies] = useState('');
+      const [weight, setWeight] = useState('');
+      const [location, setLocation] = useState('');
+      const [notes, setNotes] = useState('');
+      const [photoData, setPhotoData] = useState('');
+      const [photoName, setPhotoName] = useState('');
+      const [submitted, setSubmitted] = useState(false);
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState('');
+      const fileInputRef = useRef(null);
+
+      async function handlePhotoChange(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setPhotoName(file.name);
+        const compressed = await compressPhoto(file);
+        setPhotoData(compressed);
+      }
+
+      function removePhoto() {
+        setPhotoData(''); setPhotoName('');
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      }
+
+      async function handleSubmit() {
+        if (!species.trim()) return;
+        setLoading(true);
+        setError('');
+        try {
+          const combinedNotes = [
+            species && 'Species: ' + species,
+            weight && 'Weight: ' + weight + ' lbs',
+            location && 'Location: ' + location,
+            notes && 'Notes: ' + notes,
+          ].filter(Boolean).join('\n');
+
+          const result = await gasPost({
+            action: 'submitChallenge',
+            memberEmail: member.email,
+            memberName: member.name,
+            challengeId: challenge.id,
+            challengeTitle: challenge.title,
+            notes: combinedNotes,
+            photo: photoData,
+            points: challenge.reward.points || 0,
+          });
+
+          if (!result.success) throw new Error(result.error || 'Submission failed');
+
+          const statuses = getMemberStatus(member.email);
+          const existing = statuses.find(s => s.challengeId === challenge.id);
+          if (existing) { existing.status = 'pending_approval'; existing.submissionId = result.id; }
+          else { statuses.push({ challengeId: challenge.id, status: 'pending_approval', submissionId: result.id }); }
+          saveMemberStatus(member.email, statuses);
+
+          setSubmitted(true);
+          setTimeout(() => { onSubmitted(); }, 1500);
+        } catch(e) {
+          console.error(e);
+          setError('Failed to submit. Please try again.');
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      return (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-md">
+            {submitted ? (
+              <div className="text-center py-6">
+                <div className="text-5xl mb-3">&#x1F389;</div>
+                <h3 className="text-xl font-bold text-success">Submission Received!</h3>
+                <p className="text-base-content/60 mt-2">Your catch is pending admin approval. You'll earn your reward once verified.</p>
+              </div>
+            ) : (
+              <>
+                <h3 className="font-bold text-lg mb-1">{challenge.icon} Submit Your Catch</h3>
+                <p className="text-sm text-base-content/50 mb-4">{challenge.title}</p>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="label pb-1"><span className="label-text font-medium">Species <span className="text-error">*</span></span></label>
+                    <input className="input input-bordered w-full input-sm" placeholder="e.g. Common Carp" value={species} onChange={e => setSpecies(e.target.value)} />
+                  </div>
+                  <div>
+                    <label className="label pb-1"><span className="label-text font-medium">Weight (lbs)</span></label>
+                    <input className="input input-bordered w-full input-sm" placeholder="e.g. 12.5" value={weight} onChange={e => setWeight(e.target.value)} />
+                  </div>
+                  <div>
+                    <label className="label pb-1"><span className="label-text font-medium">Location / Water</span></label>
+                    <input className="input input-bordered w-full input-sm" placeholder="e.g. Redmire Pool" value={location} onChange={e => setLocation(e.target.value)} />
+                  </div>
+                  <div>
+                    <label className="label pb-1"><span className="label-text font-medium">Notes</span></label>
+                    <textarea className="textarea textarea-bordered w-full textarea-sm" placeholder="Any additional details..." rows={2} value={notes} onChange={e => setNotes(e.target.value)} />
+                  </div>
+
+                  <div>
+                    <label className="label pb-1"><span className="label-text font-medium">&#x1F4F8; Photo Proof</span></label>
+                    {photoData ? (
+                      <div className="relative">
+                        <img src={photoData} alt="Catch photo" className="w-full rounded-lg max-h-48 object-cover" />
+                        <button className="btn btn-circle btn-xs btn-error absolute top-2 right-2" onClick={removePhoto}>
+                          <X size={12} />
+                        </button>
+                        <p className="text-xs text-base-content/40 mt-1 truncate">{photoName}</p>
+                      </div>
+                    ) : (
+                      <button className="btn btn-outline btn-sm w-full gap-2" onClick={() => fileInputRef.current?.click()}>
+                        <Camera size={16} /> Upload Photo
+                      </button>
+                    )}
+                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+                  </div>
+
+                  {error && <p className="text-error text-sm">{error}</p>}
+                </div>
+
+                <div className="modal-action mt-4">
+                  <button className="btn btn-ghost btn-sm" onClick={onClose} disabled={loading}>Cancel</button>
+                  <button className="btn brand-btn btn-sm" onClick={handleSubmit} disabled={!species.trim() || loading}>
+                    {loading ? <span className="loading loading-spinner loading-sm" /> : 'Submit Catch'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="modal-backdrop" onClick={onClose} />
         </div>
+      );
+    }
 
-        <button class="btn btn-danger btn-full" onclick="logout()">🚪 Log Out</button>
-      </div>`;
-  }
+    // ── MemberView ────────────────────────────────────────────────────────────
+    function MemberView({ member: initialMember, challenges, onLogout }) {
+      const [member, setMember] = useState(initialMember);
+      const [selectedChallenge, setSelectedChallenge] = useState(null);
+      const [copied, setCopied] = useState(false);
+      const [referralOpen, setReferralOpen] = useState(false);
 
-  function copyReferralLink(link, btn) {
-    navigator.clipboard.writeText(link).then(() => {
-      const orig = btn.textContent;
-      btn.textContent = '✅ Copied!';
-      setTimeout(() => { btn.textContent = orig; }, 2000);
-    });
-  }
+      async function refreshMember() {
+        try {
+          const data = await gasGet({ action: 'getMember', email: member.email });
+          if (data.success) {
+            setMember(prev => ({
+              ...prev,
+              points: data.pointsTotal,
+              discountCode: data.discountCode || undefined,
+              voucherCode: data.voucher || undefined,
+              challenges: getMemberStatus(prev.email),
+            }));
+          } else {
+            setMember(prev => ({ ...prev, challenges: getMemberStatus(prev.email) }));
+          }
+        } catch(e) {
+          setMember(prev => ({ ...prev, challenges: getMemberStatus(prev.email) }));
+        }
+      }
 
-  function renderModal() {
-    if (!state.modal) return '';
-    const ch = state.challenges.find(c => c.id === state.modal.challengeId);
-    if (!ch) return '';
+      const refLink = (() => {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('ref'); url.searchParams.delete('refname');
+          url.searchParams.set('ref', member.memberNumber || member.id);
+          url.searchParams.set('refname', member.name);
+          return url.toString();
+        } catch {
+          return window.location.href + '?ref=' + encodeURIComponent(member.memberNumber || member.id) + '&refname=' + encodeURIComponent(member.name);
+        }
+      })();
 
-    if (state.submitSuccess) {
-      return `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-sheet">
-            <div class="modal-handle"></div>
-            <div class="modal-success">
-              <div class="modal-success-icon">🎉</div>
-              <div class="modal-success-title">Submission Received!</div>
-              <div class="modal-success-sub">Your catch has been submitted for review. You'll be notified when it's approved!</div>
-              <button class="btn btn-primary" style="margin-top:24px;max-width:200px" onclick="closeModal()">Done</button>
+      const shareMessage = 'Hey! I thought you'd love Voyager's Hook fishing club — I'm a member and it's brilliant \u{1F3A3}\n\nCheck out membership here: https://www.voyagershook.com/memberships\n\nUse my referral link to get started with the members area: ' + refLink;
+      const whatsappUrl = 'https://wa.me/?text=' + encodeURIComponent(shareMessage);
+      const emailUrl = 'mailto:?subject=Join Voyager's Hook Fishing Club&body=' + encodeURIComponent(shareMessage);
+
+      async function copyLink() {
+        try { await navigator.clipboard.writeText(refLink); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {}
+      }
+
+      const completed = member.challenges.filter(c => c.status === 'completed').length;
+      const pending = member.challenges.filter(c => c.status === 'pending_approval').length;
+      const progressPct = challenges.length > 0 ? Math.round((completed / challenges.length) * 100) : 0;
+
+      return (
+        <div className="min-h-screen bg-base-200">
+          <div className="brand-header-bg text-white px-4 py-5">
+            <div className="flex items-center justify-between max-w-xl mx-auto">
+              <div className="flex items-center gap-3">
+                <img src={LOGO_URL} alt="Voyager's Hook" className="h-10 object-contain" />
+                <div>
+                  <p className="text-white/60 text-xs">Welcome back,</p>
+                  <h1 className="text-lg font-bold leading-tight">{member.name}</h1>
+                  {member.memberNumber && (
+                    <p className="text-white/50 text-xs flex items-center gap-1">
+                      <Hash size={10} /> Member #{member.memberNumber}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <button className="btn btn-ghost btn-sm text-white opacity-80 hover:opacity-100" onClick={onLogout}>Logout</button>
+            </div>
+
+            <div className="mt-4 max-w-xl mx-auto grid grid-cols-3 gap-3">
+              <div className="bg-white/10 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold brand-text-teal">{member.points}</div>
+                <div className="text-xs text-white/60">Points</div>
+              </div>
+              <div className="bg-white/10 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold">{completed}</div>
+                <div className="text-xs text-white/60">Completed</div>
+              </div>
+              <div className="bg-white/10 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold">{pending}</div>
+                <div className="text-xs text-white/60">Pending</div>
+              </div>
+            </div>
+
+            <div className="mt-4 max-w-xl mx-auto">
+              <div className="flex justify-between text-xs text-white/60 mb-1">
+                <span>Challenge Progress</span>
+                <span>{completed} / {challenges.length} completed</span>
+              </div>
+              <div className="w-full bg-white/20 rounded-full h-2">
+                <div className="h-2 rounded-full transition-all" style={{ width: progressPct + '%', backgroundColor: '#0097b2' }} />
+              </div>
             </div>
           </div>
-        </div>`;
-    }
 
-    const previewHtml = state.submitPhotoData
-      ? `<img class="upload-preview" src="${state.submitPhotoData}" alt="Preview">`
-      : '';
+          {(member.discountCode || member.voucherCode) && (
+            <div className="max-w-xl mx-auto px-4 pt-4 space-y-2">
+              <h2 className="text-sm font-semibold text-base-content/70 uppercase tracking-wide">&#x1F381; Your Rewards</h2>
+              {member.discountCode && (
+                <div className="bg-base-100 rounded-xl p-3 flex items-center gap-3 border border-base-300">
+                  <div className="brand-text-teal"><Tag size={18} /></div>
+                  <div className="flex-1">
+                    <p className="text-xs text-base-content/60">Discount Code</p>
+                    <p className="font-bold tracking-wider text-base-content">{member.discountCode}</p>
+                  </div>
+                  <span className="badge badge-success badge-sm">Active</span>
+                </div>
+              )}
+              {member.voucherCode && (
+                <div className="bg-base-100 rounded-xl p-3 flex items-center gap-3 border border-base-300">
+                  <div className="brand-text-teal"><Ticket size={18} /></div>
+                  <div className="flex-1">
+                    <p className="text-xs text-base-content/60">Voucher Code</p>
+                    <p className="font-bold tracking-wider text-base-content">{member.voucherCode}</p>
+                  </div>
+                  <span className="badge badge-warning badge-sm">Voucher</span>
+                </div>
+              )}
+            </div>
+          )}
 
-    return `
-      <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-        <div class="modal-sheet">
-          <div class="modal-handle"></div>
-          <div class="modal-title">${escHtml(ch.title)}</div>
-          <div class="modal-sub">${escHtml(ch.desc)} · <strong>${ch.points} points</strong></div>
-
-          ${previewHtml}
-          <div class="upload-area" ${state.submitPhotoData ? 'style="padding:16px"' : ''}>
-            <input type="file" accept="image/*" capture="environment" onchange="handlePhotoSelect(event)">
-            ${state.submitPhotoData
-              ? `<div style="font-size:13px;color:var(--teal);font-weight:600">📸 Photo selected — tap to change</div>`
-              : `<div class="upload-icon">📷</div>
-                 <div class="upload-text">Tap to take or choose a photo<br><small>(required)</small></div>`}
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Notes <span style="font-weight:400;text-transform:none">(optional)</span></label>
-            <textarea class="form-textarea" placeholder="Species, weight, location, conditions..."
-              oninput="state.submitNotes=this.value">${escHtml(state.submitNotes)}</textarea>
-          </div>
-
-          <div class="modal-actions">
-            <button class="btn btn-secondary" style="flex:0 0 auto" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-primary" style="flex:1" ${state.submitLoading ? 'disabled' : ''} onclick="handleSubmitChallenge()">
-              ${state.submitLoading ? '<span class="spinner" style="width:18px;height:18px;border-width:2px"></span> Submitting...' : '🎣 Submit Catch'}
+          <div className="max-w-xl mx-auto px-4 pt-3">
+            <button
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm text-base-content/50 hover:text-base-content/70 hover:bg-base-200 transition-colors"
+              onClick={() => setReferralOpen(o => !o)}
+            >
+              <span className="flex items-center gap-2">
+                <Share2 size={13} />
+                Refer a friend &amp; earn 100 points
+              </span>
+              {referralOpen ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
             </button>
+
+            {referralOpen && (
+              <div className="mt-2 bg-base-100 rounded-xl p-3 border border-base-300 space-y-3">
+                <p className="text-xs text-base-content/50">Share your unique link — when a friend joins you'll earn 100 points automatically.</p>
+                <div className="bg-base-200 rounded-lg px-3 py-2 flex items-center gap-2">
+                  <span className="text-xs text-base-content/40 flex-1 truncate font-mono">{refLink}</span>
+                  <button className="btn btn-ghost btn-xs shrink-0" onClick={copyLink} title="Copy link">
+                    {copied ? <Check size={13} className="text-success" /> : <Copy size={13} />}
+                  </button>
+                </div>
+                {copied && <p className="text-xs text-success text-center">&#x2713; Copied!</p>}
+                <div className="grid grid-cols-2 gap-2">
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+                    className="btn btn-xs text-white border-0 hover:opacity-90"
+                    style={{ backgroundColor: '#25D366' }}>
+                    &#x1F4F1; WhatsApp
+                  </a>
+                  <a href={emailUrl} className="btn btn-xs btn-outline">&#x2709;&#xFE0F; Email</a>
+                </div>
+              </div>
+            )}
           </div>
+
+          <div className="max-w-xl mx-auto px-4 py-5 space-y-3">
+            <h2 className="text-base font-semibold text-base-content">&#x1F3AF; Active Challenges</h2>
+            {challenges.filter(c => c.active).map(challenge => {
+              const mc = member.challenges.find(c => c.challengeId === challenge.id);
+              return (
+                <div key={challenge.id}>
+                  <ChallengeCard challenge={challenge} memberChallenge={mc} onSubmit={setSelectedChallenge} />
+                </div>
+              );
+            })}
+          </div>
+
+          {selectedChallenge && (
+            <SubmitModal
+              challenge={selectedChallenge}
+              member={member}
+              onClose={() => setSelectedChallenge(null)}
+              onSubmitted={() => { setSelectedChallenge(null); refreshMember(); }}
+            />
+          )}
         </div>
-      </div>`;
-  }
-
-  function handlePhotoSelect(e) {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    compressImage(file, (dataUrl) => {
-      state.submitPhotoData = dataUrl;
-      render();
-    });
-  }
-
-  function renderMemberView() {
-    let tabContent = '';
-    if (state.activeTab === 'home') tabContent = renderHomeTab();
-    else if (state.activeTab === 'challenges') tabContent = renderChallengesTab();
-    else if (state.activeTab === 'profile') tabContent = renderProfileTab();
-
-    return `
-      ${renderInstallBanner()}
-      ${renderHeader(false)}
-      ${tabContent}
-      ${renderBottomNav()}
-      ${renderModal()}`;
-  }
-
-  function renderAdminView() {
-    const tabs = [
-      { id: 'pending', label: '📋 Pending' },
-      { id: 'referrals', label: '👥 Referrals' },
-      { id: 'challenges', label: '⚙️ Challenges' }
-    ];
-
-    let content = '';
-    if (state.loading) {
-      content = `<div class="loading-wrap"><div class="spinner"></div><span>Loading data...</span></div>`;
-    } else if (state.activeTab === 'pending') {
-      content = renderAdminPending();
-    } else if (state.activeTab === 'referrals') {
-      content = renderAdminReferrals();
-    } else if (state.activeTab === 'challenges') {
-      content = renderAdminChallenges();
+      );
     }
 
-    return `
-      ${renderInstallBanner()}
-      ${renderHeader(true)}
-      <div class="admin-tabs">
-        ${tabs.map(t => `<button class="tab-btn ${state.activeTab === t.id ? 'active' : ''}" onclick="setTab('${t.id}')">${t.label}</button>`).join('')}
-        <button class="tab-btn tab-logout" onclick="logout()">🚪 Logout</button>
-      </div>
-      <div class="main-content no-bottom-nav">${content}</div>`;
-  }
+    // ── Login ─────────────────────────────────────────────────────────────────
+    function Login({ onMemberLogin, onAdminLogin }) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refMemberNum = urlParams.get('ref') || '';
+      const refName = urlParams.get('refname') || '';
 
-  function renderAdminPending() {
-    if (!state.appsScriptUrl) {
-      return renderSetupCard() + renderLocalSubmissions();
+      const [tab, setTab] = useState('member');
+      const [email, setEmail] = useState('');
+      const [adminEmail, setAdminEmail] = useState('');
+      const [adminPass, setAdminPass] = useState('');
+      const [error, setError] = useState('');
+      const [loading, setLoading] = useState(false);
+      const [nonMemberWithReferral, setNonMemberWithReferral] = useState(false);
+      const [referralLogged, setReferralLogged] = useState(false);
+
+      async function logReferralToSheet(referredEmail) {
+        try {
+          await gasPost({ action: 'logReferral', referrerMemberNumber: refMemberNum, referrerName: refName, newMemberEmail: referredEmail });
+        } catch(err) { console.error('Failed to log referral:', err); }
+      }
+
+      async function handleMemberLogin() {
+        if (!email.trim()) { setError('Please enter your email address.'); return; }
+        setLoading(true); setError(''); setNonMemberWithReferral(false);
+        try {
+          const data = await gasGet({ action: 'getMember', email: email.trim() });
+          if (!data.success) {
+            if (refMemberNum) {
+              setNonMemberWithReferral(true);
+              if (!referralLogged) { await logReferralToSheet(email.trim()); setReferralLogged(true); }
+            } else {
+              setError(data.error || 'No member found with that email address. Please check your email and try again.');
+            }
+            return;
+          }
+
+          const member = {
+            id: data.memberNumber || data.email,
+            name: data.name,
+            email: data.email,
+            memberNumber: data.memberNumber,
+            points: data.pointsTotal,
+            discountCode: data.discountCode && data.discountCode !== '-' ? data.discountCode : undefined,
+            voucherCode: data.voucher && data.voucher !== '-' ? data.voucher : undefined,
+            challenges: getMemberStatus(data.email),
+            sheetRow: data.rowIndex,
+          };
+
+          onMemberLogin(member);
+        } catch(err) {
+          console.error(err);
+          setError('Could not connect to the member database. Please try again.');
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      function handleAdminLogin() {
+        if (adminEmail.toLowerCase() === ADMIN_EMAIL && adminPass === ADMIN_PASS) {
+          onAdminLogin();
+        } else {
+          setError('Incorrect email or password.');
+        }
+      }
+
+      return (
+        <div className="min-h-screen brand-login-bg flex flex-col items-center justify-center p-4">
+          <div className="mb-6 text-center">
+            <img src={LOGO_URL} alt="Voyager's Hook" className="h-24 mx-auto mb-3 object-contain" />
+            <h1 className="text-2xl font-bold text-white">Members Challenge Tracker</h1>
+            <p className="text-white/60 mt-1">Catch. Submit. Earn Rewards.</p>
+          </div>
+
+          {refMemberNum && !nonMemberWithReferral && (
+            <div className="mb-4 rounded-xl px-4 py-3 text-center text-white max-w-sm w-full" style={{ backgroundColor: 'rgba(0,151,178,0.25)', border: '1px solid rgba(0,151,178,0.5)' }}>
+              <p className="text-sm font-semibold">&#x1F465; You've been referred by {refName || 'a member'}!</p>
+              <p className="text-xs text-white/70 mt-1">Log in below, or sign up to join the club.</p>
+            </div>
+          )}
+
+          <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <div className="tabs tabs-boxed mb-5">
+              <button className={`tab flex-1 ${tab === 'member' ? 'tab-active' : ''}`}
+                onClick={() => { setTab('member'); setError(''); setNonMemberWithReferral(false); }}>
+                Member Login
+              </button>
+              <button className={`tab flex-1 ${tab === 'admin' ? 'tab-active' : ''}`}
+                onClick={() => { setTab('admin'); setError(''); setNonMemberWithReferral(false); }}>
+                Admin
+              </button>
+            </div>
+
+            {tab === 'member' ? (
+              <div className="space-y-4">
+                {nonMemberWithReferral ? (
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">&#x1F3A3;</div>
+                    <h3 className="font-bold text-base mb-1">Not a member yet?</h3>
+                    <p className="text-sm text-base-content/60 mb-4">
+                      {refName ? refName + ' thinks' : 'Someone thinks'} you'd love Voyager's Hook! Sign up to start earning points and taking on challenges.
+                    </p>
+                    <a href={MEMBERSHIPS_URL} target="_blank" rel="noopener noreferrer" className="btn brand-btn w-full mb-3">
+                      Join Voyager's Hook &#x2192;
+                    </a>
+                    <p className="text-xs text-base-content/40">
+                      We've noted your referral — we'll add your bonus points once you join! &#x1F389;
+                    </p>
+                    <button className="btn btn-ghost btn-xs mt-3 text-base-content/40" onClick={() => setNonMemberWithReferral(false)}>
+                      Already a member? Try again
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <label className="label"><span className="label-text font-medium">Your Email Address</span></label>
+                      <input
+                        type="email"
+                        className="input input-bordered w-full"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={e => { setEmail(e.target.value); setError(''); }}
+                        onKeyDown={e => e.key === 'Enter' && handleMemberLogin()}
+                        disabled={loading}
+                      />
+                    </div>
+                    {error && <p className="text-error text-sm">{error}</p>}
+                    <button className="btn brand-btn w-full" onClick={handleMemberLogin} disabled={loading}>
+                      {loading ? <span className="loading loading-spinner loading-sm" /> : 'View My Challenges'}
+                    </button>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label className="label"><span className="label-text font-medium">Admin Email</span></label>
+                  <input type="email" className="input input-bordered w-full" placeholder="Enter admin email" value={adminEmail} onChange={e => { setAdminEmail(e.target.value); setError(''); }} />
+                </div>
+                <div>
+                  <label className="label"><span className="label-text font-medium">Password</span></label>
+                  <input type="password" className="input input-bordered w-full" placeholder="Enter password" value={adminPass} onChange={e => { setAdminPass(e.target.value); setError(''); }} onKeyDown={e => e.key === 'Enter' && handleAdminLogin()} />
+                </div>
+                {error && <p className="text-error text-sm">{error}</p>}
+                <button className="btn btn-neutral w-full" onClick={handleAdminLogin}>Admin Login</button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
     }
-    const pending = state.submissions.filter(s => s.status === 'pending');
-    const approved = state.submissions.filter(s => s.status === 'approved');
-    const rejected = state.submissions.filter(s => s.status === 'rejected');
 
-    return `
-      ${renderSetupCardIfNeeded()}
-      <div class="section-heading">Pending Review (${pending.length})</div>
-      ${pending.length === 0 ? `<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-title">All caught up!</div><div class="empty-sub">No pending submissions.</div></div>` : ''}
-      ${pending.map(s => renderSubmissionCard(s)).join('')}
-      ${approved.length > 0 ? `<div class="section-heading">Approved (${approved.length})</div>${approved.map(s => renderSubmissionCard(s)).join('')}` : ''}
-      ${rejected.length > 0 ? `<div class="section-heading">Rejected (${rejected.length})</div>${rejected.map(s => renderSubmissionCard(s)).join('')}` : ''}`;
-  }
+    // ── AdminView ─────────────────────────────────────────────────────────────
+    function AdminView({ challenges, onLogout, onRefresh }) {
+      const [tab, setTab] = useState('pending');
+      const [submissions, setSubmissions] = useState([]);
+      const [referrals, setReferrals] = useState([]);
+      const [loading, setLoading] = useState(false);
+      const [sheetUpdateStatus, setSheetUpdateStatus] = useState({});
+      const [referralAwardStatus, setReferralAwardStatus] = useState({});
+      const [expandedPhoto, setExpandedPhoto] = useState(null);
 
-  function renderLocalSubmissions() {
-    const all = loadLocalSubmissions();
-    if (all.length === 0) return `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No submissions yet</div><div class="empty-sub">Member submissions will appear here.</div></div>`;
-    const pending = all.filter(s => s.status === 'pending');
-    const approved = all.filter(s => s.status === 'approved');
-    const rejected = all.filter(s => s.status === 'rejected');
-    return `
-      <div class="section-heading">Pending (${pending.length})</div>
-      ${pending.map(s => renderSubmissionCard(s)).join('')}
-      ${approved.length > 0 ? `<div class="section-heading">Approved (${approved.length})</div>${approved.map(s => renderSubmissionCard(s)).join('')}` : ''}
-      ${rejected.length > 0 ? `<div class="section-heading">Rejected (${rejected.length})</div>${rejected.map(s => renderSubmissionCard(s)).join('')}` : ''}`;
-  }
+      const pending = submissions.filter(s => s.status === 'pending');
+      const history = submissions.filter(s => s.status !== 'pending');
+      const pendingReferrals = referrals.filter(r => r.status === 'pending');
 
-  function renderSubmissionCard(s) {
-    const isPending = s.status === 'pending';
-    const ch = state.challenges.find(c => c.id === s.challengeId);
-    const pointsInputId = `pts_${s.id}`;
-    return `
-      <div class="submission-card ${s.status}">
-        <div class="submission-header">
-          <div>
-            <div class="submission-member">👤 ${escHtml(s.memberName || s.memberEmail)}</div>
-            <div class="submission-challenge">🏆 ${escHtml(s.challengeTitle || s.challengeId)}</div>
-            <div class="submission-time">🕐 ${formatDate(s.timestamp)}</div>
+      async function loadData() {
+        setLoading(true);
+        try {
+          const data = await gasGet({ action: 'getAdminData' });
+          setSubmissions(data.submissions || []);
+          setReferrals(data.referrals || []);
+        } catch(e) { console.error(e); }
+        setLoading(false);
+      }
+
+      useEffect(() => { loadData(); }, []);
+
+      async function approveSubmission(sub) {
+        const challenge = challenges.find(c => c.id === sub.challengeId);
+        setSheetUpdateStatus(prev => ({ ...prev, [sub.id]: 'updating' }));
+        try {
+          await gasPost({
+            action: 'approveSubmission',
+            submissionId: sub.id,
+            memberEmail: sub.memberEmail,
+            points: challenge?.reward?.points || sub.points || 0,
+          });
+          const statuses = getMemberStatus(sub.memberEmail);
+          const idx = statuses.findIndex(s => s.challengeId === sub.challengeId);
+          if (idx !== -1) statuses[idx].status = 'completed';
+          saveMemberStatus(sub.memberEmail, statuses);
+          setSheetUpdateStatus(prev => ({ ...prev, [sub.id]: 'done' }));
+          await loadData();
+        } catch(e) {
+          setSheetUpdateStatus(prev => ({ ...prev, [sub.id]: 'failed' }));
+        }
+      }
+
+      async function rejectSubmission(sub) {
+        await gasPost({ action: 'rejectSubmission', submissionId: sub.id });
+        const statuses = getMemberStatus(sub.memberEmail);
+        const idx = statuses.findIndex(s => s.challengeId === sub.challengeId);
+        if (idx !== -1) statuses[idx].status = 'not_started';
+        saveMemberStatus(sub.memberEmail, statuses);
+        await loadData();
+      }
+
+      async function awardReferral(referral) {
+        const key = referral.referredEmail + '_' + referral.row;
+        setReferralAwardStatus(prev => ({ ...prev, [key]: 'updating' }));
+        try {
+          await gasPost({ action: 'awardReferralPoints', row: referral.row, referrerMemberNumber: referral.referrerMemberNumber });
+          setReferralAwardStatus(prev => ({ ...prev, [key]: 'done' }));
+          await loadData();
+        } catch(e) {
+          setReferralAwardStatus(prev => ({ ...prev, [key]: 'failed' }));
+        }
+      }
+
+      function formatDate(iso) {
+        if (!iso) return '—';
+        return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+
+      return (
+        <div className="min-h-screen bg-base-200">
+          <div className="brand-header-bg text-white px-4 py-5">
+            <div className="flex items-center justify-between max-w-2xl mx-auto">
+              <div>
+                <p className="text-white/50 text-sm">Admin Dashboard</p>
+                <h1 className="text-xl font-bold">&#x1F3A3; Challenge Manager</h1>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="btn btn-ghost btn-sm text-white opacity-80" onClick={loadData} disabled={loading}>
+                  <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+                </button>
+                <button className="btn btn-ghost btn-sm text-white opacity-80" onClick={onLogout}>Logout</button>
+              </div>
+            </div>
+            <div className="mt-4 max-w-2xl mx-auto grid grid-cols-3 gap-3">
+              <div className="bg-white/10 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold text-warning">{pending.length}</div>
+                <div className="text-xs text-white/60">Pending Reviews</div>
+              </div>
+              <div className="bg-white/10 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold">{submissions.length}</div>
+                <div className="text-xs text-white/60">Total Submissions</div>
+              </div>
+              <div className="bg-white/10 rounded-xl p-3 text-center">
+                <div className="text-2xl font-bold brand-text-teal">{history.filter(s => s.status === 'approved').length}</div>
+                <div className="text-xs text-white/60">Approved</div>
+              </div>
+            </div>
           </div>
-          <span class="status-badge status-${s.status}">${statusIcon(s.status)} ${capitalize(s.status)}</span>
-        </div>
-        ${s.photo ? `<img class="submission-photo" src="${s.photo}" alt="Catch photo">` : ''}
-        ${s.notes ? `<div class="submission-notes">"${escHtml(s.notes)}"</div>` : ''}
-        ${isPending ? `
-          <div class="submission-actions">
-            <span style="font-size:13px;color:var(--text-muted)">Points:</span>
-            <input class="points-input" type="number" id="${pointsInputId}" value="${ch ? ch.points : s.points || 0}" min="0">
-            <button class="btn btn-success btn-sm" onclick="approveWithPoints('${s.id}','${pointsInputId}',${JSON.stringify(s).replace(/'/g,"\\'")} )">✅ Approve</button>
-            <button class="btn btn-danger btn-sm" onclick="rejectSub(${JSON.stringify(s).replace(/'/g,"\\'")})">❌ Reject</button>
-          </div>` : ''}
-      </div>`;
-  }
 
-  function approveWithPoints(subId, inputId, sub) {
-    const input = document.getElementById(inputId);
-    const pts = input ? Number(input.value) : (sub.points || 0);
-    handleApprove(sub, pts);
-  }
-
-  function rejectSub(sub) {
-    if (confirm('Reject this submission?')) handleReject(sub);
-  }
-
-  function renderAdminReferrals() {
-    if (!state.appsScriptUrl) return renderSetupCard();
-    const refs = state.referrals;
-    return `
-      ${renderSetupCardIfNeeded()}
-      <div class="section-heading">Referrals (${refs.length})</div>
-      ${refs.length === 0 ? `<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-title">No referrals yet</div><div class="empty-sub">Referrals from members will appear here.</div></div>` : ''}
-      ${refs.map(r => `
-        <div class="referral-admin-card">
-          <div class="referral-info">
-            <div class="referral-referrer">👤 Member #${escHtml(r.referrerMemberNumber)} ${r.referrerName ? `(${escHtml(r.referrerName)})` : ''}</div>
-            <div class="referral-new-member">→ ${escHtml(r.newMemberEmail)}</div>
-            <div class="referral-new-member">📅 ${formatDate(r.timestamp)}</div>
+          <div className="max-w-2xl mx-auto px-4 pt-4">
+            <div className="tabs tabs-boxed bg-base-300 overflow-x-auto flex-nowrap gap-0">
+              <button className={`tab text-xs whitespace-nowrap ${tab === 'pending' ? 'tab-active' : ''}`} onClick={() => setTab('pending')}>
+                Pending {pending.length > 0 && <span className="badge badge-error badge-sm ml-1">{pending.length}</span>}
+              </button>
+              <button className={`tab text-xs whitespace-nowrap ${tab === 'members' ? 'tab-active' : ''}`} onClick={() => setTab('members')}>Members</button>
+              <button className={`tab text-xs whitespace-nowrap ${tab === 'history' ? 'tab-active' : ''}`} onClick={() => setTab('history')}>History</button>
+              <button className={`tab text-xs whitespace-nowrap ${tab === 'challenges' ? 'tab-active' : ''}`} onClick={() => setTab('challenges')}>Challenges</button>
+              <button className={`tab text-xs whitespace-nowrap ${tab === 'referrals' ? 'tab-active' : ''}`} onClick={() => setTab('referrals')}>
+                Referrals {pendingReferrals.length > 0 && <span className="badge badge-warning badge-sm ml-1">{pendingReferrals.length}</span>}
+              </button>
+            </div>
           </div>
-          ${r.status === 'pending' || !r.status
-            ? `<button class="btn btn-sm btn-primary" onclick="handleAwardReferral(${JSON.stringify(r)})">🏆 Award 100 pts</button>`
-            : `<span class="status-badge status-approved">✅ Awarded (${r.pointsAwarded || 100} pts)</span>`}
-        </div>`).join('')}`;
-  }
 
-  function renderAdminChallenges() {
-    const form = state.challengeForm ? renderChallengeForm() : '';
-    return `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div class="section-heading" style="margin:0">Challenges (${state.challenges.length})</div>
-        <button class="btn btn-primary btn-sm" onclick="startEditChallenge(null)">+ Add Challenge</button>
-      </div>
-      ${state.challenges.map(ch => `
-        <div class="challenge-admin-card">
-          <div class="challenge-admin-info">
-            <div class="challenge-admin-title">${escHtml(ch.title)}</div>
-            <div class="challenge-admin-meta">${ch.points} pts · ${escHtml(ch.type)} · ${escHtml(ch.reward)}</div>
+          <div className="max-w-2xl mx-auto px-4 py-4 space-y-3">
+
+            {tab === 'pending' && (
+              <>
+                {loading ? (
+                  <div className="text-center py-12"><span className="loading loading-spinner loading-md" /></div>
+                ) : pending.length === 0 ? (
+                  <div className="text-center py-12 text-base-content/40">
+                    <div className="text-4xl mb-2">&#x2705;</div>
+                    <p>No pending submissions — all caught up!</p>
+                  </div>
+                ) : (
+                  pending.map(sub => {
+                    const challenge = challenges.find(c => c.id === sub.challengeId);
+                    const sheetStatus = sheetUpdateStatus[sub.id];
+                    return (
+                      <div key={sub.id} className="card bg-base-100 border border-warning shadow-sm rounded-xl">
+                        <div className="card-body p-4">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h3 className="font-bold">{challenge?.icon} {sub.challengeTitle}</h3>
+                              <p className="text-sm text-base-content/50">by <span className="font-medium text-base-content">{sub.memberName}</span> · {formatDate(sub.timestamp)}</p>
+                            </div>
+                            <span className="badge badge-warning">Pending</span>
+                          </div>
+
+                          {sub.notes && (
+                            <div className="mt-2 bg-base-200 rounded p-2 text-sm">
+                              <span className="text-base-content/50">Notes:</span>
+                              <pre className="font-medium whitespace-pre-wrap mt-1 text-xs">{sub.notes}</pre>
+                            </div>
+                          )}
+
+                          {sub.photo && (
+                            <div className="mt-2">
+                              <p className="text-xs text-base-content/40 mb-1">&#x1F4F8; Photo proof:</p>
+                              <img
+                                src={sub.photo}
+                                alt="Catch photo"
+                                className="w-full rounded-lg max-h-56 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                onClick={() => setExpandedPhoto(sub.photo)}
+                              />
+                            </div>
+                          )}
+
+                          {challenge?.reward && (
+                            <p className="text-xs text-base-content/40 mt-1">Reward on approval: {challenge.reward.description}</p>
+                          )}
+
+                          {sheetStatus === 'updating' && (
+                            <div className="flex items-center gap-2 text-xs text-base-content/50 mt-1">
+                              <RefreshCw size={12} className="animate-spin" /> Updating Google Sheets...
+                            </div>
+                          )}
+                          {sheetStatus === 'done' && (
+                            <div className="flex items-center gap-2 text-xs text-success mt-1">
+                              <CheckCircle size={12} /> Points updated in Google Sheets &#x2713;
+                            </div>
+                          )}
+                          {sheetStatus === 'failed' && (
+                            <div className="flex items-center gap-2 text-xs text-error mt-1">
+                              <XCircle size={12} /> Sheet update failed — please update manually
+                            </div>
+                          )}
+
+                          <div className="flex gap-2 mt-3">
+                            <button className="btn brand-btn btn-sm flex-1" onClick={() => approveSubmission(sub)} disabled={sheetStatus === 'updating'}>
+                              &#x2705; Approve &amp; Award
+                            </button>
+                            <button className="btn btn-error btn-outline btn-sm flex-1" onClick={() => rejectSubmission(sub)}>
+                              &#x274C; Reject
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </>
+            )}
+
+            {tab === 'members' && (
+              <div className="card bg-base-100 border border-base-200 shadow-sm rounded-xl">
+                <div className="card-body p-6 text-center">
+                  <div className="text-4xl mb-3">&#x1F4CA;</div>
+                  <h3 className="font-bold text-lg mb-2">Member Data</h3>
+                  <p className="text-base-content/60 mb-4">Member data is managed in your Google Sheet. Visit the sheet to view and manage members directly.</p>
+                  <a
+                    href="https://docs.google.com/spreadsheets/d/1loWRLLaoJyeRrK8YwJqCQPeIyZ5EGLByr7_D2b5qgUY"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn brand-btn"
+                  >
+                    Open Google Sheet &#x2192;
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {tab === 'history' && (
+              <>
+                {loading ? (
+                  <div className="text-center py-12"><span className="loading loading-spinner loading-md" /></div>
+                ) : history.length === 0 ? (
+                  <div className="text-center py-12 text-base-content/40">
+                    <div className="text-4xl mb-2">&#x1F4CB;</div>
+                    <p>No reviewed submissions yet.</p>
+                  </div>
+                ) : (
+                  history.map(sub => (
+                    <div key={sub.id} className={`card bg-base-100 shadow-sm rounded-xl border ${sub.status === 'approved' ? 'border-success' : 'border-error'}`}>
+                      <div className="card-body p-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-semibold text-sm">{sub.challengeTitle}</h3>
+                            <p className="text-xs text-base-content/40">{sub.memberName} · {formatDate(sub.timestamp)}</p>
+                            {sub.notes && <p className="text-xs mt-1 text-base-content/60 truncate">{sub.notes}</p>}
+                          </div>
+                          <span className={`badge ${sub.status === 'approved' ? 'badge-success' : 'badge-error'}`}>
+                            {sub.status === 'approved' ? '&#x2705; Approved' : '&#x274C; Rejected'}
+                          </span>
+                        </div>
+                        {sub.photo && (
+                          <img
+                            src={sub.photo}
+                            alt="Catch photo"
+                            className="mt-2 w-full rounded-lg max-h-32 object-cover cursor-pointer hover:opacity-90"
+                            onClick={() => setExpandedPhoto(sub.photo)}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </>
+            )}
+
+            {tab === 'challenges' && (
+              <ChallengeManager challenges={challenges} onRefresh={onRefresh} />
+            )}
+
+            {tab === 'referrals' && (
+              <>
+                <div className="flex items-center justify-between mb-1">
+                  <h2 className="font-semibold text-base flex items-center gap-2">
+                    <Users size={16} className="brand-text-teal" /> Referral Tracker
+                  </h2>
+                  <button className="btn btn-ghost btn-xs" onClick={loadData} disabled={loading}>
+                    <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
+                  </button>
+                </div>
+                <p className="text-xs text-base-content/50 mb-3">
+                  When a member's friend joins, click "Award 100 pts" to credit the referrer automatically.
+                </p>
+
+                {loading ? (
+                  <div className="text-center py-12">
+                    <span className="loading loading-spinner loading-md" />
+                    <p className="text-sm text-base-content/40 mt-2">Loading referrals...</p>
+                  </div>
+                ) : referrals.length === 0 ? (
+                  <div className="text-center py-12 text-base-content/40">
+                    <div className="text-4xl mb-2">&#x1F465;</div>
+                    <p className="font-medium">No referrals yet</p>
+                    <p className="text-sm mt-1">Referrals will appear here when members share their links.</p>
+                  </div>
+                ) : (
+                  <>
+                    {pendingReferrals.length > 0 && (
+                      <div className="mb-2">
+                        <p className="text-xs font-semibold text-warning uppercase tracking-wide mb-2">&#x23F3; Awaiting Award</p>
+                        {pendingReferrals.map((ref, i) => {
+                          const key = ref.referredEmail + '_' + ref.row;
+                          const awardStatus = referralAwardStatus[key];
+                          return (
+                            <div key={i} className="card bg-base-100 border border-warning shadow-sm rounded-xl mb-2">
+                              <div className="card-body p-4">
+                                <div className="flex items-start justify-between">
+                                  <div>
+                                    <p className="font-semibold text-sm">{ref.referredEmail}</p>
+                                    <p className="text-xs text-base-content/50 mt-0.5">
+                                      Referred by <span className="font-medium text-base-content">{ref.referrerName}</span>
+                                      {ref.referrerMemberNumber && <span className="text-base-content/40"> (#{ref.referrerMemberNumber})</span>}
+                                    </p>
+                                    <p className="text-xs text-base-content/40 mt-0.5">{formatDate(ref.timestamp)}</p>
+                                  </div>
+                                  <span className="badge badge-warning badge-sm">Pending</span>
+                                </div>
+
+                                {awardStatus === 'updating' && (
+                                  <div className="flex items-center gap-2 text-xs text-base-content/50 mt-2">
+                                    <RefreshCw size={12} className="animate-spin" /> Awarding points...
+                                  </div>
+                                )}
+                                {awardStatus === 'done' && (
+                                  <div className="flex items-center gap-2 text-xs text-success mt-2">
+                                    <CheckCircle size={12} /> 100 pts awarded &#x2713;
+                                  </div>
+                                )}
+                                {awardStatus === 'failed' && (
+                                  <div className="flex items-center gap-2 text-xs text-error mt-2">
+                                    <XCircle size={12} /> Failed — check member number is correct
+                                  </div>
+                                )}
+
+                                <button
+                                  className="btn brand-btn btn-sm w-full mt-3"
+                                  onClick={() => awardReferral(ref)}
+                                  disabled={awardStatus === 'updating' || awardStatus === 'done'}
+                                >
+                                  &#x1F389; Award 100 pts to {ref.referrerName || 'referrer'}
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {referrals.filter(r => r.status === 'awarded').length > 0 && (
+                      <div>
+                        <p className="text-xs font-semibold text-success uppercase tracking-wide mb-2">&#x2705; Awarded</p>
+                        {referrals.filter(r => r.status === 'awarded').map((ref, i) => (
+                          <div key={i} className="card bg-base-100 border border-success shadow-sm rounded-xl mb-2 opacity-75">
+                            <div className="card-body p-3">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <p className="font-semibold text-sm">{ref.referredEmail}</p>
+                                  <p className="text-xs text-base-content/50">
+                                    Referred by <span className="font-medium">{ref.referrerName}</span>
+                                    {ref.referrerMemberNumber && <span className="text-base-content/40"> (#{ref.referrerMemberNumber})</span>}
+                                  </p>
+                                  <p className="text-xs text-base-content/40">{formatDate(ref.timestamp)}</p>
+                                </div>
+                                <span className="badge badge-success badge-sm">+100 pts</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
           </div>
-          <div class="challenge-admin-actions">
-            <button class="btn btn-secondary btn-sm" onclick="startEditChallenge(${JSON.stringify(ch)})">✏️</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteChallengeById('${ch.id}')">🗑️</button>
-          </div>
-        </div>`).join('')}
-      ${form}`;
-  }
 
-  function renderChallengeForm() {
-    const f = state.challengeForm;
-    return `
-      <div class="challenge-form-card" id="challenge-form-scroll">
-        <div class="challenge-form-title">${state.editingChallenge ? '✏️ Edit Challenge' : '➕ Add New Challenge'}</div>
-        <div class="form-group">
-          <label class="form-label">Title</label>
-          <input class="form-input" type="text" value="${escHtml(f.title)}" oninput="state.challengeForm.title=this.value" placeholder="Challenge title">
+          {expandedPhoto && (
+            <div className="modal modal-open" onClick={() => setExpandedPhoto(null)}>
+              <div className="modal-box max-w-2xl p-2 bg-base-300">
+                <img src={expandedPhoto} alt="Catch photo full size" className="w-full rounded-lg" />
+                <p className="text-xs text-center text-base-content/40 mt-2">Tap anywhere to close</p>
+              </div>
+              <div className="modal-backdrop" />
+            </div>
+          )}
         </div>
-        <div class="form-group">
-          <label class="form-label">Description</label>
-          <textarea class="form-textarea" oninput="state.challengeForm.desc=this.value" placeholder="What must members do to complete this challenge?">${escHtml(f.desc)}</textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Points</label>
-          <input class="form-input" type="number" value="${f.points}" oninput="state.challengeForm.points=this.value" placeholder="e.g. 200" min="0">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Reward Description</label>
-          <input class="form-input" type="text" value="${escHtml(f.reward)}" oninput="state.challengeForm.reward=this.value" placeholder="e.g. 200 Points + 10% Voucher">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Type</label>
-          <select class="form-input" onchange="state.challengeForm.type=this.value">
-            ${['species','weight','location','monthly','seasonal','quiz','custom'].map(t =>
-              `<option value="${t}" ${f.type === t ? 'selected' : ''}>${capitalize(t)}</option>`).join('')}
-          </select>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:4px">
-          <button class="btn btn-secondary" onclick="state.challengeForm=null;state.editingChallenge=null;render()">Cancel</button>
-          <button class="btn btn-primary" style="flex:1" onclick="saveChallengeForm()">💾 Save Challenge</button>
-        </div>
-      </div>`;
-  }
-
-  function renderSetupCard() {
-    return `
-      <div class="setup-card">
-        <div class="setup-title">⚙️ Apps Script Not Configured</div>
-        <div class="setup-desc">To enable live data (member lookups, submissions, referrals), deploy the Google Apps Script backend and paste the web app URL below.</div>
-        <div class="form-group">
-          <label class="form-label">Apps Script Web App URL</label>
-          <input class="form-input" type="url" placeholder="https://script.google.com/macros/s/..."
-            value="${escHtml(state.urlSetupInput)}"
-            oninput="state.urlSetupInput=this.value">
-        </div>
-        <button class="btn btn-primary" onclick="saveAppsScriptUrl()">💾 Save & Connect</button>
-      </div>`;
-  }
-
-  function renderSetupCardIfNeeded() {
-    return !state.appsScriptUrl ? renderSetupCard() : '';
-  }
-
-  function escHtml(str) {
-    if (str === null || str === undefined) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  // ===== MAIN RENDER =====
-  function render() {
-    const app = document.getElementById('app');
-    if (!app) return;
-    let html = '';
-    if (state.view === 'login') html = renderLoginView();
-    else if (state.view === 'member') html = renderMemberView();
-    else if (state.view === 'admin') html = renderAdminView();
-    app.innerHTML = html;
-  }
-
-  // ===== INIT =====
-  function init() {
-    detectReferral();
-    loadChallenges();
-    render();
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(console.error);
-      });
+      );
     }
-  }
 
-  init();
+    // ── BottomNav ─────────────────────────────────────────────────────────────
+    function BottomNav({ activeTab, onTabChange }) {
+      const tabs = [
+        { id: 'challenges', label: 'Challenges', icon: '\u{1F3A3}' },
+        { id: 'website', label: 'Website', icon: '\u{1F310}', url: 'https://www.voyagershook.com' },
+        { id: 'offers', label: 'Offers', icon: '\u{1F3F7}\uFE0F', url: 'https://www.voyagershook.com/members-exclusive-offers' },
+        { id: 'facebook', label: 'Facebook', icon: '\u{1F4D8}', url: 'https://www.facebook.com/profile.php?id=61573745438430' },
+      ];
+      return (
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#26241f', zIndex: 1000, display: 'flex', borderTop: '1px solid #444' }}>
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => tab.url ? window.open(tab.url, '_blank') : onTabChange(tab.id)}
+              style={{
+                flex: 1, padding: '8px 4px 12px', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', gap: '2px', background: 'none', border: 'none', cursor: 'pointer',
+                color: activeTab === tab.id ? '#0097b2' : '#aaa', fontSize: '11px', fontWeight: activeTab === tab.id ? '600' : '400'
+              }}
+            >
+              <span style={{ fontSize: '20px' }}>{tab.icon}</span>
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    // ── App Root ──────────────────────────────────────────────────────────────
+    function App() {
+      const [view, setView] = useState('login');
+      const [currentMember, setCurrentMember] = useState(null);
+      const [challenges, setChallenges] = useState(getChallenges());
+      const [activeTab, setActiveTab] = useState('challenges');
+
+      function refreshChallenges() { setChallenges(getChallenges()); }
+
+      function handleTabChange(tab) { setActiveTab(tab); }
+
+      return (
+        <div className="font-sans" style={{ paddingBottom: '70px' }}>
+          {view === 'login' && (
+            <Login
+              onMemberLogin={(m) => { setCurrentMember(m); setView('member'); }}
+              onAdminLogin={() => setView('admin')}
+            />
+          )}
+          {view === 'member' && currentMember && (
+            <MemberView
+              member={currentMember}
+              challenges={challenges}
+              onLogout={() => { setCurrentMember(null); setView('login'); }}
+            />
+          )}
+          {view === 'admin' && (
+            <AdminView
+              challenges={challenges}
+              onLogout={() => setView('login')}
+              onRefresh={refreshChallenges}
+            />
+          )}
+          <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
