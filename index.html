@@ -104,16 +104,17 @@
       });
     }
 
-    // ── Storage Utilities ─────────────────────────────────────────────────────
-    const CHALLENGES_KEY = 'vh_challenges';
-    function getChallenges() {
-      const s = localStorage.getItem(CHALLENGES_KEY);
-      if (!s) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(DEFAULT_CHALLENGES)); return DEFAULT_CHALLENGES; }
-      const parsed = JSON.parse(s);
-      if (!parsed || parsed.length === 0) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(DEFAULT_CHALLENGES)); return DEFAULT_CHALLENGES; }
-      return parsed;
+    // ── Challenge GAS Helpers ──────────────────────────────────────────────────
+    async function fetchChallengesFromGAS() {
+      try {
+        const data = await gasGet({ action: 'getChallenges' });
+        if (data.success && data.challenges && data.challenges.length > 0) return data.challenges;
+      } catch(e) {}
+      return DEFAULT_CHALLENGES;
     }
-    function saveChallenges(ch) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(ch)); }
+    async function saveChallengesToGAS(ch) {
+      try { await gasPost({ action: 'saveChallenges', challenges: ch }); } catch(e) {}
+    }
     function getMemberStatus(email) {
       const s = localStorage.getItem('vh_status_' + email);
       return s ? JSON.parse(s) : [];
@@ -238,19 +239,19 @@
 
       function openNew() { setIsNew(true); setEditing(blankEdit()); }
 
-      function toggleActive(challenge) {
-        const all = getChallenges();
-        const idx = all.findIndex(c => c.id === challenge.id);
-        if (idx !== -1) { all[idx].active = !all[idx].active; saveChallenges(all); }
+      async function toggleActive(challenge) {
+        const all = challenges.map(c => c.id === challenge.id ? {...c, active: !c.active} : c);
+        await saveChallengesToGAS(all);
         onRefresh();
       }
 
-      function deleteChallenge(id) {
-        saveChallenges(getChallenges().filter(c => c.id !== id));
+      async function deleteChallenge(id) {
+        const all = challenges.filter(c => c.id !== id);
+        await saveChallengesToGAS(all);
         onRefresh();
       }
 
-      function saveEdit() {
+      async function saveEdit() {
         if (!editing || !editing.title.trim()) return;
         const reward = { type: editing.rewardType };
         if (editing.rewardType === 'points') { reward.points = editing.points; reward.description = editing.points + ' Points'; }
@@ -263,10 +264,10 @@
           reward, active: editing.active,
         };
 
-        const all = getChallenges();
+        const all = [...challenges];
         if (isNew) { all.push(updated); }
         else { const idx = all.findIndex(c => c.id === updated.id); if (idx !== -1) all[idx] = updated; }
-        saveChallenges(all);
+        await saveChallengesToGAS(all);
         setEditing(null);
         onRefresh();
       }
@@ -1255,10 +1256,17 @@
     function App() {
       const [view, setView] = useState('login');
       const [currentMember, setCurrentMember] = useState(null);
-      const [challenges, setChallenges] = useState(getChallenges());
+      const [challenges, setChallenges] = useState(DEFAULT_CHALLENGES);
       const [activeTab, setActiveTab] = useState('challenges');
 
-      function refreshChallenges() { setChallenges(getChallenges()); }
+      useEffect(() => {
+        fetchChallengesFromGAS().then(ch => setChallenges(ch));
+      }, []);
+
+      async function refreshChallenges() {
+        const ch = await fetchChallengesFromGAS();
+        setChallenges(ch);
+      }
 
       function handleTabChange(tab) { setActiveTab(tab); }
 
