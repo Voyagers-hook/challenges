@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#0097b2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="VH Challenges">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <title>Voyager's Hook — Challenges</title>
+  <style>
+    :root {
+      --dark: #26241f;
+      --dark2: #1c1b17;
+      --teal: #0097b2;
+      --light-teal: #00b8d9;
+      --amber: #f59e0b;
+      --green: #22c55e;
+      --red: #ef4444;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f3f4f6;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    #app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== INSTALL BANNER ===== */
+    .install-banner {
+      background: linear-gradient(135deg, var(--teal), var(--light-teal));
+      color: white;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: slideDown 0.3s ease;
+    }
+    .install-banner button {
+      background: white;
+      color: var(--teal);
+      border: none;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .install-banner .dismiss {
+      background: none;
+      color: white;
+      padding: 4px 8px;
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    /* ===== REFERRAL BANNER ===== */
+    .referral-banner {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: white;
+      padding: 12px 16px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .referral-banner a {
+      color: white;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: linear-gradient(135deg, var(--dark), #3a3830);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .header-logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-name {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    .admin-badge {
+      background: var(--teal);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== LOGIN VIEW ===== */
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--dark) 0%, #3a3830 100%);
+    }
+    .login-logo {
+      width: 130px;
+      margin-bottom: 8px;
+    }
+    .login-club-name {
+      color: var(--light-teal);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0.85;
+    }
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+    .login-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .login-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      color: var(--text);
+      background: white;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--teal);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal), var(--light-teal));
+      color: white;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0,151,178,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,151,178,0.45);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    .btn-secondary {
+      background: var(--border);
+      color: var(--text);
+    }
+    .btn-secondary:hover {
+      background: #d1d5db;
+    }
+    .btn-danger {
+      background: #fee2e2;
+      color: var(--red);
+    }
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+    .btn-success {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    .btn-success:hover {
+      background: #bbf7d0;
+    }
+    .btn-sm {
+      padding: 7px 14px;
+      font-size: 13px;
+    }
+    .btn-full { width: 100%; }
+    .admin-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .admin-link:hover { color: var(--teal); }
+    .login-error {
+      background: #fee2e2;
+      color: var(--red);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .login-info {
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .not-member-link {
+      display: block;
+      text-align: center;
+      margin-top: 16px;
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .not-member-link:hover { text-decoration: underline; }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      flex: 1;
+      padding: 16px;
+      padding-bottom: 80px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .main-content.no-bottom-nav {
+      padding-bottom: 24px;
+    }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 50;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 0 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 500;
+      gap: 3px;
+      transition: color 0.15s;
+      border: none;
+      background: none;
+    }
+    .nav-item.active {
+      color: var(--teal);
+    }
+    .nav-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    /* ===== ADMIN TABS ===== */
+    .admin-tabs {
+      display: flex;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .admin-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 3px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+    .tab-btn:hover { color: var(--teal); }
+    .tab-logout {
+      margin-left: auto;
+      color: var(--red);
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .card-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ===== HOME TAB ===== */
+    .welcome-card {
+      background: linear-gradient(135deg, var(--dark), #3a3830);
+      color: white;
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .welcome-card::after {
+      content: '🎣';
+      position: absolute;
+      right: 20px;
+      bottom: 10px;
+      font-size: 64px;
+      opacity: 0.1;
+    }
+    .welcome-greeting {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-bottom: 4px;
+    }
+    .welcome-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .points-big {
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--light-teal);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .points-label {
+      font-size: 13px;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .progress-section {
+      margin-top: 20px;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      opacity: 0.7;
+      margin-bottom: 6px;
+    }
+    .progress-bar-bg {
+      background: rgba(255,255,255,0.15);
+      border-radius: 99px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--light-teal));
+      border-radius: 99px;
+      transition: width 0.6s ease;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ===== CHALLENGE CARDS ===== */
+    .challenge-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px 16px 16px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      border-left: 4px solid var(--teal);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: box-shadow 0.2s;
+    }
+    .challenge-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .challenge-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .challenge-info { flex: 1; }
+    .challenge-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .challenge-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .points-badge {
+      background: linear-gradient(135deg, var(--teal), var(--light-teal));
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .challenge-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .reward-text {
+      font-size: 12px;
+      color: var(--teal);
+      font-weight: 500;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .status-approved {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .status-rejected {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* ===== PROFILE TAB ===== */
+    .profile-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-field:last-child { border-bottom: none; }
+    .profile-field-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .profile-field-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      text-align: right;
+      max-width: 55%;
+      word-break: break-all;
+    }
+    .voucher-value {
+      color: var(--teal);
+      font-size: 16px;
+    }
+
+    /* ===== REFERRAL SECTION ===== */
+    .referral-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 0;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .referral-toggle:hover { opacity: 0.8; }
+    .referral-expanded {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .referral-link-box {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--dark);
+      word-break: break-all;
+      margin-bottom: 12px;
+      font-family: monospace;
+    }
+    .referral-share-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+    }
+    .btn-whatsapp:hover { background: #1fba58; }
+    .btn-email {
+      background: #4f46e5;
+      color: white;
+    }
+    .btn-email:hover { background: #4338ca; }
+    .btn-copy {
+      background: var(--border);
+      color: var(--dark);
+    }
+    .btn-copy:hover { background: #d1d5db; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-sheet {
+      background: white;
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 600px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 24px 20px;
+      animation: slideUp 0.3s ease;
+    }
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .modal-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .upload-area {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .upload-area:hover { border-color: var(--teal); }
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .upload-icon { font-size: 40px; margin-bottom: 8px; }
+    .upload-text { font-size: 14px; color: var(--text-muted); }
+    .upload-preview {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+    .form-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      color: var(--text);
+      background: white;
+      transition: border-color 0.2s;
+      outline: none;
+      resize: vertical;
+      min-height: 90px;
+      font-family: inherit;
+    }
+    .form-textarea:focus { border-color: var(--teal); }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .modal-success {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .modal-success-icon { font-size: 56px; margin-bottom: 12px; }
+    .modal-success-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .modal-success-sub { font-size: 14px; color: var(--text-muted); }
+
+    /* ===== ADMIN VIEW ===== */
+    .submission-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      border-left: 4px solid var(--amber);
+    }
+    .submission-card.approved { border-left-color: var(--green); }
+    .submission-card.rejected { border-left-color: var(--red); }
+    .submission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .submission-member {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .submission-challenge {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .submission-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .submission-photo {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      margin: 10px 0;
+    }
+    .submission-notes {
+      font-size: 13px;
+      color: var(--text);
+      font-style: italic;
+      margin: 8px 0;
+      background: #f9fafb;
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+    }
+    .submission-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .points-input {
+      width: 80px;
+      padding: 7px 10px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      outline: none;
+    }
+    .points-input:focus { border-color: var(--teal); }
+    .referral-admin-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .referral-info { flex: 1; }
+    .referral-referrer {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .referral-new-member {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ===== CHALLENGE MANAGER ===== */
+    .challenge-admin-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .challenge-admin-info { flex: 1; }
+    .challenge-admin-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .challenge-admin-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .challenge-admin-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* ===== CHALLENGE FORM ===== */
+    .challenge-form-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .challenge-form-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--dark);
+    }
+
+    /* ===== SETUP SCREEN ===== */
+    .setup-card {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .setup-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #9a3412;
+      margin-bottom: 8px;
+    }
+    .setup-desc {
+      font-size: 13px;
+      color: #7c2d12;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .empty-sub { font-size: 14px; }
+
+    /* ===== SECTION HEADING ===== */
+    .section-heading {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      margin-top: 20px;
+    }
+    .section-heading:first-child { margin-top: 0; }
+
+    /* ===== LOADING ===== */
+    .loading-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 14px 0;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+
+    /* ===== RESPONSIVE ===== */
+    @media (min-width: 600px) {
+      .main-content { padding: 24px; padding-bottom: 24px; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .modal-overlay { align-items: center; }
+      .modal-sheet { border-radius: 20px; max-height: 85vh; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+  // ===== CONFIG =====
+  const ADMIN_EMAIL = 'info@voyagershook.com';
+  const ADMIN_PASSWORD = 'voyagershook';
+  const REFERRAL_PARAM = 'ref';
+  const MEMBERSHIP_URL = 'https://www.voyagershook.com/memberships';
+  const SPREADSHEET_ID = '1loWRLLaoJyeRrK8YwJqCQPeIyZ5EGLByr7_D2b5qgUY';
+  const LOGO_URL = 'https://voyagers-hook.github.io/images/logo%20trans.png';
+
+  const DEFAULT_CHALLENGES = [
+    { id: 'species-trio', title: 'Species Trio', desc: 'Catch 3 of these 5 species: Carp, Pike, Tench, Perch, Bream', points: 500, type: 'species', reward: '500 Points' },
+    { id: 'specimen-carp', title: 'Specimen Carp', desc: 'Catch a carp weighing 10lb or more', points: 200, type: 'weight', reward: '200 Points + 10% Off Voucher' },
+    { id: 'specimen-pike', title: 'Specimen Pike', desc: 'Catch a pike weighing 15lb or more', points: 300, type: 'weight', reward: '300 Points' },
+    { id: 'specimen-tench', title: 'Specimen Tench', desc: 'Catch a tench weighing 5lb or more', points: 250, type: 'weight', reward: '250 Points' },
+    { id: 'local-legend', title: 'Local Legend', desc: 'Catch fish from 3 different waters', points: 400, type: 'location', reward: '400 Points' },
+    { id: 'big-catch', title: 'Big Catch of the Month', desc: 'Catch the biggest fish of the month', points: 1000, type: 'monthly', reward: '1000 Points' },
+    { id: 'seasonal-slam', title: 'Seasonal Slam', desc: 'Catch 4 different species across the seasons', points: 600, type: 'seasonal', reward: '600 Points' },
+    { id: 'gear-guru', title: 'Gear Guru Quiz', desc: 'Complete the tackle knowledge quiz', points: 100, type: 'quiz', reward: '100 Points' }
+  ];
+
+  // ===== STATE =====
+  let state = {
+    view: 'login',
+    member: null,
+    challenges: [],
+    submissions: [],
+    referrals: [],
+    referralExpanded: false,
+    activeTab: 'home',
+    modal: null,
+    loading: false,
+    error: null,
+    adminError: null,
+    pendingReferrer: null,
+    appsScriptUrl: localStorage.getItem('vh_apps_script_url') || 'https://script.google.com/macros/s/AKfycbzBuiob4jDSUQAmcbxd7lrQ_JhuPCDnr8P4WlocCG3-Eu_FWQdDoDF-vnCHRwNqKA0wIw/exec',
+    showAdminPassword: false,
+    adminPasswordInput: '',
+    emailInput: '',
+    passwordInput: '',
+    submitPhoto: null,
+    submitPhotoData: null,
+    submitNotes: '',
+    submitLoading: false,
+    submitSuccess: false,
+    showInstallBanner: false,
+    urlSetupInput: '',
+    challengeForm: null,
+    editingChallenge: null,
+    adminData: null
+  };
+
+  let deferredPrompt = null;
+
+  // ===== PWA INSTALL PROMPT =====
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    setTimeout(() => {
+      if (!localStorage.getItem('vh_install_dismissed')) {
+        state.showInstallBanner = true;
+        render();
+      }
+    }, 3000);
+  });
+
+  // ===== LOAD CHALLENGES FROM LOCALSTORAGE =====
+  function loadChallenges() {
+    const stored = localStorage.getItem('vh_challenges');
+    if (stored) {
+      try { state.challenges = JSON.parse(stored); return; } catch(e) {}
+    }
+    state.challenges = JSON.parse(JSON.stringify(DEFAULT_CHALLENGES));
+    saveChallenges();
+  }
+  function saveChallenges() {
+    localStorage.setItem('vh_challenges', JSON.stringify(state.challenges));
+  }
+
+  // ===== LOCAL SUBMISSIONS (demo/fallback) =====
+  function loadLocalSubmissions() {
+    const stored = localStorage.getItem('vh_submissions');
+    if (stored) {
+      try { return JSON.parse(stored); } catch(e) {}
+    }
+    return [];
+  }
+  function saveLocalSubmission(sub) {
+    const subs = loadLocalSubmissions();
+    subs.push(sub);
+    localStorage.setItem('vh_submissions', JSON.stringify(subs));
+  }
+
+  // ===== REFERRAL DETECTION =====
+  function detectReferral() {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get(REFERRAL_PARAM);
+    if (ref) {
+      state.pendingReferrer = ref;
+      localStorage.setItem('vh_referrer', ref);
+    } else {
+      const stored = localStorage.getItem('vh_referrer');
+      if (stored) state.pendingReferrer = stored;
+    }
+  }
+
+  // ===== API CALLS =====
+  async function apiGet(action, params = {}) {
+    if (!state.appsScriptUrl) return { demo: true };
+    try {
+      const url = new URL(state.appsScriptUrl);
+      url.searchParams.set('action', action);
+      Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+      const res = await fetch(url.toString());
+      return await res.json();
+    } catch(e) {
+      return { error: e.message };
+    }
+  }
+
+  async function apiPost(action, data) {
+    if (!state.appsScriptUrl) return { demo: true };
+    try {
+      await fetch(state.appsScriptUrl, {
+        method: 'POST',
+        body: JSON.stringify({ action, ...data })
+      });
+      return { success: true };
+    } catch(e) {
+      return { error: e.message };
+    }
+  }
+
+  // ===== IMAGE COMPRESSION =====
+  function compressImage(file, callback) {
+    const canvas = document.createElement('canvas');
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      const max = 800;
+      if (w > max || h > max) {
+        if (w > h) { h = Math.round(h * max / w); w = max; }
+        else { w = Math.round(w * max / h); h = max; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      callback(canvas.toDataURL('image/jpeg', 0.7));
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => { callback(null); URL.revokeObjectURL(url); };
+    img.src = url;
+  }
+
+  // ===== ACTIONS =====
+
+  async function handleLogin() {
+    const email = state.emailInput.trim().toLowerCase();
+    if (!email) { state.error = 'Please enter your email address.'; render(); return; }
+    state.loading = true; state.error = null; render();
+
+    if (email === ADMIN_EMAIL.toLowerCase()) {
+      state.loading = false;
+      state.error = 'Use the Admin login below.';
+      render(); return;
+    }
+
+    const data = await apiGet('getMember', { email });
+
+    if (data.demo) {
+      // Demo mode - simulate member
+      state.member = {
+        name: 'Demo Member',
+        email: email,
+        memberNumber: 'DEMO001',
+        pointsTotal: 350,
+        pointsNeeded: 1000,
+        voucher: '',
+        discountCode: ''
+      };
+      state.loading = false;
+      state.view = 'member';
+      state.activeTab = 'home';
+      if (state.pendingReferrer) {
+        localStorage.removeItem('vh_referrer');
+      }
+      render(); return;
+    }
+
+    if (data.error || !data.success) {
+      state.loading = false;
+      state.error = data.error === 'Member not found'
+        ? null
+        : (data.error || 'Unable to find your account.');
+      if (data.error === 'Member not found') {
+        state.error = 'notfound';
+      }
+      render(); return;
+    }
+
+    state.member = data;
+    state.loading = false;
+    state.view = 'member';
+    state.activeTab = 'home';
+
+    // Log referral if pending
+    if (state.pendingReferrer && state.pendingReferrer !== data.memberNumber) {
+      apiPost('logReferral', {
+        referrerMemberNumber: state.pendingReferrer,
+        referrerName: '',
+        newMemberEmail: data.email
+      });
+      localStorage.removeItem('vh_referrer');
+      state.pendingReferrer = null;
+    }
+
+    render();
+  }
+
+  async function handleAdminLogin() {
+    if (state.adminPasswordInput !== ADMIN_PASSWORD) {
+      state.error = 'Incorrect admin password.';
+      render(); return;
+    }
+    state.view = 'admin';
+    state.activeTab = 'pending';
+    state.error = null;
+    state.loading = true;
+    render();
+    await loadAdminData();
+    state.loading = false;
+    render();
+  }
+
+  async function loadAdminData() {
+    const data = await apiGet('getAdminData');
+    if (data.demo) {
+      state.submissions = loadLocalSubmissions();
+      state.referrals = [];
+    } else if (!data.error) {
+      state.submissions = data.submissions || [];
+      state.referrals = data.referrals || [];
+      // Merge local submissions (demo ones)
+      const localSubs = loadLocalSubmissions();
+      localSubs.forEach(ls => {
+        if (!state.submissions.find(s => s.id === ls.id)) state.submissions.push(ls);
+      });
+    }
+  }
+
+  async function handleSubmitChallenge() {
+    if (!state.submitPhotoData) {
+      alert('Please add a photo of your catch!');
+      return;
+    }
+    const challenge = state.challenges.find(c => c.id === state.modal.challengeId);
+    if (!challenge) return;
+
+    state.submitLoading = true; render();
+
+    const payload = {
+      memberEmail: state.member.email,
+      memberName: state.member.name,
+      challengeId: challenge.id,
+      challengeTitle: challenge.title,
+      notes: state.submitNotes,
+      photo: state.submitPhotoData,
+      points: challenge.points
+    };
+
+    if (!state.appsScriptUrl) {
+      // Save locally
+      const sub = {
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString(),
+        ...payload,
+        status: 'pending'
+      };
+      saveLocalSubmission(sub);
+    } else {
+      await apiPost('submitChallenge', payload);
+    }
+
+    state.submitLoading = false;
+    state.submitSuccess = true;
+    render();
+  }
+
+  async function handleApprove(sub, points) {
+    await apiPost('approveSubmission', {
+      submissionId: sub.id,
+      memberEmail: sub.memberEmail,
+      points: points
+    });
+    // Update local state
+    const idx = state.submissions.findIndex(s => s.id === sub.id);
+    if (idx > -1) state.submissions[idx].status = 'approved';
+    // Also update in localStorage
+    const localSubs = loadLocalSubmissions();
+    const li = localSubs.findIndex(s => s.id === sub.id);
+    if (li > -1) { localSubs[li].status = 'approved'; localStorage.setItem('vh_submissions', JSON.stringify(localSubs)); }
+    render();
+  }
+
+  async function handleReject(sub) {
+    await apiPost('rejectSubmission', { submissionId: sub.id });
+    const idx = state.submissions.findIndex(s => s.id === sub.id);
+    if (idx > -1) state.submissions[idx].status = 'rejected';
+    const localSubs = loadLocalSubmissions();
+    const li = localSubs.findIndex(s => s.id === sub.id);
+    if (li > -1) { localSubs[li].status = 'rejected'; localStorage.setItem('vh_submissions', JSON.stringify(localSubs)); }
+    render();
+  }
+
+  async function handleAwardReferral(ref) {
+    await apiPost('awardReferralPoints', {
+      row: ref.row,
+      referrerMemberNumber: ref.referrerMemberNumber
+    });
+    const idx = state.referrals.findIndex(r => r.row === ref.row);
+    if (idx > -1) { state.referrals[idx].status = 'awarded'; state.referrals[idx].pointsAwarded = 100; }
+    render();
+  }
+
+  function logout() {
+    state.view = 'login';
+    state.member = null;
+    state.submissions = [];
+    state.referrals = [];
+    state.emailInput = '';
+    state.adminPasswordInput = '';
+    state.showAdminPassword = false;
+    state.activeTab = 'home';
+    state.error = null;
+    render();
+  }
+
+  function openModal(challengeId) {
+    state.modal = { challengeId };
+    state.submitPhoto = null;
+    state.submitPhotoData = null;
+    state.submitNotes = '';
+    state.submitSuccess = false;
+    state.submitLoading = false;
+    render();
+  }
+
+  function closeModal() {
+    state.modal = null;
+    render();
+  }
+
+  function saveAppsScriptUrl() {
+    const url = state.urlSetupInput.trim();
+    if (!url) { alert('Please paste a valid URL.'); return; }
+    state.appsScriptUrl = url;
+    localStorage.setItem('vh_apps_script_url', url);
+    state.urlSetupInput = '';
+    loadAdminData().then(() => render());
+    render();
+  }
+
+  function deleteChallengeById(id) {
+    if (!confirm('Delete this challenge?')) return;
+    state.challenges = state.challenges.filter(c => c.id !== id);
+    saveChallenges();
+    render();
+  }
+
+  function startEditChallenge(ch) {
+    state.editingChallenge = ch ? ch.id : null;
+    state.challengeForm = ch
+      ? { ...ch }
+      : { id: 'ch_' + Date.now(), title: '', desc: '', points: 100, type: 'custom', reward: '' };
+    render();
+    setTimeout(() => {
+      const el = document.getElementById('challenge-form-scroll');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }
+
+  function saveChallengeForm() {
+    const f = state.challengeForm;
+    if (!f.title.trim()) { alert('Title is required.'); return; }
+    if (!f.points || isNaN(Number(f.points))) { alert('Points must be a number.'); return; }
+    f.points = Number(f.points);
+    if (state.editingChallenge) {
+      const idx = state.challenges.findIndex(c => c.id === state.editingChallenge);
+      if (idx > -1) state.challenges[idx] = { ...f };
+    } else {
+      state.challenges.push({ ...f });
+    }
+    saveChallenges();
+    state.challengeForm = null;
+    state.editingChallenge = null;
+    render();
+  }
+
+  function getMemberSubmissions() {
+    if (!state.member) return [];
+    const all = loadLocalSubmissions();
+    const email = state.member.email.toLowerCase();
+    return all.filter(s => s.memberEmail && s.memberEmail.toLowerCase() === email);
+  }
+
+  function getSubmissionForChallenge(challengeId) {
+    const subs = getMemberSubmissions();
+    return subs.find(s => s.challengeId === challengeId) || null;
+  }
+
+  function referralUrl() {
+    const base = window.location.href.split('?')[0];
+    return base + '?' + REFERRAL_PARAM + '=' + (state.member ? state.member.memberNumber : '');
+  }
+
+  function formatDate(ts) {
+    if (!ts) return '';
+    try {
+      return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch(e) { return ts; }
+  }
+
+  // ===== RENDER HELPERS =====
+
+  function renderInstallBanner() {
+    if (!state.showInstallBanner) return '';
+    return `
+      <div class="install-banner">
+        <span>📲 Add to your Home Screen for the best experience</span>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button onclick="installApp()">Install</button>
+          <button class="dismiss" onclick="dismissInstall()">✕</button>
+        </div>
+      </div>`;
+  }
+
+  function installApp() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        state.showInstallBanner = false;
+        render();
+      });
+    }
+  }
+
+  function dismissInstall() {
+    localStorage.setItem('vh_install_dismissed', '1');
+    state.showInstallBanner = false;
+    render();
+  }
+
+  function renderLoginView() {
+    const refBanner = state.pendingReferrer
+      ? `<div class="referral-banner">🎣 You've been referred! <a href="${MEMBERSHIP_URL}" target="_blank">Sign up to join Voyager's Hook →</a></div>`
+      : '';
+
+    const demoNotice = !state.appsScriptUrl
+      ? `<div class="login-info">ℹ️ <strong>Demo mode:</strong> Live data not yet configured. You can still explore the app.</div>`
+      : '';
+
+    const errorHtml = state.error && state.error !== 'notfound'
+      ? `<div class="login-error">⚠️ ${state.error}</div>`
+      : '';
+
+    const notFoundHtml = state.error === 'notfound'
+      ? `<div class="login-error">⚠️ No account found for that email address.</div><a class="not-member-link" href="${MEMBERSHIP_URL}" target="_blank">Not a member yet? Join here →</a>`
+      : '';
+
+    const adminSection = state.showAdminPassword
+      ? `<div class="form-group" style="margin-top:12px">
+           <label class="form-label">Admin Password</label>
+           <input class="form-input" type="password" placeholder="Enter admin password" value="${escHtml(state.adminPasswordInput)}"
+             oninput="state.adminPasswordInput=this.value"
+             onkeydown="if(event.key==='Enter')handleAdminLogin()">
+         </div>
+         <button class="btn btn-primary" style="margin-top:4px" onclick="handleAdminLogin()">🔐 Admin Login</button>`
+      : `<span class="admin-link" onclick="state.showAdminPassword=true;render()">Admin login</span>`;
+
+    return `
+      ${renderInstallBanner()}
+      ${refBanner}
+      <div class="login-wrap">
+        <img src="${LOGO_URL}" class="login-logo" alt="Voyager's Hook logo">
+        <span class="login-club-name">Voyager's Hook</span>
+        <div class="login-card">
+          <div class="login-title">Member Login 🎣</div>
+          <div class="login-subtitle">Sign in with your membership email</div>
+          ${demoNotice}
+          ${errorHtml}
+          ${notFoundHtml}
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="you@example.com"
+              autocomplete="email" inputmode="email"
+              value="${escHtml(state.emailInput)}"
+              oninput="state.emailInput=this.value;state.error=null"
+              onkeydown="if(event.key==='Enter')handleLogin()">
+          </div>
+          ${state.loading
+            ? `<div class="loading-wrap"><div class="spinner"></div><span>Checking membership...</span></div>`
+            : `<button class="btn btn-primary" onclick="handleLogin()">Log In</button>`}
+          ${adminSection}
+        </div>
+      </div>`;
+  }
+
+  function renderHeader(showAdmin) {
+    const right = showAdmin
+      ? `<span class="admin-badge">Admin</span>`
+      : `<span class="header-name">${escHtml(state.member ? state.member.name.split(' ')[0] : '')}</span>`;
+    return `
+      <div class="header">
+        <img src="${LOGO_URL}" class="header-logo" alt="Voyager's Hook">
+        <div class="header-right">${right}</div>
+      </div>`;
+  }
+
+  function renderBottomNav() {
+    const tabs = [
+      { id: 'home', icon: '🏠', label: 'Home' },
+      { id: 'challenges', icon: '🎣', label: 'Challenges' },
+      { id: 'profile', icon: '👤', label: 'Profile' }
+    ];
+    return `
+      <nav class="bottom-nav">
+        ${tabs.map(t => `
+          <button class="nav-item ${state.activeTab === t.id ? 'active' : ''}" onclick="setTab('${t.id}')">
+            <span class="nav-icon">${t.icon}</span>
+            <span>${t.label}</span>
+          </button>`).join('')}
+      </nav>`;
+  }
+
+  function setTab(tab) {
+    state.activeTab = tab;
+    render();
+  }
+
+  function renderHomeTab() {
+    const m = state.member;
+    const pts = m.pointsTotal || 0;
+    const needed = m.pointsNeeded || 1000;
+    const pct = Math.min(100, Math.round((pts / needed) * 100));
+    const mySubs = getMemberSubmissions();
+    const pendingCount = mySubs.filter(s => s.status === 'pending').length;
+    const approvedCount = mySubs.filter(s => s.status === 'approved').length;
+
+    const recentSubs = mySubs.slice(-3).reverse();
+    const recentHtml = recentSubs.length
+      ? recentSubs.map(s => {
+          const ch = state.challenges.find(c => c.id === s.challengeId);
+          return `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+              <div>
+                <div style="font-size:14px;font-weight:600">${escHtml(ch ? ch.title : s.challengeId)}</div>
+                <div style="font-size:12px;color:var(--text-muted)">${formatDate(s.timestamp)}</div>
+              </div>
+              <span class="status-badge status-${s.status}">${statusIcon(s.status)} ${capitalize(s.status)}</span>
+            </div>`;
+        }).join('')
+      : `<div class="empty-state" style="padding:20px 0"><div class="empty-icon">📋</div><div class="empty-title">No submissions yet</div><div class="empty-sub">Start catching fish and submit your challenges!</div></div>`;
+
+    return `
+      <div class="main-content">
+        <div class="welcome-card">
+          <div class="welcome-greeting">Welcome back,</div>
+          <div class="welcome-name">${escHtml(m.name)} 👋</div>
+          <div class="points-big">${pts}</div>
+          <div class="points-label">Total Points</div>
+          <div class="progress-section">
+            <div class="progress-label">
+              <span>Progress to next reward</span>
+              <span>${pts} / ${needed} pts</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:${pct}%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">${state.challenges.length}</div>
+            <div class="stat-label">Challenges</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${pendingCount}</div>
+            <div class="stat-label">Pending</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${approvedCount}</div>
+            <div class="stat-label">Completed ✅</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Recent Submissions</div>
+          ${recentHtml}
+        </div>
+
+        ${!state.appsScriptUrl ? `
+          <div class="card" style="border-left:4px solid var(--amber)">
+            <div style="font-size:14px;font-weight:600;color:#92400e;margin-bottom:4px">⚙️ Demo Mode Active</div>
+            <div style="font-size:13px;color:var(--text-muted)">The app is running in demo mode. Your admin needs to connect the Google Apps Script for live data.</div>
+          </div>` : ''}
+      </div>`;
+  }
+
+  function statusIcon(status) {
+    if (status === 'approved') return '✅';
+    if (status === 'rejected') return '❌';
+    return '⏳';
+  }
+
+  function capitalize(str) {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+  }
+
+  function renderChallengesTab() {
+    return `
+      <div class="main-content">
+        <div class="section-heading">Active Challenges 🏆</div>
+        ${state.challenges.map(ch => {
+          const sub = getSubmissionForChallenge(ch.id);
+          const submitted = !!sub;
+          return `
+            <div class="challenge-card">
+              <div class="challenge-card-top">
+                <div class="challenge-info">
+                  <div class="challenge-title">${escHtml(ch.title)}</div>
+                  <div class="challenge-desc">${escHtml(ch.desc)}</div>
+                </div>
+                <div class="points-badge">${ch.points} pts</div>
+              </div>
+              <div class="challenge-card-bottom">
+                <div class="reward-text">🏅 ${escHtml(ch.reward)}</div>
+                ${submitted
+                  ? `<span class="status-badge status-${sub.status}">${statusIcon(sub.status)} ${capitalize(sub.status)}</span>`
+                  : `<button class="btn btn-primary btn-sm" onclick="openModal('${ch.id}')">Submit Catch</button>`}
+              </div>
+            </div>`;
+        }).join('')}
+        ${state.challenges.length === 0 ? `<div class="empty-state"><div class="empty-icon">🎣</div><div class="empty-title">No challenges yet</div><div class="empty-sub">The admin hasn't added any challenges yet.</div></div>` : ''}
+      </div>`;
+  }
+
+  function renderProfileTab() {
+    const m = state.member;
+    const link = referralUrl();
+    const waMsg = encodeURIComponent(`Hey! I'm a member at Voyager's Hook Fishing Club 🎣 I think you'd love it! Sign up here: ${MEMBERSHIP_URL} — and use my personal referral link: ${link}`);
+    const emailSubject = encodeURIComponent(`Join me at Voyager's Hook Fishing Club!`);
+    const emailBody = encodeURIComponent(`Hey!\n\nI'm a member at Voyager's Hook Fishing Club and I think you'd love it! 🎣\n\nSign up here: ${MEMBERSHIP_URL}\n\nAnd use my personal referral link when you join:\n${link}\n\nSee you on the bank!`);
+
+    const referralExpanded = state.referralExpanded ? `
+      <div class="referral-expanded">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Share your unique referral link:</div>
+        <div class="referral-link-box">${escHtml(link)}</div>
+        <div class="referral-share-btns">
+          <button class="btn btn-sm btn-whatsapp" onclick="window.open('https://wa.me/?text=${waMsg}','_blank')">💬 WhatsApp</button>
+          <button class="btn btn-sm btn-email" onclick="window.open('mailto:?subject=${emailSubject}&body=${emailBody}','_blank')">📧 Email</button>
+          <button class="btn btn-sm btn-copy" onclick="copyReferralLink('${escHtml(link)}',this)">📋 Copy Link</button>
+        </div>
+      </div>` : '';
+
+    return `
+      <div class="main-content">
+        <div class="section-heading">Your Profile</div>
+        <div class="card">
+          <div class="profile-field">
+            <span class="profile-field-label">Full Name</span>
+            <span class="profile-field-value">${escHtml(m.name)}</span>
+          </div>
+          <div class="profile-field">
+            <span class="profile-field-label">Email</span>
+            <span class="profile-field-value">${escHtml(m.email)}</span>
+          </div>
+          <div class="profile-field">
+            <span class="profile-field-label">Member #</span>
+            <span class="profile-field-value">${escHtml(m.memberNumber || 'N/A')}</span>
+          </div>
+          <div class="profile-field">
+            <span class="profile-field-label">Points Total</span>
+            <span class="profile-field-value" style="color:var(--teal);font-size:18px;font-weight:800">${m.pointsTotal || 0}</span>
+          </div>
+          ${m.voucher ? `
+          <div class="profile-field">
+            <span class="profile-field-label">🎁 Voucher</span>
+            <span class="profile-field-value voucher-value">${escHtml(m.voucher)}</span>
+          </div>` : ''}
+          ${m.discountCode ? `
+          <div class="profile-field">
+            <span class="profile-field-label">🏷️ Discount Code</span>
+            <span class="profile-field-value voucher-value">${escHtml(m.discountCode)}</span>
+          </div>` : ''}
+        </div>
+
+        <div class="card">
+          <button class="referral-toggle" onclick="state.referralExpanded=!state.referralExpanded;render()">
+            🎣 Know a fellow angler? Refer them ${state.referralExpanded ? '▲' : '→'}
+          </button>
+          ${referralExpanded}
+        </div>
+
+        <button class="btn btn-danger btn-full" onclick="logout()">🚪 Log Out</button>
+      </div>`;
+  }
+
+  function copyReferralLink(link, btn) {
+    navigator.clipboard.writeText(link).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  }
+
+  function renderModal() {
+    if (!state.modal) return '';
+    const ch = state.challenges.find(c => c.id === state.modal.challengeId);
+    if (!ch) return '';
+
+    if (state.submitSuccess) {
+      return `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+          <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-success">
+              <div class="modal-success-icon">🎉</div>
+              <div class="modal-success-title">Submission Received!</div>
+              <div class="modal-success-sub">Your catch has been submitted for review. You'll be notified when it's approved!</div>
+              <button class="btn btn-primary" style="margin-top:24px;max-width:200px" onclick="closeModal()">Done</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    const previewHtml = state.submitPhotoData
+      ? `<img class="upload-preview" src="${state.submitPhotoData}" alt="Preview">`
+      : '';
+
+    return `
+      <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <div class="modal-title">${escHtml(ch.title)}</div>
+          <div class="modal-sub">${escHtml(ch.desc)} · <strong>${ch.points} points</strong></div>
+
+          ${previewHtml}
+          <div class="upload-area" ${state.submitPhotoData ? 'style="padding:16px"' : ''}>
+            <input type="file" accept="image/*" capture="environment" onchange="handlePhotoSelect(event)">
+            ${state.submitPhotoData
+              ? `<div style="font-size:13px;color:var(--teal);font-weight:600">📸 Photo selected — tap to change</div>`
+              : `<div class="upload-icon">📷</div>
+                 <div class="upload-text">Tap to take or choose a photo<br><small>(required)</small></div>`}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Notes <span style="font-weight:400;text-transform:none">(optional)</span></label>
+            <textarea class="form-textarea" placeholder="Species, weight, location, conditions..."
+              oninput="state.submitNotes=this.value">${escHtml(state.submitNotes)}</textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn btn-secondary" style="flex:0 0 auto" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" style="flex:1" ${state.submitLoading ? 'disabled' : ''} onclick="handleSubmitChallenge()">
+              ${state.submitLoading ? '<span class="spinner" style="width:18px;height:18px;border-width:2px"></span> Submitting...' : '🎣 Submit Catch'}
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function handlePhotoSelect(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    compressImage(file, (dataUrl) => {
+      state.submitPhotoData = dataUrl;
+      render();
+    });
+  }
+
+  function renderMemberView() {
+    let tabContent = '';
+    if (state.activeTab === 'home') tabContent = renderHomeTab();
+    else if (state.activeTab === 'challenges') tabContent = renderChallengesTab();
+    else if (state.activeTab === 'profile') tabContent = renderProfileTab();
+
+    return `
+      ${renderInstallBanner()}
+      ${renderHeader(false)}
+      ${tabContent}
+      ${renderBottomNav()}
+      ${renderModal()}`;
+  }
+
+  function renderAdminView() {
+    const tabs = [
+      { id: 'pending', label: '📋 Pending' },
+      { id: 'referrals', label: '👥 Referrals' },
+      { id: 'challenges', label: '⚙️ Challenges' }
+    ];
+
+    let content = '';
+    if (state.loading) {
+      content = `<div class="loading-wrap"><div class="spinner"></div><span>Loading data...</span></div>`;
+    } else if (state.activeTab === 'pending') {
+      content = renderAdminPending();
+    } else if (state.activeTab === 'referrals') {
+      content = renderAdminReferrals();
+    } else if (state.activeTab === 'challenges') {
+      content = renderAdminChallenges();
+    }
+
+    return `
+      ${renderInstallBanner()}
+      ${renderHeader(true)}
+      <div class="admin-tabs">
+        ${tabs.map(t => `<button class="tab-btn ${state.activeTab === t.id ? 'active' : ''}" onclick="setTab('${t.id}')">${t.label}</button>`).join('')}
+        <button class="tab-btn tab-logout" onclick="logout()">🚪 Logout</button>
+      </div>
+      <div class="main-content no-bottom-nav">${content}</div>`;
+  }
+
+  function renderAdminPending() {
+    if (!state.appsScriptUrl) {
+      return renderSetupCard() + renderLocalSubmissions();
+    }
+    const pending = state.submissions.filter(s => s.status === 'pending');
+    const approved = state.submissions.filter(s => s.status === 'approved');
+    const rejected = state.submissions.filter(s => s.status === 'rejected');
+
+    return `
+      ${renderSetupCardIfNeeded()}
+      <div class="section-heading">Pending Review (${pending.length})</div>
+      ${pending.length === 0 ? `<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-title">All caught up!</div><div class="empty-sub">No pending submissions.</div></div>` : ''}
+      ${pending.map(s => renderSubmissionCard(s)).join('')}
+      ${approved.length > 0 ? `<div class="section-heading">Approved (${approved.length})</div>${approved.map(s => renderSubmissionCard(s)).join('')}` : ''}
+      ${rejected.length > 0 ? `<div class="section-heading">Rejected (${rejected.length})</div>${rejected.map(s => renderSubmissionCard(s)).join('')}` : ''}`;
+  }
+
+  function renderLocalSubmissions() {
+    const all = loadLocalSubmissions();
+    if (all.length === 0) return `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No submissions yet</div><div class="empty-sub">Member submissions will appear here.</div></div>`;
+    const pending = all.filter(s => s.status === 'pending');
+    const approved = all.filter(s => s.status === 'approved');
+    const rejected = all.filter(s => s.status === 'rejected');
+    return `
+      <div class="section-heading">Pending (${pending.length})</div>
+      ${pending.map(s => renderSubmissionCard(s)).join('')}
+      ${approved.length > 0 ? `<div class="section-heading">Approved (${approved.length})</div>${approved.map(s => renderSubmissionCard(s)).join('')}` : ''}
+      ${rejected.length > 0 ? `<div class="section-heading">Rejected (${rejected.length})</div>${rejected.map(s => renderSubmissionCard(s)).join('')}` : ''}`;
+  }
+
+  function renderSubmissionCard(s) {
+    const isPending = s.status === 'pending';
+    const ch = state.challenges.find(c => c.id === s.challengeId);
+    const pointsInputId = `pts_${s.id}`;
+    return `
+      <div class="submission-card ${s.status}">
+        <div class="submission-header">
+          <div>
+            <div class="submission-member">👤 ${escHtml(s.memberName || s.memberEmail)}</div>
+            <div class="submission-challenge">🏆 ${escHtml(s.challengeTitle || s.challengeId)}</div>
+            <div class="submission-time">🕐 ${formatDate(s.timestamp)}</div>
+          </div>
+          <span class="status-badge status-${s.status}">${statusIcon(s.status)} ${capitalize(s.status)}</span>
+        </div>
+        ${s.photo ? `<img class="submission-photo" src="${s.photo}" alt="Catch photo">` : ''}
+        ${s.notes ? `<div class="submission-notes">"${escHtml(s.notes)}"</div>` : ''}
+        ${isPending ? `
+          <div class="submission-actions">
+            <span style="font-size:13px;color:var(--text-muted)">Points:</span>
+            <input class="points-input" type="number" id="${pointsInputId}" value="${ch ? ch.points : s.points || 0}" min="0">
+            <button class="btn btn-success btn-sm" onclick="approveWithPoints('${s.id}','${pointsInputId}',${JSON.stringify(s).replace(/'/g,"\\'")} )">✅ Approve</button>
+            <button class="btn btn-danger btn-sm" onclick="rejectSub(${JSON.stringify(s).replace(/'/g,"\\'")})">❌ Reject</button>
+          </div>` : ''}
+      </div>`;
+  }
+
+  function approveWithPoints(subId, inputId, sub) {
+    const input = document.getElementById(inputId);
+    const pts = input ? Number(input.value) : (sub.points || 0);
+    handleApprove(sub, pts);
+  }
+
+  function rejectSub(sub) {
+    if (confirm('Reject this submission?')) handleReject(sub);
+  }
+
+  function renderAdminReferrals() {
+    if (!state.appsScriptUrl) return renderSetupCard();
+    const refs = state.referrals;
+    return `
+      ${renderSetupCardIfNeeded()}
+      <div class="section-heading">Referrals (${refs.length})</div>
+      ${refs.length === 0 ? `<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-title">No referrals yet</div><div class="empty-sub">Referrals from members will appear here.</div></div>` : ''}
+      ${refs.map(r => `
+        <div class="referral-admin-card">
+          <div class="referral-info">
+            <div class="referral-referrer">👤 Member #${escHtml(r.referrerMemberNumber)} ${r.referrerName ? `(${escHtml(r.referrerName)})` : ''}</div>
+            <div class="referral-new-member">→ ${escHtml(r.newMemberEmail)}</div>
+            <div class="referral-new-member">📅 ${formatDate(r.timestamp)}</div>
+          </div>
+          ${r.status === 'pending' || !r.status
+            ? `<button class="btn btn-sm btn-primary" onclick="handleAwardReferral(${JSON.stringify(r)})">🏆 Award 100 pts</button>`
+            : `<span class="status-badge status-approved">✅ Awarded (${r.pointsAwarded || 100} pts)</span>`}
+        </div>`).join('')}`;
+  }
+
+  function renderAdminChallenges() {
+    const form = state.challengeForm ? renderChallengeForm() : '';
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="section-heading" style="margin:0">Challenges (${state.challenges.length})</div>
+        <button class="btn btn-primary btn-sm" onclick="startEditChallenge(null)">+ Add Challenge</button>
+      </div>
+      ${state.challenges.map(ch => `
+        <div class="challenge-admin-card">
+          <div class="challenge-admin-info">
+            <div class="challenge-admin-title">${escHtml(ch.title)}</div>
+            <div class="challenge-admin-meta">${ch.points} pts · ${escHtml(ch.type)} · ${escHtml(ch.reward)}</div>
+          </div>
+          <div class="challenge-admin-actions">
+            <button class="btn btn-secondary btn-sm" onclick="startEditChallenge(${JSON.stringify(ch)})">✏️</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteChallengeById('${ch.id}')">🗑️</button>
+          </div>
+        </div>`).join('')}
+      ${form}`;
+  }
+
+  function renderChallengeForm() {
+    const f = state.challengeForm;
+    return `
+      <div class="challenge-form-card" id="challenge-form-scroll">
+        <div class="challenge-form-title">${state.editingChallenge ? '✏️ Edit Challenge' : '➕ Add New Challenge'}</div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" type="text" value="${escHtml(f.title)}" oninput="state.challengeForm.title=this.value" placeholder="Challenge title">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" oninput="state.challengeForm.desc=this.value" placeholder="What must members do to complete this challenge?">${escHtml(f.desc)}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Points</label>
+          <input class="form-input" type="number" value="${f.points}" oninput="state.challengeForm.points=this.value" placeholder="e.g. 200" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reward Description</label>
+          <input class="form-input" type="text" value="${escHtml(f.reward)}" oninput="state.challengeForm.reward=this.value" placeholder="e.g. 200 Points + 10% Voucher">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-input" onchange="state.challengeForm.type=this.value">
+            ${['species','weight','location','monthly','seasonal','quiz','custom'].map(t =>
+              `<option value="${t}" ${f.type === t ? 'selected' : ''}>${capitalize(t)}</option>`).join('')}
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:4px">
+          <button class="btn btn-secondary" onclick="state.challengeForm=null;state.editingChallenge=null;render()">Cancel</button>
+          <button class="btn btn-primary" style="flex:1" onclick="saveChallengeForm()">💾 Save Challenge</button>
+        </div>
+      </div>`;
+  }
+
+  function renderSetupCard() {
+    return `
+      <div class="setup-card">
+        <div class="setup-title">⚙️ Apps Script Not Configured</div>
+        <div class="setup-desc">To enable live data (member lookups, submissions, referrals), deploy the Google Apps Script backend and paste the web app URL below.</div>
+        <div class="form-group">
+          <label class="form-label">Apps Script Web App URL</label>
+          <input class="form-input" type="url" placeholder="https://script.google.com/macros/s/..."
+            value="${escHtml(state.urlSetupInput)}"
+            oninput="state.urlSetupInput=this.value">
+        </div>
+        <button class="btn btn-primary" onclick="saveAppsScriptUrl()">💾 Save & Connect</button>
+      </div>`;
+  }
+
+  function renderSetupCardIfNeeded() {
+    return !state.appsScriptUrl ? renderSetupCard() : '';
+  }
+
+  function escHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // ===== MAIN RENDER =====
+  function render() {
+    const app = document.getElementById('app');
+    if (!app) return;
+    let html = '';
+    if (state.view === 'login') html = renderLoginView();
+    else if (state.view === 'member') html = renderMemberView();
+    else if (state.view === 'admin') html = renderAdminView();
+    app.innerHTML = html;
+  }
+
+  // ===== INIT =====
+  function init() {
+    detectReferral();
+    loadChallenges();
+    render();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(console.error);
+      });
+    }
+  }
+
+  init();
+  </script>
+</body>
+</html>
