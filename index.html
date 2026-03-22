@@ -516,9 +516,9 @@
         }
       })();
 
-      const shareMessage = 'Hey! I thought you'd love Voyager's Hook fishing club — I'm a member and it's brilliant \u{1F3A3}\n\nCheck out membership here: https://www.voyagershook.com/memberships\n\nUse my referral link to get started with the members area: ' + refLink;
+      const shareMessage = `Hey! I thought you'd love Voyager's Hook fishing club — I'm a member and it's brilliant 🎣\n\nCheck out membership here: https://www.voyagershook.com/memberships\n\nUse my referral link to get started with the members area: ` + refLink;
       const whatsappUrl = 'https://wa.me/?text=' + encodeURIComponent(shareMessage);
-      const emailUrl = 'mailto:?subject=Join Voyager's Hook Fishing Club&body=' + encodeURIComponent(shareMessage);
+      const emailUrl = `mailto:?subject=Join Voyager's Hook Fishing Club&body=` + encodeURIComponent(shareMessage);
 
       async function copyLink() {
         try { await navigator.clipboard.writeText(refLink); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch {}
