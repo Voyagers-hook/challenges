@@ -109,7 +109,9 @@
     function getChallenges() {
       const s = localStorage.getItem(CHALLENGES_KEY);
       if (!s) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(DEFAULT_CHALLENGES)); return DEFAULT_CHALLENGES; }
-      return JSON.parse(s);
+      const parsed = JSON.parse(s);
+      if (!parsed || parsed.length === 0) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(DEFAULT_CHALLENGES)); return DEFAULT_CHALLENGES; }
+      return parsed;
     }
     function saveChallenges(ch) { localStorage.setItem(CHALLENGES_KEY, JSON.stringify(ch)); }
     function getMemberStatus(email) {
