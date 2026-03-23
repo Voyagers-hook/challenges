@@ -495,6 +495,23 @@ function getMemberStatus(email) {
 function saveMemberStatus(email, statuses) {
   localStorage.setItem('vh_status_' + email, JSON.stringify(statuses));
 }
+function syncSubmissionsFromGAS(email, gasSubmissions) {
+  if (!gasSubmissions) return getMemberStatus(email);
+  if (gasSubmissions.length === 0) {
+    saveMemberStatus(email, []);
+    return [];
+  }
+  var synced = gasSubmissions.map(function(s) {
+    var st = (s.status || '').toLowerCase();
+    return {
+      challengeId: s.challengeId,
+      submissionId: s.submissionId,
+      status: st === 'pending' ? 'pending_approval' : st === 'approved' ? 'completed' : 'rejected'
+    };
+  });
+  saveMemberStatus(email, synced);
+  return synced;
+}
 function useCountUp(target, duration, delay) {
   duration = duration || 1200;
   delay = delay || 400;
@@ -1284,7 +1301,7 @@ function MemberView({
           points: data.pointsTotal || prev.points,
           discountCode: data.discountCode && data.discountCode !== '-' ? data.discountCode : prev.discountCode,
           voucherCode: data.voucher && data.voucher !== '-' ? data.voucher : prev.voucherCode,
-          challenges: getMemberStatus(prev.email)
+          challenges: syncSubmissionsFromGAS(prev.email, data.submissions)
         }));
       } else {
         setMember(prev => ({
@@ -1665,7 +1682,7 @@ function Login({
         points: parseInt(data.pointsTotal) || 0,
         discountCode: data.discountCode && data.discountCode !== '-' && data.discountCode.trim() ? data.discountCode.trim() : undefined,
         voucherCode: data.voucher && data.voucher !== '-' && data.voucher.trim() ? data.voucher.trim() : undefined,
-        challenges: getMemberStatus(data.email),
+        challenges: syncSubmissionsFromGAS(data.email, data.submissions),
         sheetRow: data.rowIndex,
         hasPassword: data.hasPassword,
         showOnLeaderboard: data.showOnLeaderboard === 'Yes',
