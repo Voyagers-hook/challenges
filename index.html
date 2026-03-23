@@ -35,35 +35,55 @@
     html, body { overflow-x: hidden; max-width: 100vw; }
     input::placeholder { color: rgba(255,255,255,0.25); }
   /* ── ADMIN LIGHT THEME ── */
+      /* Base: white bg, black text on EVERYTHING */
       .admin-panel { background: #ffffff !important; min-height: 100vh; }
-      .admin-panel * { color: #111111 !important; }
+      .admin-panel, .admin-panel *, .admin-panel button, .admin-panel a,
+      .admin-panel span, .admin-panel label, .admin-panel p, .admin-panel h1,
+      .admin-panel h2, .admin-panel h3, .admin-panel h4, .admin-panel div {
+        color: #111111 !important;
+      }
+      /* Inputs */
       .admin-panel input, .admin-panel select, .admin-panel textarea {
         background: #ffffff !important; color: #111111 !important;
-        border-color: #cccccc !important;
+        border: 1px solid #cccccc !important;
       }
-      .admin-panel button { color: #ffffff !important; }
-      .admin-panel button.bg-gray-200, .admin-panel button[class*="gray"] { color: #111111 !important; }
-      .admin-panel .tab { color: #555555 !important; background: transparent !important; }
-      .admin-panel .tab-active { color: #111111 !important; font-weight: 700 !important; background: #ffffff !important; }
+      .admin-panel input::placeholder { color: #999999 !important; }
+      /* Only teal-bg buttons get white text */
+      .admin-panel .btn-primary, .admin-panel button[style*="0097b2"],
+      .admin-panel button[style*="teal"] {
+        color: #ffffff !important; background: #0097b2 !important;
+      }
+      /* Cards and containers: always white */
       .admin-panel .card, .admin-panel [class*="bg-base"], .admin-panel .bg-white,
       .admin-panel [class*="bg-white"], .admin-panel .modal-box {
         background: #ffffff !important;
       }
-      .admin-panel .tabs-boxed { background: #f3f4f6 !important; }
+      /* Tabs: dark text, light bg */
+      .admin-panel .tab { color: #555555 !important; background: transparent !important; }
+      .admin-panel .tab-active { color: #111111 !important; font-weight: 700 !important;
+        background: #ffffff !important; border-bottom: 2px solid #0097b2 !important; }
+      .admin-panel .tabs-boxed { background: #f0f0f0 !important; }
+      /* Table */
       .admin-panel th { color: #111111 !important; background: #f3f4f6 !important; }
       .admin-panel td { color: #111111 !important; }
       .admin-panel tr { background: #ffffff !important; }
       .admin-panel tr:nth-child(even) { background: #f9fafb !important; }
+      /* Badges */
       .admin-panel .badge-warning { color: #92400e !important; background: #fef3c7 !important; }
       .admin-panel .badge-success { color: #166534 !important; background: #dcfce7 !important; }
       .admin-panel .badge-error { color: #991b1b !important; background: #fee2e2 !important; }
       .admin-panel .badge { border: none !important; }
-      .admin-panel .brand-header-bg * { color: #ffffff !important; }
-      .admin-panel .text-success, .admin-panel .text-success * { color: #16a34a !important; }
-      .admin-panel .text-error, .admin-panel .text-error * { color: #dc2626 !important; }
-      .admin-panel .text-warning, .admin-panel .text-warning * { color: #d97706 !important; }
+      /* Header bar stays dark with white text */
+      .admin-panel .brand-header-bg, .admin-panel .brand-header-bg * { color: #ffffff !important; }
+      /* Semantic colours */
+      .admin-panel .text-success { color: #16a34a !important; }
+      .admin-panel .text-error { color: #dc2626 !important; }
+      .admin-panel .text-warning { color: #d97706 !important; }
       .admin-panel .brand-text-teal { color: #0097b2 !important; }
-      .admin-panel .btn-error { color: #dc2626 !important; border-color: #dc2626 !important; background: transparent !important; }
+      /* Delete/error outline button */
+      .admin-panel .btn-error { color: #dc2626 !important; border: 1px solid #dc2626 !important; background: transparent !important; }
+      .admin-panel .btn-ghost { color: #111111 !important; background: transparent !important; }
+      .admin-panel .btn-outline { color: #111111 !important; background: transparent !important; border: 1px solid #cccccc !important; }
       .admin-panel .loading { color: #0097b2 !important; }
       </style>
 </head>
