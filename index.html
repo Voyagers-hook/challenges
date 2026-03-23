@@ -97,6 +97,89 @@ const Trash2 = safeIcon('Trash2');
 const Edit3 = safeIcon('Edit3');
 const Save = safeIcon('Save');
 const ChevronLeft = safeIcon('ChevronLeft');
+
+// ── Inline SVG Icons (no external dependency) ──
+function SvgGlobe({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('circle', {cx:12, cy:12, r:10}),
+    React.createElement('path', {d:'M2 12h20'}),
+    React.createElement('path', {d:'M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'})
+  );
+}
+function SvgTag({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('path', {d:'M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z'}),
+    React.createElement('line', {x1:7, y1:7, x2:7.01, y2:7})
+  );
+}
+function SvgFacebook({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('path', {d:'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z'})
+  );
+}
+function SvgLock({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('rect', {x:3, y:11, width:18, height:11, rx:2, ry:2}),
+    React.createElement('path', {d:'M7 11V7a5 5 0 0 1 10 0v4'})
+  );
+}
+function SvgShare({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('circle', {cx:18, cy:5, r:3}),
+    React.createElement('circle', {cx:6, cy:12, r:3}),
+    React.createElement('circle', {cx:18, cy:19, r:3}),
+    React.createElement('line', {x1:8.59, y1:13.51, x2:15.42, y2:17.49}),
+    React.createElement('line', {x1:15.41, y1:6.51, x2:8.59, y2:10.49})
+  );
+}
+function SvgShield({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('path', {d:'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'})
+  );
+}
+function SvgLogOut({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('path', {d:'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'}),
+    React.createElement('polyline', {points:'16 17 21 12 16 7'}),
+    React.createElement('line', {x1:21, y1:12, x2:9, y2:12})
+  );
+}
+function SvgCamera({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('path', {d:'M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z'}),
+    React.createElement('circle', {cx:12, cy:13, r:4})
+  );
+}
+function SvgMail({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('path', {d:'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'}),
+    React.createElement('polyline', {points:'22,6 12,13 2,6'})
+  );
+}
+function SvgPhone({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('path', {d:'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'})
+  );
+}
+function SvgCopy({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('rect', {x:9, y:9, width:13, height:13, rx:2, ry:2}),
+    React.createElement('path', {d:'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'})
+  );
+}
+function SvgCheck({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('polyline', {points:'20 6 9 17 4 12'})
+  );
+}
+function SvgImage({size=20, color='currentColor'}) {
+  return React.createElement('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:color, strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round'},
+    React.createElement('rect', {x:3, y:3, width:18, height:18, rx:2, ry:2}),
+    React.createElement('circle', {cx:8.5, cy:8.5, r:1.5}),
+    React.createElement('polyline', {points:'21 15 16 10 5 21'})
+  );
+}
+
 const AlertCircle = safeIcon('AlertCircle');
 const Download = safeIcon('Download');
 
@@ -192,7 +275,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Catch 3 different species from: Perch, Pike, Tench, Bream, Roach', 'All 3 within same calendar month', 'Photo proof required for each'],
   active: true,
-  requiredSubmissions: 3
+  requiredSubmissions: 3,
+  showGallery: true
 }, {
   id: 'specimen-carp',
   title: 'Specimen Hunter: Carp',
@@ -205,7 +289,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Carp must weigh 10lb+', 'Scales in photo', 'Any water'],
   active: true,
-  requiredSubmissions: 1
+  requiredSubmissions: 1,
+  showGallery: true
 }, {
   id: 'specimen-pike',
   title: 'Specimen Hunter: Pike',
@@ -219,7 +304,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Pike must weigh 15lb+', 'Scales in photo', 'Handle with care'],
   active: true,
-  requiredSubmissions: 1
+  requiredSubmissions: 1,
+  showGallery: true
 }, {
   id: 'specimen-tench',
   title: 'Specimen Hunter: Tench',
@@ -232,7 +318,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Tench 5lb+', 'Photo proof'],
   active: true,
-  requiredSubmissions: 1
+  requiredSubmissions: 1,
+  showGallery: true
 }, {
   id: 'local-legend',
   title: 'The Local Legend',
@@ -245,7 +332,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Catch from 3 different named waters', 'Each must be different location', 'One photo per water'],
   active: true,
-  requiredSubmissions: 3
+  requiredSubmissions: 3,
+  showGallery: true
 }, {
   id: 'big-catch',
   title: 'Big Catch of the Month',
@@ -259,7 +347,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Submit biggest single catch', 'Include weight and species', 'Heaviest at month end wins', 'All valid entries get 100 points'],
   active: true,
-  requiredSubmissions: 1
+  requiredSubmissions: 1,
+  showGallery: true
 }, {
   id: 'seasonal-slam',
   title: 'The Seasonal Slam',
@@ -273,7 +362,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Spring: Tench', 'Summer: Carp', 'Autumn: Pike', 'Winter: Grayling', 'Photo proof each'],
   active: true,
-  requiredSubmissions: 4
+  requiredSubmissions: 4,
+  showGallery: true
 }, {
   id: 'gear-guru',
   title: 'Gear Guru Quiz',
@@ -287,7 +377,8 @@ const DEFAULT_CHALLENGES = [{
   },
   criteria: ['Complete monthly quiz', '100% correct', 'First 5 correct entries win'],
   active: true,
-  requiredSubmissions: 1
+  requiredSubmissions: 1,
+  showGallery: true
 }];
 
 // ── Helpers ────────────────────────────────────────
@@ -518,9 +609,12 @@ function CompletionStamp() {
 function ChallengeCard({
   challenge,
   memberChallenge,
-  onSubmit
+  onSubmit,
+  galleryPhotos
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
+  const [expandedPhoto, setExpandedPhoto] = useState(null);
+  const hasGallery = challenge.showGallery && galleryPhotos && galleryPhotos.length > 0;
   const status = memberChallenge ? memberChallenge.status : 'not_started';
   const isComplete = status === 'completed';
   const required = challenge.requiredSubmissions || 1;
@@ -739,7 +833,7 @@ function ChallengeCard({
       background: i < approved ? '#0097b2' : '#ece7de'
     }
   })))), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setExpanded(!expanded),
+    /* criteria always shown */
     style: {
       ...barlow,
       display: 'flex',
@@ -758,11 +852,7 @@ function ChallengeCard({
       letterSpacing: '0.8px',
       opacity: isComplete ? 0.45 : 1
     }
-  }, expanded ? /*#__PURE__*/React.createElement(ChevronUp, {
-    size: 13
-  }) : /*#__PURE__*/React.createElement(ChevronDown, {
-    size: 13
-  }), expanded ? 'Less' : 'Criteria'), expanded && /*#__PURE__*/React.createElement("div", {
+  }, 'Criteria'), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: '10px',
       paddingTop: '10px',
@@ -849,8 +939,8 @@ function ChallengeCard({
     onMouseDown: e => e.currentTarget.style.transform = 'scale(0.97)',
     onMouseUp: e => e.currentTarget.style.transform = 'scale(1)',
     onMouseLeave: e => e.currentTarget.style.transform = 'scale(1)'
-  }, /*#__PURE__*/React.createElement(Camera, {
-    size: 14
+  }, /*#__PURE__*/React.createElement(SvgCamera, {
+    size: 14, color: "white"
   }), isMultiStep && approved > 0 ? `Submit (${approved + 1}/${required})` : 'Submit Catch')), status === 'pending_approval' && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: '12px',
@@ -866,7 +956,49 @@ function ChallengeCard({
       color: '#d97706',
       fontWeight: '600'
     }
-  }, '\u23F3', " Waiting for admin to verify your submission.")));
+  }, '\u23F3', " Waiting for admin to verify your submission.")),
+
+  hasGallery && /*#__PURE__*/React.createElement("div", {
+    style: { marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(42,37,32,0.08)' }
+  },
+    /*#__PURE__*/React.createElement("button", {
+      onClick: function() { setShowGallery(!showGallery); },
+      style: Object.assign({}, barlow, { background: 'none', border: 'none', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: '6px',
+        fontSize: '12px', fontWeight: '700', textTransform: 'uppercase',
+        letterSpacing: '0.8px', color: '#0097b2', padding: 0 })
+    }, /*#__PURE__*/React.createElement(SvgImage, { size: 14, color: '#0097b2' }),
+      showGallery ? 'Hide Gallery' : 'View Gallery (' + galleryPhotos.length + ')'),
+    showGallery && /*#__PURE__*/React.createElement("div", {
+      style: { marginTop: '10px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '8px' }
+    }, galleryPhotos.map(function(photo, idx) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: idx,
+        style: { position: 'relative', borderRadius: '8px', overflow: 'hidden', aspectRatio: '1', cursor: 'pointer' },
+        onClick: function() { setExpandedPhoto(photo); }
+      },
+        /*#__PURE__*/React.createElement("img", {
+          src: photo.photo, alt: 'Catch by ' + photo.memberName,
+          style: { width: '100%', height: '100%', objectFit: 'cover' },
+          loading: 'lazy'
+        }),
+        /*#__PURE__*/React.createElement("div", {
+          style: { position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.7))', padding: '4px 6px', color: 'white', fontSize: '10px', fontWeight: '600' }
+        }, photo.memberName));
+    }))),
+
+  expandedPhoto && /*#__PURE__*/React.createElement("div", {
+    onClick: function() { setExpandedPhoto(null); },
+    style: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', cursor: 'pointer' }
+  },
+    /*#__PURE__*/React.createElement("img", {
+      src: expandedPhoto.photo, alt: 'Catch photo',
+      style: { maxWidth: '100%', maxHeight: '70vh', borderRadius: '8px', objectFit: 'contain' }
+    }),
+    /*#__PURE__*/React.createElement("div", {
+      style: { color: 'white', marginTop: '12px', textAlign: 'center', fontSize: '14px' }
+    }, /*#__PURE__*/React.createElement("strong", null, expandedPhoto.memberName),
+      expandedPhoto.notes ? /*#__PURE__*/React.createElement("p", { style: { opacity: 0.7, fontSize: '12px', marginTop: '4px' } }, expandedPhoto.notes) : null)));
 }
 
 // ── SubmitModal ───────────────────────────────────
@@ -1077,6 +1209,12 @@ function MemberView({
 }) {
   const [member, setMember] = useState(initialMember);
   const [selectedChallenge, setSelectedChallenge] = useState(null);
+  const [galleryData, setGalleryData] = useState([]);
+  useEffect(function() {
+    gasGet({ action: 'getGallery' }).then(function(data) {
+      if (data && data.gallery) setGalleryData(data.gallery);
+    }).catch(function() {});
+  }, []);
   async function refreshMember() {
     try {
       var data = await gasGet({
@@ -1377,7 +1515,8 @@ function MemberView({
     }, /*#__PURE__*/React.createElement(ChallengeCard, {
       challenge: challenge,
       memberChallenge: mcItem,
-      onSubmit: setSelectedChallenge
+      onSubmit: setSelectedChallenge,
+      galleryPhotos: galleryData.filter(function(g) { return g.challengeId === challenge.id; })
     }));
   }))), selectedChallenge && /*#__PURE__*/React.createElement(SubmitModal, {
     challenge: selectedChallenge,
@@ -2661,31 +2800,29 @@ function MenuDrawer({
     setTimeout(() => setReferralCopied(false), 2000);
   }
   var menuItems = [{
-    icon: /*#__PURE__*/React.createElement(Globe, {
-      size: 20
+    icon: /*#__PURE__*/React.createElement(SvgGlobe, {
+      size: 20, color: '#F4EFE6'
     }),
     label: 'Visit Website',
     sub: 'voyagershook.com',
     action: () => window.open('https://www.voyagershook.com', '_blank')
   }, {
-    icon: /*#__PURE__*/React.createElement(Tag, {
-      size: 20
+    icon: /*#__PURE__*/React.createElement(SvgTag, {
+      size: 20, color: '#F4EFE6'
     }),
     label: 'Member Offers',
     sub: 'Exclusive deals for members',
     action: () => window.open('https://www.voyagershook.com/members-exclusive-offers', '_blank')
   }, {
-    icon: /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: '20px'
-      }
-    }, '\u{1F4D8}'),
+    icon: /*#__PURE__*/React.createElement(SvgFacebook, {
+      size: 20, color: '#F4EFE6'
+    }),
     label: 'Follow on Facebook',
     sub: 'Stay up to date',
     action: () => window.open('https://www.facebook.com/profile.php?id=61573745438430', '_blank')
   }, {
-    icon: /*#__PURE__*/React.createElement(Lock, {
-      size: 20
+    icon: /*#__PURE__*/React.createElement(SvgLock, {
+      size: 20, color: '#F4EFE6'
     }),
     label: 'Set / Change Password',
     sub: 'Manage your login password',
@@ -3567,7 +3704,18 @@ function ChallengeManager({
       color: '#F4EFE6',
       borderColor: 'rgba(255,255,255,0.15)'
     }
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+  })),
+
+  /*#__PURE__*/React.createElement("div", {
+    style: { marginTop: '12px' }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: { display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', color: '#F4EFE6', fontSize: '14px', fontWeight: '600' }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: editing.showGallery || false,
+    onChange: function(e) { setEditing(Object.assign({}, editing, { showGallery: e.target.checked })); },
+    style: { width: '18px', height: '18px', accentColor: '#0097b2' }
+  }), "Show Photo Gallery on this challenge")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "label pb-0"
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs"
@@ -3717,10 +3865,10 @@ function AdminView({
     });
   }
   return /*#__PURE__*/React.createElement("div", {
-    className: "min-h-screen",
+    className: "min-h-screen admin-panel",
     style: {
-      background: '#1a1816',
-      color: '#F4EFE6'
+      background: '#ffffff',
+      color: '#111111'
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "brand-header-bg text-white px-4 py-5"
@@ -3745,29 +3893,38 @@ function AdminView({
   }, "Logout"))), /*#__PURE__*/React.createElement("div", {
     className: "mt-4 max-w-2xl mx-auto grid grid-cols-3 gap-3"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "bg-white/10 rounded-xl p-3 text-center"
+    className: "rounded-xl p-3 text-center",
+    style: { background: '#f3f4f6' }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "text-2xl font-bold text-warning"
+    className: "text-2xl font-bold",
+    style: { color: '#d97706' }
   }, pending.length), /*#__PURE__*/React.createElement("div", {
-    className: "text-xs text-white/60"
+    className: "text-xs",
+    style: { color: '#666666' }
   }, "Pending Reviews")), /*#__PURE__*/React.createElement("div", {
-    className: "bg-white/10 rounded-xl p-3 text-center"
+    className: "rounded-xl p-3 text-center",
+    style: { background: '#f3f4f6' }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "text-2xl font-bold"
+    className: "text-2xl font-bold",
+    style: { color: '#111111' }
   }, submissions.length), /*#__PURE__*/React.createElement("div", {
-    className: "text-xs text-white/60"
+    className: "text-xs",
+    style: { color: '#666666' }
   }, "Total Submissions")), /*#__PURE__*/React.createElement("div", {
-    className: "bg-white/10 rounded-xl p-3 text-center"
+    className: "rounded-xl p-3 text-center",
+    style: { background: '#f3f4f6' }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "text-2xl font-bold brand-text-teal"
+    className: "text-2xl font-bold",
+    style: { color: '#0097b2' }
   }, history.filter(s => s.status === 'approved').length), /*#__PURE__*/React.createElement("div", {
-    className: "text-xs text-white/60"
+    className: "text-xs",
+    style: { color: '#666666' }
   }, "Approved")))), /*#__PURE__*/React.createElement("div", {
     className: "max-w-2xl mx-auto px-4 pt-4"
   }, /*#__PURE__*/React.createElement("div", {
     className: "tabs tabs-boxed overflow-x-auto flex-nowrap gap-0",
     style: {
-      background: '#252220'
+      background: '#f3f4f6'
     }
   }, /*#__PURE__*/React.createElement("button", {
     className: `tab text-xs whitespace-nowrap ${tab === 'pending' ? 'tab-active' : ''}`,
@@ -3805,14 +3962,16 @@ function AdminView({
       key: sub.id,
       className: "card border border-warning shadow-sm rounded-xl",
       style: {
-        background: '#252220'
+        background: '#ffffff',
+        border: '1px solid #e5e7eb'
       }
     }, /*#__PURE__*/React.createElement("div", {
       className: "card-body p-4"
     }, /*#__PURE__*/React.createElement("div", {
       className: "flex items-start justify-between"
     }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
-      className: "font-bold"
+      className: "font-bold",
+      style: { color: '#111111' }
     }, challenge?.icon, " ", sub.challengeTitle), /*#__PURE__*/React.createElement("p", {
       className: "text-sm text-base-content/50"
     }, "by ", /*#__PURE__*/React.createElement("span", {
@@ -3822,10 +3981,10 @@ function AdminView({
     }, "Pending")), sub.notes && /*#__PURE__*/React.createElement("div", {
       className: "mt-2 rounded p-2 text-sm",
       style: {
-        background: 'rgba(255,255,255,0.06)'
+        background: '#f9fafb'
       }
     }, /*#__PURE__*/React.createElement("span", {
-      className: "text-base-content/50"
+      style: { color: '#666666' }
     }, "Notes:"), /*#__PURE__*/React.createElement("pre", {
       className: "font-medium whitespace-pre-wrap mt-1 text-xs"
     }, sub.notes)), sub.photo && /*#__PURE__*/React.createElement("div", {

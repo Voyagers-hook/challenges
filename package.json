@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.28.6",
+    "@babel/plugin-transform-react-jsx": "^7.28.6"
+  }
+}
