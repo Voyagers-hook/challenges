@@ -33,7 +33,23 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     input::placeholder { color: rgba(255,255,255,0.25); }
-  </style>
+  /* ── ADMIN LIGHT THEME ── */
+      .admin-panel { background: #ffffff !important; min-height: 100vh; }
+      .admin-panel, .admin-panel * { color: #111111 !important; }
+      .admin-panel input, .admin-panel select, .admin-panel textarea {
+        background: #ffffff !important; color: #111111 !important;
+        border-color: #cccccc !important;
+      }
+      .admin-panel button { color: #ffffff !important; }
+      .admin-panel button.bg-gray-200, .admin-panel button[class*="gray"] { color: #111111 !important; }
+      .admin-panel .bg-white, .admin-panel [class*="bg-white"] {
+        background: #ffffff !important;
+      }
+      .admin-panel th { color: #111111 !important; background: #f3f4f6 !important; }
+      .admin-panel td { color: #111111 !important; }
+      .admin-panel tr { background: #ffffff !important; }
+      .admin-panel tr:nth-child(even) { background: #f9fafb !important; }
+      </style>
 </head>
 <body>
   <div id="root"></div>
