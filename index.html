@@ -56,14 +56,13 @@
   <div id="root"></div>
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/lucide-react/dist/umd/lucide-react.js"></script>
   <script>
 const {
   useState,
   useEffect,
   useRef
 } = React;
-const safeIcon = name => LucideReact && LucideReact[name] ? LucideReact[name] : () => null;
+const safeIcon = name => (window.LucideReact && window.LucideReact[name]) ? window.LucideReact[name] : () => null;
 const Tag = safeIcon('Tag');
 const Ticket = safeIcon('Ticket');
 const Hash = safeIcon('Hash');
