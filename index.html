@@ -451,9 +451,7 @@ async function gasPost(data) {
       var url = GAS_URL + '?action=' + encodeURIComponent(data.action) + '&payload=' + encodeURIComponent(JSON.stringify(data));
       var r = await fetch(url);
       return r.json();
-    });
-  return r.json();
-}
+    }
 async function fetchChallengesFromGAS() {
   try {
     const data = await gasGet({
