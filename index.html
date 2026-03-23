@@ -441,7 +441,7 @@ function compressPhoto(file) {
   });
 }
 async function gasGet(params) {
-  const url = GAS_URL + '?' + new URLSearchParams(params).toString();
+  params._t = Date.now(); const url = GAS_URL + '?' + new URLSearchParams(params).toString();
   const r = await fetch(url, {
     redirect: 'follow'
   });
@@ -1674,9 +1674,9 @@ function Login({
     width: '100%',
     padding: '14px 16px',
     borderRadius: '8px',
-    background: '#f9fafb',
+    background: 'rgba(255,255,255,0.07)',
     border: '1px solid rgba(255,255,255,0.12)',
-    color: 'white',
+    color: '#ffffff',
     fontSize: '15px',
     outline: 'none',
     boxSizing: 'border-box'
@@ -2618,12 +2618,12 @@ function PasswordModal({
     width: '100%',
     padding: '12px 14px',
     borderRadius: '8px',
-    background: '#f9fafb',
-    border: '1px solid rgba(255,255,255,0.1)',
+    background: 'rgba(255,255,255,0.07)',
+    border: '1px solid rgba(255,255,255,0.12)',
     fontSize: '14px',
     outline: 'none',
     boxSizing: 'border-box',
-    color: 'white'
+    color: '#ffffff'
   };
   return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3440,13 +3440,13 @@ function ChallengeManager({
       ...c,
       active: !c.active
     } : c);
-    await saveChallengesToGAS(all);
-    onRefresh();
+    onRefresh(all);
+    saveChallengesToGAS(all);
   }
   async function deleteChallenge(id) {
     const all = challenges.filter(c => c.id !== id);
-    await saveChallengesToGAS(all);
-    onRefresh();
+    onRefresh(all);
+    saveChallengesToGAS(all);
   }
   async function saveEdit() {
     if (!editing || !editing.title.trim()) return;
@@ -3481,9 +3481,9 @@ function ChallengeManager({
       const idx = all.findIndex(c => c.id === updated.id);
       if (idx !== -1) all[idx] = updated;
     }
-    await saveChallengesToGAS(all);
     setEditing(null);
-    onRefresh();
+    onRefresh(all);
+    saveChallengesToGAS(all);
   }
   function updateCriteria(i, val) {
     if (!editing) return;
@@ -4309,7 +4309,8 @@ function App() {
   useEffect(() => {
     fetchChallengesFromGAS().then(ch => setChallenges(ch));
   }, []);
-  async function refreshChallenges() {
+  async function refreshChallenges(localData) {
+    if (localData) { setChallenges(localData); return; }
     setChallenges(await fetchChallengesFromGAS());
   }
   function handleLogout() {
