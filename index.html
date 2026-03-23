@@ -1086,16 +1086,22 @@ function SubmitModal({
     setError('');
     try {
       const combinedNotes = [species && 'Species: ' + species, weight && 'Weight: ' + weight + ' lbs', location && 'Location: ' + location, notes && 'Notes: ' + notes].filter(Boolean).join('\n');
-      const result = await gasPost({
+      var submitData = {
         action: 'submitChallenge',
         memberEmail: member.email,
         memberName: member.name,
         challengeId: challenge.id,
         challengeTitle: challenge.title,
         notes: combinedNotes,
-        photo: photoData,
         points: challenge.reward.points || 0
-      });
+      };
+      if (photoData) {
+        var parts = photoData.split(',');
+        var mimeMatch = photoData.match(/data:([^;]+);/);
+        submitData.photoBase64 = parts[1] || '';
+        submitData.photoMimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+      }
+      const result = await gasPost(submitData);
       if (!result.success) throw new Error(result.error || 'Submission failed');
       var statuses = getMemberStatus(member.email);
       var existing = statuses.find(s => s.challengeId === challenge.id);
@@ -3831,9 +3837,9 @@ function AdminView({
   const [sheetUpdateStatus, setSheetUpdateStatus] = useState({});
   const [referralAwardStatus, setReferralAwardStatus] = useState({});
   const [expandedPhoto, setExpandedPhoto] = useState(null);
-  const pending = submissions.filter(s => s.status === 'pending');
-  const history = submissions.filter(s => s.status !== 'pending');
-  const pendingReferrals = referrals.filter(r => r.status === 'pending');
+  const pending = submissions.filter(s => (s.status || '').toLowerCase() === 'pending');
+  const history = submissions.filter(s => (s.status || '').toLowerCase() !== 'pending');
+  const pendingReferrals = referrals.filter(r => (r.status || '').toLowerCase() === 'pending');
   async function loadData() {
     setLoading(true);
     try {
@@ -3974,7 +3980,7 @@ function AdminView({
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-2xl font-bold",
     style: { color: '#0097b2' }
-  }, history.filter(s => s.status === 'approved').length), /*#__PURE__*/React.createElement("div", {
+  }, history.filter(s => (s.status || '').toLowerCase() === 'approved').length), /*#__PURE__*/React.createElement("div", {
     className: "text-xs",
     style: { color: '#666666' }
   }, "Approved")))), /*#__PURE__*/React.createElement("div", {
@@ -4107,7 +4113,7 @@ function AdminView({
     className: "text-4xl mb-2"
   }, "\uD83D\uDCCB"), /*#__PURE__*/React.createElement("p", null, "No reviewed submissions yet.")) : history.map(sub => /*#__PURE__*/React.createElement("div", {
     key: sub.id,
-    className: `card shadow-sm rounded-xl border ${sub.status === 'approved' ? 'border-success' : 'border-error'}`,
+    className: `card shadow-sm rounded-xl border ${(sub.status || '').toLowerCase() === 'approved' ? 'border-success' : 'border-error'}`,
     style: {
       background: '#ffffff'
     }
@@ -4122,8 +4128,8 @@ function AdminView({
   }, sub.memberName, " \xB7 ", formatDate(sub.timestamp)), sub.notes && /*#__PURE__*/React.createElement("p", {
     className: "text-xs mt-1 text-base-content/60 truncate"
   }, sub.notes)), /*#__PURE__*/React.createElement("span", {
-    className: `badge ${sub.status === 'approved' ? 'badge-success' : 'badge-error'}`
-  }, sub.status === 'approved' ? '&#x2705; Approved' : '&#x274C; Rejected')), sub.photo && /*#__PURE__*/React.createElement("img", {
+    className: `badge ${(sub.status || '').toLowerCase() === 'approved' ? 'badge-success' : 'badge-error'}`
+  }, (sub.status || '').toLowerCase() === 'approved' ? '&#x2705; Approved' : '&#x274C; Rejected')), sub.photo && /*#__PURE__*/React.createElement("img", {
     src: sub.photo,
     alt: "Catch photo",
     className: "mt-2 w-full rounded-lg max-h-32 object-cover cursor-pointer hover:opacity-90",
