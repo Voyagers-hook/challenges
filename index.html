@@ -85,6 +85,11 @@
       .admin-panel .btn-ghost { color: #111111 !important; background: transparent !important; }
       .admin-panel .btn-outline { color: #111111 !important; background: transparent !important; border: 1px solid #cccccc !important; }
       .admin-panel .loading { color: #0097b2 !important; }
+      .admin-panel .toggle { appearance: none; width: 48px; height: 26px; border-radius: 13px; background: #ccc !important; position: relative; cursor: pointer; transition: background 0.2s; border: none !important; }
+      .admin-panel .toggle:checked { background: #16a34a !important; }
+      .admin-panel .toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #ffffff !important; transition: transform 0.2s; }
+      .admin-panel .toggle:checked::after { transform: translateX(22px); }
+      .admin-panel .label-text { color: #333333 !important; }
       </style>
 </head>
 <body>
@@ -3537,13 +3542,20 @@ function ChallengeManager({
     className: "text-xs text-base-content/60"
   }, ch.reward.description)), /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-1 shrink-0"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: `badge badge-sm ${ch.active ? 'badge-success' : 'badge-ghost'}`
-  }, ch.active ? 'Active' : 'Off'), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-ghost btn-xs",
-    title: ch.active ? 'Deactivate' : 'Activate',
+  }, /*#__PURE__*/React.createElement("button", {
+    style: {
+      padding: '4px 12px',
+      borderRadius: '12px',
+      fontSize: '11px',
+      fontWeight: '700',
+      border: 'none',
+      cursor: 'pointer',
+      background: ch.active ? '#dcfce7' : '#f3f4f6',
+      color: ch.active ? '#166534' : '#666666'
+    },
+    title: ch.active ? 'Click to deactivate' : 'Click to activate',
     onClick: () => toggleActive(ch)
-  }, ch.active ? '&#9646;' : '&#9654;'), /*#__PURE__*/React.createElement("button", {
+  }, ch.active ? '● Active' : '○ Inactive'), /*#__PURE__*/React.createElement("button", {
     className: "btn btn-ghost btn-xs",
     title: "Edit",
     onClick: () => openEdit(ch)
