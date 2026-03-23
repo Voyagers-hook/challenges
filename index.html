@@ -32,6 +32,7 @@
     @keyframes stampIn { 0% { opacity: 0; transform: translate(-50%, -50%) rotate(-18deg) scale(1.8); } 60% { opacity: 1; transform: translate(-50%, -50%) rotate(-18deg) scale(0.95); } 100% { opacity: 1; transform: translate(-50%, -50%) rotate(-18deg) scale(1); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    html, body { overflow-x: hidden; max-width: 100vw; }
     input::placeholder { color: rgba(255,255,255,0.25); }
   /* ── ADMIN LIGHT THEME ── */
       .admin-panel { background: #ffffff !important; min-height: 100vh; }
@@ -425,7 +426,13 @@
         try {
           var data = await gasGet({ action: 'getMember', email: member.email });
           if (data.success) {
-            setMember(prev => ({ ...prev, points: data.pointsTotal, discountCode: data.discountCode || undefined, voucherCode: data.voucher || undefined, challenges: getMemberStatus(prev.email) }));
+            setMember(prev => ({
+              ...prev,
+              points: data.pointsTotal || prev.points,
+              discountCode: (data.discountCode && data.discountCode !== '-') ? data.discountCode : prev.discountCode,
+              voucherCode: (data.voucher && data.voucher !== '-') ? data.voucher : prev.voucherCode,
+              challenges: getMemberStatus(prev.email)
+            }));
           } else {
             setMember(prev => ({ ...prev, challenges: getMemberStatus(prev.email) }));
           }
@@ -548,12 +555,18 @@
             if (password !== data.password) { setError('Incorrect password.'); setLoading(false); return; }
           }
           onMemberLogin({
-            id: data.memberNumber || data.email, name: data.name, email: data.email,
-            memberNumber: data.memberNumber, points: data.pointsTotal,
-            discountCode: data.discountCode && data.discountCode !== '-' ? data.discountCode : undefined,
-            voucherCode: data.voucher && data.voucher !== '-' ? data.voucher : undefined,
-            challenges: getMemberStatus(data.email), sheetRow: data.rowIndex,
-            showOnLeaderboard: data.showOnLeaderboard === 'Yes', showMyPhotos: data.showMyPhotos === 'Yes',
+            id: data.memberNumber || data.email,
+            name: data.name,
+            email: data.email,
+            memberNumber: (data.memberNumber || '').toString(),
+            points: parseInt(data.pointsTotal) || 0,
+            discountCode: (data.discountCode && data.discountCode !== '-' && data.discountCode.trim()) ? data.discountCode.trim() : undefined,
+            voucherCode: (data.voucher && data.voucher !== '-' && data.voucher.trim()) ? data.voucher.trim() : undefined,
+            challenges: getMemberStatus(data.email),
+            sheetRow: data.rowIndex,
+            hasPassword: data.hasPassword,
+            showOnLeaderboard: data.showOnLeaderboard === 'Yes',
+            showMyPhotos: data.showMyPhotos === 'Yes',
           });
         } catch(e) { console.error(e); setError('Could not connect. Please try again.'); }
         finally { setLoading(false); }
@@ -837,7 +850,7 @@
       var memberNumber = member ? member.memberNumber : '';
       var showOnLeaderboard = member ? member.showOnLeaderboard : false;
       var showMyPhotos = member ? member.showMyPhotos : false;
-      var referralCode = memberNumber ? 'HOOKREF-' + memberNumber : 'HOOKREF';
+      var referralCode = memberNumber ? 'HOOKREF-VH' + memberNumber : 'HOOKREF-VH';
       var referralLink = MEMBERSHIPS_URL + '?ref=' + referralCode;
       var referralMessage = "Join me at Voyager's Hook Club! \u{1F3A3} Use my referral code " + referralCode + " when you sign up: " + referralLink;
 
@@ -882,7 +895,7 @@
                     <button key={i} onClick={() => { item.action(); if (!item.label.includes('Password')) onClose(); }}
                       style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '14px', padding: '13px 12px', borderRadius: '10px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', color: 'white', transition: 'background 0.15s' }}
                       onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'} onMouseLeave={e => e.currentTarget.style.background = 'none'}>
-                      <span style={{ color: item.color || '#0097b2', flexShrink: 0 }}>{item.icon}</span>
+                      <span style={{ fontSize: '22px', flexShrink: 0, lineHeight: 1 }}>{item.icon}</span>
                       <div>
                         <p style={{ ...barlow, margin: 0, fontWeight: '700', fontSize: '15px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{item.label}</p>
                         <p style={{ margin: 0, color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>{item.sub}</p>
@@ -1530,13 +1543,21 @@
     // ── BottomNav ─────────────────────────────────────
     function BottomNav({ activeTab, onTabChange, onMenuOpen }) {
       function tabStyle(active) {
-        return { flex: 1, padding: '8px 0 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', background: 'none', border: 'none', cursor: 'pointer', color: active ? '#0097b2' : 'rgba(255,255,255,0.4)', fontSize: '10px', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', transition: 'color 0.2s' };
+        return {
+          flex: 1, padding: '13px 0 12px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: active ? '#0097b2' : 'rgba(255,255,255,0.45)',
+          fontSize: '11px', fontFamily: "'Barlow Condensed', sans-serif",
+          fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px',
+          transition: 'color 0.15s', minHeight: '60px', justifyContent: 'center',
+        };
       }
       return (
-        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#1a1816', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', zIndex: 40, paddingBottom: 'env(safe-area-inset-bottom)' }}>
-          <button onClick={() => onTabChange('challenges')} style={tabStyle(activeTab === 'challenges')}><Fish size={20} /><span>Challenges</span></button>
-          <button onClick={() => onTabChange('leaderboard')} style={tabStyle(activeTab === 'leaderboard')}><Trophy size={20} /><span>Leaderboard</span></button>
-          <button onClick={onMenuOpen} style={tabStyle(false)}><MenuIcon size={20} /><span>Menu</span></button>
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: '#1a1816', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', zIndex: 40, paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          <button onClick={() => onTabChange('challenges')} style={tabStyle(activeTab === 'challenges')}><span style={{ fontSize: '24px', lineHeight: 1 }}>🐟</span><span>Challenges</span></button>
+          <button onClick={() => onTabChange('leaderboard')} style={tabStyle(activeTab === 'leaderboard')}><span style={{ fontSize: '24px', lineHeight: 1 }}>🏆</span><span>Leaderboard</span></button>
+          <button onClick={onMenuOpen} style={tabStyle(false)}><span style={{ fontSize: '24px', lineHeight: 1 }}>☰</span><span>Menu</span></button>
         </div>
       );
     }
@@ -1575,7 +1596,7 @@
           {view === 'login' && <Login onMemberLogin={m => { setCurrentMember(m); setView('member'); }} onAdminLogin={() => setView('admin')} />}
           {view === 'member' && currentMember && (
             <>
-              <div style={{ paddingBottom: '68px' }}>
+              <div style={{ paddingBottom: '80px' }}>
                 {activeTab === 'challenges' && <MemberView member={currentMember} challenges={challenges} onLogout={handleLogout} />}
                 {activeTab === 'leaderboard' && <Leaderboard member={currentMember} />}
               </div>
