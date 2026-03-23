@@ -964,7 +964,7 @@
       const [isNew, setIsNew] = useState(false);
 
       function blankEdit() {
-        return { id: 'c-' + Date.now(), title: '', description: '', icon: '\u{1F3A3}', criteria: [''], rewardType: 'points', points: 100, discount: 0, active: true };
+        return { id: 'c-' + Date.now(), title: '', description: '', icon: '\u{1F3A3}', criteria: [''], rewardType: 'points', points: 100, discount: 0, active: true, requiredSubmissions: 1 };
       }
 
       function openEdit(challenge) {
@@ -973,7 +973,7 @@
           id: challenge.id, title: challenge.title, description: challenge.description,
           icon: challenge.icon, criteria: [...challenge.criteria],
           rewardType: challenge.reward.type, points: challenge.reward.points ?? 0,
-          discount: challenge.reward.discount ?? 0, active: challenge.active,
+          discount: challenge.reward.discount ?? 0, active: challenge.active, requiredSubmissions: challenge.requiredSubmissions ?? 1,
         });
       }
 
@@ -1001,7 +1001,7 @@
         const updated = {
           id: editing.id, title: editing.title, description: editing.description,
           icon: editing.icon, criteria: editing.criteria.filter(c => c.trim() !== ''),
-          reward, active: editing.active,
+          reward, active: editing.active, requiredSubmissions: editing.requiredSubmissions ?? 1,
         };
 
         const all = [...challenges];
@@ -1036,7 +1036,7 @@
           </div>
 
           {challenges.map(ch => (
-            <div key={ch.id} className={`card bg-base-100 border shadow-sm rounded-xl ${ch.active ? 'border-base-200' : 'border-base-300 opacity-60'}`}>
+            <div key={ch.id} className={`card border shadow-sm rounded-xl ${ch.active ? 'border-base-200' : 'border-base-300 opacity-60'}`} style={{background:'#252220'}}>
               <div className="card-body p-3">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{ch.icon}</span>
@@ -1057,36 +1057,36 @@
 
           {editing && (
             <div className="modal modal-open">
-              <div className="modal-box max-w-lg max-h-[90vh] overflow-y-auto">
+              <div className="modal-box max-w-lg max-h-[90vh] overflow-y-auto" style={{background:'#252220',color:'#F4EFE6'}}>
                 <h3 className="font-bold text-lg mb-4">{isNew ? '\u2728 New Challenge' : '\u270F\uFE0F Edit Challenge'}</h3>
                 <div className="space-y-3">
                   <div className="flex gap-2">
                     <div className="w-24">
-                      <label className="label pb-0"><span className="label-text text-xs">Icon (emoji)</span></label>
-                      <input className="input input-bordered w-full text-center text-xl" value={editing.icon} onChange={e => setEditing({ ...editing, icon: e.target.value })} />
+                      <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Icon (emoji)</span></label>
+                      <input className="input input-bordered w-full text-center text-xl" style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} value={editing.icon} onChange={e => setEditing({ ...editing, icon: e.target.value })} />
                     </div>
                     <div className="flex-1">
-                      <label className="label pb-0"><span className="label-text text-xs">Title *</span></label>
-                      <input className="input input-bordered w-full" placeholder="e.g. Specimen Hunter: Carp" value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} />
+                      <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Title *</span></label>
+                      <input className="input input-bordered w-full" placeholder="e.g. Specimen Hunter: Carp" style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} />
                     </div>
                   </div>
                   <div>
-                    <label className="label pb-0"><span className="label-text text-xs">Description</span></label>
-                    <textarea className="textarea textarea-bordered w-full text-sm" rows={2} placeholder="Describe what members need to do..." value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} />
+                    <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Description</span></label>
+                    <textarea className="textarea textarea-bordered w-full text-sm" rows={2} style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} placeholder="Describe what members need to do..." value={editing.description} onChange={e => setEditing({ ...editing, description: e.target.value })} />
                   </div>
                   <div>
-                    <label className="label pb-0"><span className="label-text text-xs">Requirements</span></label>
+                    <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Requirements</span></label>
                     {editing.criteria.map((c, i) => (
                       <div key={i} className="flex gap-1 mb-1">
-                        <input className="input input-bordered input-sm flex-1" placeholder={`Requirement ${i + 1}`} value={c} onChange={e => updateCriteria(i, e.target.value)} />
+                        <input className="input input-bordered input-sm flex-1" placeholder={`Requirement ${i + 1}`} style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} value={c} onChange={e => updateCriteria(i, e.target.value)} />
                         <button className="btn btn-ghost btn-sm text-error" onClick={() => removeCriteria(i)}>&times;</button>
                       </div>
                     ))}
                     <button className="btn btn-ghost btn-xs mt-1" onClick={addCriteria}>+ Add requirement</button>
                   </div>
                   <div>
-                    <label className="label pb-0"><span className="label-text text-xs">Reward Type</span></label>
-                    <select className="select select-bordered w-full" value={editing.rewardType} onChange={e => setEditing({ ...editing, rewardType: e.target.value })}>
+                    <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Reward Type</span></label>
+                    <select className="select select-bordered w-full" value={editing.rewardType} style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} onChange={e => setEditing({ ...editing, rewardType: e.target.value })}>
                       <option value="points">Points only</option>
                       <option value="discount">Discount only</option>
                       <option value="both">Points + Discount</option>
@@ -1094,19 +1094,24 @@
                   </div>
                   {(editing.rewardType === 'points' || editing.rewardType === 'both') && (
                     <div>
-                      <label className="label pb-0"><span className="label-text text-xs">Points awarded</span></label>
-                      <input type="number" min={0} className="input input-bordered w-full" value={editing.points} onChange={e => setEditing({ ...editing, points: Number(e.target.value) })} />
+                      <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Points awarded</span></label>
+                      <input type="number" min={0} className="input input-bordered w-full" value={editing.points} style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} onChange={e => setEditing({ ...editing, points: Number(e.target.value) })} />
                     </div>
                   )}
                   {(editing.rewardType === 'discount' || editing.rewardType === 'both') && (
                     <div>
-                      <label className="label pb-0"><span className="label-text text-xs">Discount % awarded</span></label>
-                      <input type="number" min={0} max={100} className="input input-bordered w-full" value={editing.discount} onChange={e => setEditing({ ...editing, discount: Number(e.target.value) })} />
+                      <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Discount % awarded</span></label>
+                      <input type="number" min={0} max={100} className="input input-bordered w-full" value={editing.discount} style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} onChange={e => setEditing({ ...editing, discount: Number(e.target.value) })} />
                     </div>
                   )}
                   <div>
+                    <label className="label pb-0"><span className="label-text text-xs" style={{color:'#F4EFE6'}}>Required Submissions</span></label>
+                    <p className="text-xs mb-1" style={{color:'rgba(244,239,230,0.5)'}}>How many catches/submissions does a member need to complete this challenge?</p>
+                    <input type="number" min={1} max={20} className="input input-bordered w-full" value={editing.requiredSubmissions ?? 1} onChange={e => setEditing({ ...editing, requiredSubmissions: Number(e.target.value) })} style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} />
+                  </div>
+                  <div>
                     <label className="label pb-0"><span className="label-text text-xs">Quiz URL (optional — links to a Google Form)</span></label>
-                    <input className="input input-bordered w-full" placeholder="https://forms.gle/..." value={editing.quizUrl||''} onChange={e => setEditing({ ...editing, quizUrl: e.target.value })} />
+                    <input className="input input-bordered w-full" placeholder="https://forms.gle/..." style={{background:'rgba(255,255,255,0.07)',color:'#F4EFE6',borderColor:'rgba(255,255,255,0.15)'}} value={editing.quizUrl||''} onChange={e => setEditing({ ...editing, quizUrl: e.target.value })} />
                   </div>
                   <div className="flex items-center gap-3 pt-1">
                     <input type="checkbox" className="toggle toggle-success" checked={editing.active} onChange={e => setEditing({ ...editing, active: e.target.checked })} />
@@ -1200,7 +1205,7 @@
       }
 
       return (
-        <div className="min-h-screen bg-base-200">
+        <div className="min-h-screen" style={{background:'#1a1816',color:'#F4EFE6'}}>
           <div className="brand-header-bg text-white px-4 py-5">
             <div className="flex items-center justify-between max-w-2xl mx-auto">
               <div>
@@ -1231,7 +1236,7 @@
           </div>
 
           <div className="max-w-2xl mx-auto px-4 pt-4">
-            <div className="tabs tabs-boxed bg-base-300 overflow-x-auto flex-nowrap gap-0">
+            <div className="tabs tabs-boxed overflow-x-auto flex-nowrap gap-0" style={{background:'#252220'}}>
               <button className={`tab text-xs whitespace-nowrap ${tab === 'pending' ? 'tab-active' : ''}`} onClick={() => setTab('pending')}>
                 Pending {pending.length > 0 && <span className="badge badge-error badge-sm ml-1">{pending.length}</span>}
               </button>
@@ -1260,7 +1265,7 @@
                     const challenge = challenges.find(c => c.id === sub.challengeId);
                     const sheetStatus = sheetUpdateStatus[sub.id];
                     return (
-                      <div key={sub.id} className="card bg-base-100 border border-warning shadow-sm rounded-xl">
+                      <div key={sub.id} className="card border border-warning shadow-sm rounded-xl" style={{background:'#252220'}}>
                         <div className="card-body p-4">
                           <div className="flex items-start justify-between">
                             <div>
@@ -1271,7 +1276,7 @@
                           </div>
 
                           {sub.notes && (
-                            <div className="mt-2 bg-base-200 rounded p-2 text-sm">
+                            <div className="mt-2 rounded p-2 text-sm" style={{background:'rgba(255,255,255,0.06)'}}>
                               <span className="text-base-content/50">Notes:</span>
                               <pre className="font-medium whitespace-pre-wrap mt-1 text-xs">{sub.notes}</pre>
                             </div>
@@ -1326,7 +1331,7 @@
             )}
 
             {tab === 'members' && (
-              <div className="card bg-base-100 border border-base-200 shadow-sm rounded-xl">
+              <div className="card border border-base-200 shadow-sm rounded-xl" style={{background:'#252220'}}>
                 <div className="card-body p-6 text-center">
                   <div className="text-4xl mb-3">&#x1F4CA;</div>
                   <h3 className="font-bold text-lg mb-2">Member Data</h3>
@@ -1354,7 +1359,7 @@
                   </div>
                 ) : (
                   history.map(sub => (
-                    <div key={sub.id} className={`card bg-base-100 shadow-sm rounded-xl border ${sub.status === 'approved' ? 'border-success' : 'border-error'}`}>
+                    <div key={sub.id} className={`card shadow-sm rounded-xl border ${sub.status === 'approved' ? 'border-success' : 'border-error'}`} style={{background:'#252220'}}>
                       <div className="card-body p-4">
                         <div className="flex justify-between items-start">
                           <div>
