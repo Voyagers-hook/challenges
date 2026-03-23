@@ -33,7 +33,7 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     html, body { overflow-x: hidden; max-width: 100vw; }
-    :not(.admin-panel) input::placeholder, :not(.admin-panel *) input::placeholder { color: rgba(255,255,255,0.25); }
+    input::placeholder { color: rgba(255,255,255,0.25); }
   /* ── ADMIN LIGHT THEME ── */
       /* Base: white bg, black text on EVERYTHING */
       .admin-panel { background: #ffffff !important; min-height: 100vh; }
@@ -74,7 +74,6 @@
       .admin-panel .badge-error { color: #991b1b !important; background: #fee2e2 !important; }
       .admin-panel .badge { border: none !important; }
       /* Header bar stays dark with white text */
-      .brand-header-bg { background: #1a1816 !important; }
       .admin-panel .brand-header-bg, .admin-panel .brand-header-bg * { color: #ffffff !important; }
       /* Semantic colours */
       .admin-panel .text-success { color: #16a34a !important; }
@@ -84,22 +83,6 @@
       /* Delete/error outline button */
       .admin-panel .btn-error { color: #dc2626 !important; border: 1px solid #dc2626 !important; background: transparent !important; }
       .admin-panel .btn-ghost { color: #111111 !important; background: transparent !important; }
-      /* DaisyUI CSS variable overrides - force black text on light bg */
-      .admin-panel [class*="text-base-content"] { color: #111111 !important; }
-      .admin-panel .input, .admin-panel .select, .admin-panel .textarea {
-        background-color: #f9fafb !important; color: #111111 !important;
-        border-color: #d1d5db !important;
-      }
-      .admin-panel .input:focus, .admin-panel .select:focus, .admin-panel .textarea:focus {
-        outline-color: #0097b2 !important; border-color: #0097b2 !important;
-      }
-      .admin-panel .label-text { color: #333333 !important; }
-      .admin-panel .modal-box { background: #ffffff !important; color: #111111 !important; }
-      .admin-panel .modal-box * { color: #111111 !important; }
-      .admin-panel .modal-box .btn-primary, .admin-panel .modal-box button[style*="0097b2"] { color: #ffffff !important; }
-      .admin-panel .modal-box .btn-error { color: #dc2626 !important; }
-      /* Prevent dark theme bleed-through */
-      .admin-panel { --bc: 17 17 17; --b1: 255 255 255; }
       .admin-panel .btn-outline { color: #111111 !important; background: transparent !important; border: 1px solid #cccccc !important; }
       .admin-panel .loading { color: #0097b2 !important; }
       .admin-panel .toggle { appearance: none; width: 48px; height: 26px; border-radius: 13px; background: #ccc !important; position: relative; cursor: pointer; transition: background 0.2s; border: none !important; }
@@ -518,16 +501,14 @@ function syncSubmissionsFromGAS(email, gasSubmissions) {
     saveMemberStatus(email, []);
     return [];
   }
-  // Aggregate per challengeId so multi-submission challenges work correctly
-  var byChallenge = {};
-  gasSubmissions.forEach(function(s) {
-    var cid = s.challengeId;
-    if (!byChallenge[cid]) byChallenge[cid] = { challengeId: cid, submissionsApproved: 0, submissionsPending: 0 };
+  var synced = gasSubmissions.map(function(s) {
     var st = (s.status || '').toLowerCase();
-    if (st === 'approved') byChallenge[cid].submissionsApproved++;
-    else if (st === 'pending') byChallenge[cid].submissionsPending++;
+    return {
+      challengeId: s.challengeId,
+      submissionId: s.submissionId,
+      status: st === 'pending' ? 'pending_approval' : st === 'approved' ? 'completed' : 'rejected'
+    };
   });
-  var synced = Object.values(byChallenge);
   saveMemberStatus(email, synced);
   return synced;
 }
@@ -702,12 +683,10 @@ function ChallengeCard({
   const [showGallery, setShowGallery] = useState(false);
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const hasGallery = challenge.showGallery && galleryPhotos && galleryPhotos.length > 0;
+  const status = memberChallenge ? memberChallenge.status : 'not_started';
+  const isComplete = status === 'completed';
   const required = challenge.requiredSubmissions || 1;
-  const approved = memberChallenge ? (memberChallenge.submissionsApproved || 0) : 0;
-  const pendingCount = memberChallenge ? (memberChallenge.submissionsPending || 0) : 0;
-  const isComplete = approved >= required;
-  const hasPending = pendingCount > 0;
-  const status = isComplete ? 'completed' : (approved > 0 || hasPending) ? 'in_progress' : 'not_started';
+  const approved = memberChallenge && memberChallenge.submissionsApproved || 0;
   const isMultiStep = required > 1;
   const progressPct = required > 0 ? Math.min(100, Math.round(approved / required * 100)) : 0;
   function rewardBadge() {
@@ -763,7 +742,7 @@ function ChallengeCard({
     }, /*#__PURE__*/React.createElement(CheckCircle, {
       size: 13
     }), " Complete");
-    if (hasPending && !isComplete) return /*#__PURE__*/React.createElement("span", {
+    if (status === 'pending_approval') return /*#__PURE__*/React.createElement("span", {
       style: {
         ...barlow,
         display: 'flex',
@@ -808,7 +787,7 @@ function ChallengeCard({
       top: 0,
       bottom: 0,
       width: '3px',
-      background: isComplete ? '#16a34a' : hasPending ? '#d97706' : '#0097b2'
+      background: isComplete ? '#16a34a' : status === 'pending_approval' ? '#d97706' : '#0097b2'
     }
   }), isComplete && /*#__PURE__*/React.createElement(CompletionStamp, null), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -979,7 +958,7 @@ function ChallengeCard({
       color: '#16a34a',
       fontWeight: '600'
     }
-  }, '\u{1F389}', " Challenge Complete! Your reward has been applied.")), !isComplete && (approved + pendingCount) < required && /*#__PURE__*/React.createElement("div", {
+  }, '\u{1F389}', " Challenge Complete! Your reward has been applied.")), status === 'not_started' && /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: '8px',
@@ -1030,7 +1009,7 @@ function ChallengeCard({
     onMouseLeave: e => e.currentTarget.style.transform = 'scale(1)'
   }, /*#__PURE__*/React.createElement(SvgCamera, {
     size: 14, color: "white"
-  }), isMultiStep && approved > 0 ? `Submit (${approved + 1}/${required})` : 'Submit Catch')), hasPending && !isComplete && /*#__PURE__*/React.createElement("div", {
+  }), isMultiStep && approved > 0 ? `Submit (${approved + 1}/${required})` : 'Submit Catch')), status === 'pending_approval' && /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: '12px',
       paddingLeft: '4px'
@@ -1045,7 +1024,7 @@ function ChallengeCard({
       color: '#d97706',
       fontWeight: '600'
     }
-  }, '\u23F3', " ", pendingCount > 1 ? pendingCount + ' catches under review' : 'Waiting for admin to verify your submission.')),
+  }, '\u23F3', " Waiting for admin to verify your submission.")),
 
   hasGallery && /*#__PURE__*/React.createElement("div", {
     style: { marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(42,37,32,0.08)' }
@@ -1144,9 +1123,14 @@ function SubmitModal({
       var statuses = getMemberStatus(member.email);
       var existing = statuses.find(s => s.challengeId === challenge.id);
       if (existing) {
-        existing.submissionsPending = (existing.submissionsPending || 0) + 1;
+        existing.status = 'pending_approval';
+        existing.submissionId = result.id;
       } else {
-        statuses.push({ challengeId: challenge.id, submissionsApproved: 0, submissionsPending: 1 });
+        statuses.push({
+          challengeId: challenge.id,
+          status: 'pending_approval',
+          submissionId: result.id
+        });
       }
       saveMemberStatus(member.email, statuses);
       setSubmitted(true);
@@ -1304,12 +1288,6 @@ function MemberView({
     gasGet({ action: 'getGallery' }).then(function(data) {
       if (data && data.gallery) setGalleryData(data.gallery);
     }).catch(function() {});
-    // Refresh member points/status on load
-    refreshMember();
-    // Refresh when user returns to tab (e.g. after admin approves)
-    function onFocus() { refreshMember(); }
-    document.addEventListener('visibilitychange', onFocus);
-    return function() { document.removeEventListener('visibilitychange', onFocus); };
   }, []);
   async function refreshMember() {
     try {
@@ -1430,41 +1408,20 @@ function MemberView({
       textTransform: 'uppercase',
       letterSpacing: '0.5px'
     }
-  }, member.name)), member.memberNumber && /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: 'rgba(0,151,178,0.15)',
-      border: '1px solid rgba(0,151,178,0.25)',
-      borderRadius: '6px',
-      padding: '6px 10px',
-      flexShrink: 0
-    }
-  }, /*#__PURE__*/React.createElement("p", {
+  }, member.name), member.memberNumber && /*#__PURE__*/React.createElement("p", {
     style: {
       ...barlow,
-      margin: 0,
-      fontSize: '9px',
-      color: 'rgba(255,255,255,0.4)',
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
+      margin: '4px 0 0',
+      fontSize: '11px',
+      color: 'rgba(255,255,255,0.55)',
+      letterSpacing: '0.5px',
       fontWeight: '600'
     }
-  }, "Member"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      ...barlow,
-      margin: 0,
-      fontWeight: '800',
-      fontSize: '14px',
-      color: '#0097b2',
-      letterSpacing: '0.5px'
-    }
-  }, "#", member.memberNumber))), /*#__PURE__*/React.createElement("div", {
+  }, "Member #", member.memberNumber))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr',
-      gap: '1px',
-      background: 'rgba(255,255,255,0.06)',
-      borderRadius: '10px',
-      overflow: 'hidden',
+      gap: '0',
       marginBottom: '16px'
     }
   }, [{
@@ -1482,9 +1439,9 @@ function MemberView({
   }].map((stat, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     style: {
-      background: '#1a1816',
-      padding: '14px 8px',
-      textAlign: 'center'
+      padding: '12px 8px',
+      textAlign: 'center',
+      borderRight: i < 2 ? '1px solid rgba(255,255,255,0.08)' : 'none'
     }
   }, /*#__PURE__*/React.createElement("p", {
     style: {
@@ -3563,7 +3520,7 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex justify-between items-center"
   }, /*#__PURE__*/React.createElement("h2", {
-    className: "font-semibold text-gray-800"
+    className: "font-semibold text-base-content"
   }, "All Challenges (", challenges.length, ")"), /*#__PURE__*/React.createElement("button", {
     className: "btn brand-btn btn-sm",
     onClick: openNew
@@ -3584,7 +3541,7 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("h3", {
     className: "font-bold text-sm truncate"
   }, ch.title), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-gray-600"
+    className: "text-xs text-base-content/60"
   }, ch.reward.description)), /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-1 shrink-0"
   }, /*#__PURE__*/React.createElement("button", {
@@ -3897,28 +3854,24 @@ function AdminView({
   }, []);
   async function approveSubmission(sub) {
     const challenge = challenges.find(c => c.id === sub.challengeId);
-    const required = challenge?.requiredSubmissions || 1;
     setSheetUpdateStatus(prev => ({
       ...prev,
       [sub.id]: 'updating'
     }));
     try {
-      const result = await gasPost({
+      await gasPost({
         action: 'approveSubmission',
         submissionId: sub.id,
         memberEmail: sub.memberEmail,
         points: challenge?.reward?.points || sub.points || 0
       });
-      // Only mark challenge complete if all required submissions are now approved
-      if (result && result.allDone) {
-        const statuses = getMemberStatus(sub.memberEmail);
-        const idx = statuses.findIndex(s => s.challengeId === sub.challengeId);
-        if (idx !== -1) statuses[idx].status = 'completed';
-        saveMemberStatus(sub.memberEmail, statuses);
-      }
+      const statuses = getMemberStatus(sub.memberEmail);
+      const idx = statuses.findIndex(s => s.challengeId === sub.challengeId);
+      if (idx !== -1) statuses[idx].status = 'completed';
+      saveMemberStatus(sub.memberEmail, statuses);
       setSheetUpdateStatus(prev => ({
         ...prev,
-        [sub.id]: result && result.allDone ? 'done' : 'partial'
+        [sub.id]: 'done'
       }));
       await loadData();
     } catch (e) {
@@ -3973,14 +3926,12 @@ function AdminView({
   }
   return /*#__PURE__*/React.createElement("div", {
     className: "min-h-screen admin-panel",
-    'data-theme': 'light',
     style: {
       background: '#ffffff',
       color: '#111111'
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "brand-header-bg text-white px-4 py-5",
-    style: { background: '#1a1816', color: '#ffffff' }
+    className: "brand-header-bg text-white px-4 py-5"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center justify-between max-w-2xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
@@ -3990,14 +3941,16 @@ function AdminView({
   }, "\uD83C\uDFA3 Challenge Manager")), /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-ghost btn-sm text-white opacity-80",
+    className: "btn btn-ghost btn-sm",
+    style: {color: '#ffffff', opacity: 0.8},
     onClick: loadData,
     disabled: loading
   }, /*#__PURE__*/React.createElement(RefreshCw, {
     size: 14,
     className: loading ? 'animate-spin' : ''
   })), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-ghost btn-sm text-white opacity-80",
+    className: "btn btn-ghost btn-sm",
+    style: {color: '#ffffff', opacity: 0.8},
     onClick: onLogout
   }, "Logout"))), /*#__PURE__*/React.createElement("div", {
     className: "mt-4 max-w-2xl mx-auto grid grid-cols-3 gap-3"
@@ -4061,7 +4014,7 @@ function AdminView({
   }, /*#__PURE__*/React.createElement("span", {
     className: "loading loading-spinner loading-md"
   })) : pending.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "text-center py-12 text-gray-400"
+    className: "text-center py-12 text-base-content/40"
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-4xl mb-2"
   }, "\u2705"), /*#__PURE__*/React.createElement("p", null, "No pending submissions \u2014 all caught up!")) : pending.map(sub => {
@@ -4082,9 +4035,9 @@ function AdminView({
       className: "font-bold",
       style: { color: '#111111' }
     }, challenge?.icon, " ", sub.challengeTitle), /*#__PURE__*/React.createElement("p", {
-      className: "text-sm text-gray-500"
+      className: "text-sm text-base-content/50"
     }, "by ", /*#__PURE__*/React.createElement("span", {
-      className: "font-medium text-gray-800"
+      className: "font-medium text-base-content"
     }, sub.memberName), " \xB7 ", formatDate(sub.timestamp))), /*#__PURE__*/React.createElement("span", {
       className: "badge badge-warning"
     }, "Pending")), sub.notes && /*#__PURE__*/React.createElement("div", {
@@ -4099,16 +4052,16 @@ function AdminView({
     }, sub.notes)), sub.photo && /*#__PURE__*/React.createElement("div", {
       className: "mt-2"
     }, /*#__PURE__*/React.createElement("p", {
-      className: "text-xs text-gray-400 mb-1"
+      className: "text-xs text-base-content/40 mb-1"
     }, "\uD83D\uDCF8 Photo proof:"), /*#__PURE__*/React.createElement("img", {
       src: sub.photo,
       alt: "Catch photo",
       className: "w-full rounded-lg max-h-56 object-cover cursor-pointer hover:opacity-90 transition-opacity",
       onClick: () => setExpandedPhoto(sub.photo)
     })), challenge?.reward && /*#__PURE__*/React.createElement("p", {
-      className: "text-xs text-gray-400 mt-1"
+      className: "text-xs text-base-content/40 mt-1"
     }, "Reward on approval: ", challenge.reward.description), sheetStatus === 'updating' && /*#__PURE__*/React.createElement("div", {
-      className: "flex items-center gap-2 text-xs text-gray-500 mt-1"
+      className: "flex items-center gap-2 text-xs text-base-content/50 mt-1"
     }, /*#__PURE__*/React.createElement(RefreshCw, {
       size: 12,
       className: "animate-spin"
@@ -4142,7 +4095,7 @@ function AdminView({
   }, "\uD83D\uDCCA"), /*#__PURE__*/React.createElement("h3", {
     className: "font-bold text-lg mb-2"
   }, "Member Data"), /*#__PURE__*/React.createElement("p", {
-    className: "text-gray-600 mb-4"
+    className: "text-base-content/60 mb-4"
   }, "Member data is managed in your Google Sheet. Visit the sheet to view and manage members directly."), /*#__PURE__*/React.createElement("a", {
     href: "https://docs.google.com/spreadsheets/d/1loWRLLaoJyeRrK8YwJqCQPeIyZ5EGLByr7_D2b5qgUY",
     target: "_blank",
@@ -4153,7 +4106,7 @@ function AdminView({
   }, /*#__PURE__*/React.createElement("span", {
     className: "loading loading-spinner loading-md"
   })) : history.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "text-center py-12 text-gray-400"
+    className: "text-center py-12 text-base-content/40"
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-4xl mb-2"
   }, "\uD83D\uDCCB"), /*#__PURE__*/React.createElement("p", null, "No reviewed submissions yet.")) : history.map(sub => /*#__PURE__*/React.createElement("div", {
@@ -4169,9 +4122,9 @@ function AdminView({
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
     className: "font-semibold text-sm"
   }, sub.challengeTitle), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-gray-400"
+    className: "text-xs text-base-content/40"
   }, sub.memberName, " \xB7 ", formatDate(sub.timestamp)), sub.notes && /*#__PURE__*/React.createElement("p", {
-    className: "text-xs mt-1 text-gray-600 truncate"
+    className: "text-xs mt-1 text-base-content/60 truncate"
   }, sub.notes)), /*#__PURE__*/React.createElement("span", {
     className: `badge ${(sub.status || '').toLowerCase() === 'approved' ? 'badge-success' : 'badge-error'}`
   }, (sub.status || '').toLowerCase() === 'approved' ? '&#x2705; Approved' : '&#x274C; Rejected')), sub.photo && /*#__PURE__*/React.createElement("img", {
@@ -4197,15 +4150,15 @@ function AdminView({
     size: 12,
     className: loading ? 'animate-spin' : ''
   }))), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-gray-500 mb-3"
+    className: "text-xs text-base-content/50 mb-3"
   }, "When a member's friend joins, click \"Award 100 pts\" to credit the referrer automatically."), loading ? /*#__PURE__*/React.createElement("div", {
     className: "text-center py-12"
   }, /*#__PURE__*/React.createElement("span", {
     className: "loading loading-spinner loading-md"
   }), /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-gray-400 mt-2"
+    className: "text-sm text-base-content/40 mt-2"
   }, "Loading referrals...")) : referrals.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "text-center py-12 text-gray-400"
+    className: "text-center py-12 text-base-content/40"
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-4xl mb-2"
   }, "\uD83D\uDC65"), /*#__PURE__*/React.createElement("p", {
@@ -4229,17 +4182,17 @@ function AdminView({
     }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
       className: "font-semibold text-sm"
     }, ref.referredEmail), /*#__PURE__*/React.createElement("p", {
-      className: "text-xs text-gray-500 mt-0.5"
+      className: "text-xs text-base-content/50 mt-0.5"
     }, "Referred by ", /*#__PURE__*/React.createElement("span", {
-      className: "font-medium text-gray-800"
+      className: "font-medium text-base-content"
     }, ref.referrerName), ref.referrerMemberNumber && /*#__PURE__*/React.createElement("span", {
-      className: "text-gray-400"
+      className: "text-base-content/40"
     }, " (#", ref.referrerMemberNumber, ")")), /*#__PURE__*/React.createElement("p", {
-      className: "text-xs text-gray-400 mt-0.5"
+      className: "text-xs text-base-content/40 mt-0.5"
     }, formatDate(ref.timestamp))), /*#__PURE__*/React.createElement("span", {
       className: "badge badge-warning badge-sm"
     }, "Pending")), awardStatus === 'updating' && /*#__PURE__*/React.createElement("div", {
-      className: "flex items-center gap-2 text-xs text-gray-500 mt-2"
+      className: "flex items-center gap-2 text-xs text-base-content/50 mt-2"
     }, /*#__PURE__*/React.createElement(RefreshCw, {
       size: 12,
       className: "animate-spin"
@@ -4268,13 +4221,13 @@ function AdminView({
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     className: "font-semibold text-sm"
   }, ref.referredEmail), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-gray-500"
+    className: "text-xs text-base-content/50"
   }, "Referred by ", /*#__PURE__*/React.createElement("span", {
     className: "font-medium"
   }, ref.referrerName), ref.referrerMemberNumber && /*#__PURE__*/React.createElement("span", {
-    className: "text-gray-400"
+    className: "text-base-content/40"
   }, " (#", ref.referrerMemberNumber, ")")), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-gray-400"
+    className: "text-xs text-base-content/40"
   }, formatDate(ref.timestamp))), /*#__PURE__*/React.createElement("span", {
     className: "badge badge-success badge-sm"
   }, "+100 pts"))))))))), expandedPhoto && /*#__PURE__*/React.createElement("div", {
@@ -4287,7 +4240,7 @@ function AdminView({
     alt: "Catch photo full size",
     className: "w-full rounded-lg"
   }), /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-center text-gray-400 mt-2"
+    className: "text-xs text-center text-base-content/40 mt-2"
   }, "Tap anywhere to close")), /*#__PURE__*/React.createElement("div", {
     className: "modal-backdrop"
   })));
