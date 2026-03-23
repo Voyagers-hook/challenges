@@ -33,7 +33,7 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     html, body { overflow-x: hidden; max-width: 100vw; }
-    input::placeholder { color: rgba(255,255,255,0.25); }
+    :not(.admin-panel) input::placeholder, :not(.admin-panel *) input::placeholder { color: rgba(255,255,255,0.25); }
   /* ── ADMIN LIGHT THEME ── */
       /* Base: white bg, black text on EVERYTHING */
       .admin-panel { background: #ffffff !important; min-height: 100vh; }
@@ -83,6 +83,22 @@
       /* Delete/error outline button */
       .admin-panel .btn-error { color: #dc2626 !important; border: 1px solid #dc2626 !important; background: transparent !important; }
       .admin-panel .btn-ghost { color: #111111 !important; background: transparent !important; }
+      /* DaisyUI CSS variable overrides - force black text on light bg */
+      .admin-panel [class*="text-base-content"] { color: #111111 !important; }
+      .admin-panel .input, .admin-panel .select, .admin-panel .textarea {
+        background-color: #f9fafb !important; color: #111111 !important;
+        border-color: #d1d5db !important;
+      }
+      .admin-panel .input:focus, .admin-panel .select:focus, .admin-panel .textarea:focus {
+        outline-color: #0097b2 !important; border-color: #0097b2 !important;
+      }
+      .admin-panel .label-text { color: #333333 !important; }
+      .admin-panel .modal-box { background: #ffffff !important; color: #111111 !important; }
+      .admin-panel .modal-box * { color: #111111 !important; }
+      .admin-panel .modal-box .btn-primary, .admin-panel .modal-box button[style*="0097b2"] { color: #ffffff !important; }
+      .admin-panel .modal-box .btn-error { color: #dc2626 !important; }
+      /* Prevent dark theme bleed-through */
+      .admin-panel { --bc: 17 17 17; --b1: 255 255 255; }
       .admin-panel .btn-outline { color: #111111 !important; background: transparent !important; border: 1px solid #cccccc !important; }
       .admin-panel .loading { color: #0097b2 !important; }
       .admin-panel .toggle { appearance: none; width: 48px; height: 26px; border-radius: 13px; background: #ccc !important; position: relative; cursor: pointer; transition: background 0.2s; border: none !important; }
@@ -1288,6 +1304,12 @@ function MemberView({
     gasGet({ action: 'getGallery' }).then(function(data) {
       if (data && data.gallery) setGalleryData(data.gallery);
     }).catch(function() {});
+    // Refresh member points/status on load
+    refreshMember();
+    // Refresh when user returns to tab (e.g. after admin approves)
+    function onFocus() { refreshMember(); }
+    document.addEventListener('visibilitychange', onFocus);
+    return function() { document.removeEventListener('visibilitychange', onFocus); };
   }, []);
   async function refreshMember() {
     try {
@@ -3875,24 +3897,28 @@ function AdminView({
   }, []);
   async function approveSubmission(sub) {
     const challenge = challenges.find(c => c.id === sub.challengeId);
+    const required = challenge?.requiredSubmissions || 1;
     setSheetUpdateStatus(prev => ({
       ...prev,
       [sub.id]: 'updating'
     }));
     try {
-      await gasPost({
+      const result = await gasPost({
         action: 'approveSubmission',
         submissionId: sub.id,
         memberEmail: sub.memberEmail,
         points: challenge?.reward?.points || sub.points || 0
       });
-      const statuses = getMemberStatus(sub.memberEmail);
-      const idx = statuses.findIndex(s => s.challengeId === sub.challengeId);
-      if (idx !== -1) statuses[idx].status = 'completed';
-      saveMemberStatus(sub.memberEmail, statuses);
+      // Only mark challenge complete if all required submissions are now approved
+      if (result && result.allDone) {
+        const statuses = getMemberStatus(sub.memberEmail);
+        const idx = statuses.findIndex(s => s.challengeId === sub.challengeId);
+        if (idx !== -1) statuses[idx].status = 'completed';
+        saveMemberStatus(sub.memberEmail, statuses);
+      }
       setSheetUpdateStatus(prev => ({
         ...prev,
-        [sub.id]: 'done'
+        [sub.id]: result && result.allDone ? 'done' : 'partial'
       }));
       await loadData();
     } catch (e) {
@@ -3947,6 +3973,7 @@ function AdminView({
   }
   return /*#__PURE__*/React.createElement("div", {
     className: "min-h-screen admin-panel",
+    'data-theme': 'light',
     style: {
       background: '#ffffff',
       color: '#111111'
