@@ -1,4 +1,4 @@
-const CACHE = 'vh-challenges-v1';
+const CACHE = 'vh-challenges-v3';
 const SHELL = ['./','./index.html','./manifest.json'];
 
 self.addEventListener('install', e => {
