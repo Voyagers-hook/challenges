@@ -449,8 +449,12 @@ async function gasGet(params) {
 }
 async function gasPost(data) {
       var url = GAS_URL + '?action=' + encodeURIComponent(data.action) + '&payload=' + encodeURIComponent(JSON.stringify(data));
-      var r = await fetch(url);
-      return r.json();
+      console.log('[gasPost] URL length:', url.length, 'action:', data.action);
+      var r = await fetch(url, { redirect: 'follow' });
+      if (!r.ok) { console.error('[gasPost] HTTP error:', r.status); throw new Error('HTTP ' + r.status); }
+      var json = await r.json();
+      console.log('[gasPost] Response:', json);
+      return json;
     }
 async function fetchChallengesFromGAS() {
   try {
@@ -463,11 +467,21 @@ async function fetchChallengesFromGAS() {
 }
 async function saveChallengesToGAS(ch) {
   try {
-    await gasPost({
+    var result = await gasPost({
       action: 'saveChallenges',
       challenges: ch
     });
-  } catch (e) {}
+    if (!result || !result.success) {
+      console.error('[saveChallengesToGAS] Save failed:', result);
+      alert('Failed to save challenges. Please try again.');
+    } else {
+      console.log('[saveChallengesToGAS] Saved', ch.length, 'challenges');
+    }
+    return result;
+  } catch (e) {
+    console.error('[saveChallengesToGAS] Error:', e);
+    alert('Error saving challenges: ' + e.message);
+  }
 }
 function getMemberStatus(email) {
   const s = localStorage.getItem('vh_status_' + email);
@@ -1660,7 +1674,7 @@ function Login({
     width: '100%',
     padding: '14px 16px',
     borderRadius: '8px',
-    background: 'rgba(255,255,255,0.07)',
+    background: '#f9fafb',
     border: '1px solid rgba(255,255,255,0.12)',
     color: 'white',
     fontSize: '15px',
@@ -2604,7 +2618,7 @@ function PasswordModal({
     width: '100%',
     padding: '12px 14px',
     borderRadius: '8px',
-    background: 'rgba(255,255,255,0.07)',
+    background: '#f9fafb',
     border: '1px solid rgba(255,255,255,0.1)',
     fontSize: '14px',
     outline: 'none',
@@ -3543,7 +3557,7 @@ function ChallengeManager({
     className: "modal-box max-w-lg max-h-[90vh] overflow-y-auto",
     style: {
       background: '#ffffff',
-      color: '#F4EFE6'
+      color: '#111111'
     }
   }, /*#__PURE__*/React.createElement("h3", {
     className: "font-bold text-lg mb-4"
@@ -3558,14 +3572,14 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Icon (emoji)")), /*#__PURE__*/React.createElement("input", {
     className: "input input-bordered w-full text-center text-xl",
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     value: editing.icon,
     onChange: e => setEditing({
@@ -3579,15 +3593,15 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Title *")), /*#__PURE__*/React.createElement("input", {
     className: "input input-bordered w-full",
     placeholder: "e.g. Specimen Hunter: Carp",
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     value: editing.title,
     onChange: e => setEditing({
@@ -3599,15 +3613,15 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Description")), /*#__PURE__*/React.createElement("textarea", {
     className: "textarea textarea-bordered w-full text-sm",
     rows: 2,
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     placeholder: "Describe what members need to do...",
     value: editing.description,
@@ -3620,7 +3634,7 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Requirements")), editing.criteria.map((c, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
@@ -3629,9 +3643,9 @@ function ChallengeManager({
     className: "input input-bordered input-sm flex-1",
     placeholder: `Requirement ${i + 1}`,
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     value: c,
     onChange: e => updateCriteria(i, e.target.value)
@@ -3646,15 +3660,15 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Reward Type")), /*#__PURE__*/React.createElement("select", {
     className: "select select-bordered w-full",
     value: editing.rewardType,
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     onChange: e => setEditing({
       ...editing,
@@ -3671,7 +3685,7 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Points awarded")), /*#__PURE__*/React.createElement("input", {
     type: "number",
@@ -3679,9 +3693,9 @@ function ChallengeManager({
     className: "input input-bordered w-full",
     value: editing.points,
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     onChange: e => setEditing({
       ...editing,
@@ -3692,7 +3706,7 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Discount % awarded")), /*#__PURE__*/React.createElement("input", {
     type: "number",
@@ -3701,9 +3715,9 @@ function ChallengeManager({
     className: "input input-bordered w-full",
     value: editing.discount,
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     onChange: e => setEditing({
       ...editing,
@@ -3714,12 +3728,12 @@ function ChallengeManager({
   }, /*#__PURE__*/React.createElement("span", {
     className: "label-text text-xs",
     style: {
-      color: '#F4EFE6'
+      color: '#333333'
     }
   }, "Required Submissions")), /*#__PURE__*/React.createElement("p", {
     className: "text-xs mb-1",
     style: {
-      color: 'rgba(244,239,230,0.5)'
+      color: '#666666'
     }
   }, "How many catches/submissions does a member need to complete this challenge?"), /*#__PURE__*/React.createElement("input", {
     type: "number",
@@ -3732,16 +3746,16 @@ function ChallengeManager({
       requiredSubmissions: Number(e.target.value)
     }),
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     }
   })),
 
   /*#__PURE__*/React.createElement("div", {
     style: { marginTop: '12px' }
   }, /*#__PURE__*/React.createElement("label", {
-    style: { display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', color: '#F4EFE6', fontSize: '14px', fontWeight: '600' }
+    style: { display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', color: '#111111', fontSize: '14px', fontWeight: '600' }
   }, /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
     checked: editing.showGallery || false,
@@ -3755,9 +3769,9 @@ function ChallengeManager({
     className: "input input-bordered w-full",
     placeholder: "https://forms.gle/...",
     style: {
-      background: 'rgba(255,255,255,0.07)',
-      color: '#F4EFE6',
-      borderColor: 'rgba(255,255,255,0.15)'
+      background: '#f9fafb',
+      color: '#111111',
+      borderColor: '#d1d5db'
     },
     value: editing.quizUrl || '',
     onChange: e => setEditing({
