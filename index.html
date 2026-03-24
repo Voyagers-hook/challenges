@@ -91,6 +91,18 @@
       .admin-panel .toggle:checked::after { transform: translateX(22px); }
       .admin-panel .label-text { color: #333333 !important; }
       </style>
+  <!-- OneSignal Push Notifications -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "bb3540cc-9c0e-4fc6-b6e3-9256f7913bb1",
+        notifyButton: { enable: false },
+        allowLocalhostAsSecureOrigin: true
+      });
+    });
+  </script>
 </head>
 <body>
   <div id="root"></div>
@@ -470,11 +482,12 @@ async function fetchChallengesFromGAS() {
   } catch (e) {}
   return DEFAULT_CHALLENGES;
 }
-async function saveChallengesToGAS(ch) {
+async function saveChallengesToGAS(ch, isNew) {
   try {
     var result = await gasPost({
       action: 'saveChallenges',
-      challenges: ch
+      challenges: ch,
+      isNew: isNew || false
     });
     if (!result || !result.success) {
       console.error('[saveChallengesToGAS] Save failed:', result);
@@ -3490,7 +3503,7 @@ function ChallengeManager({
     }
     setEditing(null);
     onRefresh(all);
-    saveChallengesToGAS(all);
+    saveChallengesToGAS(all, isNew);
   }
   function updateCriteria(i, val) {
     if (!editing) return;
@@ -4391,6 +4404,13 @@ function App() {
     onMemberLogin: m => {
       setCurrentMember(m);
       setView('member');
+      // Register member with OneSignal for push notifications
+      try {
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function(OneSignal) {
+          if (m && m.email) await OneSignal.login(m.email);
+        });
+      } catch(e) {}
     },
     onAdminLogin: () => setView('admin')
   }), view === 'member' && currentMember && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
