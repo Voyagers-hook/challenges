@@ -101,7 +101,20 @@
         notifyButton: { enable: false },
         allowLocalhostAsSecureOrigin: true,
         serviceWorkerPath: "/challenges/OneSignalSDKWorker.js",
-        serviceWorkerParam: { scope: "/challenges/" }
+        serviceWorkerParam: { scope: "/challenges/" },
+        promptOptions: {
+          slidedown: {
+            prompts: [{
+              type: "push",
+              autoPrompt: false,
+              text: {
+                actionMessage: "Get notified when challenges are approved or new challenges launch!",
+                acceptButton: "Allow",
+                cancelButton: "Maybe later"
+              }
+            }]
+          }
+        }
       });
     });
   </script>
@@ -4410,9 +4423,12 @@ function App() {
       try {
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalDeferred.push(async function(OneSignal) {
+          // First request permission (shows browser Allow/Block popup)
+          const permission = await OneSignal.Notifications.requestPermission();
+          // Then link to member email so we can target by user
           if (m && m.email) await OneSignal.login(m.email);
         });
-      } catch(e) {}
+      } catch(e) { console.warn('OneSignal error:', e); }
     },
     onAdminLogin: () => setView('admin')
   }), view === 'member' && currentMember && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
