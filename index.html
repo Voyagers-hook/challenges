@@ -1408,16 +1408,16 @@ function MemberView({
       textTransform: 'uppercase',
       letterSpacing: '0.5px'
     }
-  }, member.name), member.memberNumber && /*#__PURE__*/React.createElement("p", {
+  }, member.name), /*#__PURE__*/React.createElement("p", {
     style: {
       ...barlow,
-      margin: '4px 0 0',
-      fontSize: '11px',
-      color: 'rgba(255,255,255,0.55)',
+      margin: '3px 0 0',
+      fontSize: '12px',
+      color: 'rgba(255,255,255,0.9)',
       letterSpacing: '0.5px',
       fontWeight: '600'
     }
-  }, "Member #", member.memberNumber))), /*#__PURE__*/React.createElement("div", {
+  }, member.memberNumber ? 'Member #' + member.memberNumber : ''))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr',
