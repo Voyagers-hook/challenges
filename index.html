@@ -2853,6 +2853,7 @@ function MenuDrawer({
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [referralCopied, setReferralCopied] = useState(false);
   const [referralOpen, setReferralOpen] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState(typeof Notification !== 'undefined' && Notification.permission === 'granted');
   var memberName = member ? member.name : '';
   var memberNumber = member ? member.memberNumber : '';
   var showOnLeaderboard = member ? member.showOnLeaderboard : false;
@@ -3229,53 +3230,68 @@ function MenuDrawer({
     }
   }), /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: '8px 20px 12px'
+      padding: '4px 20px 12px'
     }
-  }, /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
-      ...barlow,
-      color: 'rgba(255,255,255,0.3)',
-      fontSize: '10px',
-      textTransform: 'uppercase',
-      letterSpacing: '2px',
-      margin: '0 0 10px',
-      fontWeight: '700',
       display: 'flex',
       alignItems: 'center',
-      gap: '6px'
+      justifyContent: 'space-between',
+      padding: '10px 0',
+      gap: '12px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      flex: 1
     }
   }, /*#__PURE__*/React.createElement(Bell, {
-    size: 12
-  }), " Push Notifications"), /*#__PURE__*/React.createElement("button", {
-    onClick: function() {
+    size: 18,
+    style: { color: '#0097b2', flexShrink: 0 }
+  }), /*#__PURE__*/React.createElement("div", null,
+    /*#__PURE__*/React.createElement("p", {
+      style: {
+        ...barlow,
+        margin: 0,
+        color: 'white',
+        fontWeight: '700',
+        fontSize: '14px',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px'
+      }
+    }, "Push Notifications"),
+    /*#__PURE__*/React.createElement("p", {
+      style: {
+        margin: 0,
+        color: 'rgba(255,255,255,0.3)',
+        fontSize: '11px'
+      }
+    }, pushEnabled ? "Notifications enabled" : "Tap to enable alerts")
+  )), /*#__PURE__*/React.createElement(Toggle, {
+    on: pushEnabled,
+    onToggle: async function() {
       try {
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        window.OneSignalDeferred.push(async function(OneSignal) {
-          const permission = await OneSignal.Notifications.requestPermission();
-          console.log('Push permission:', permission);
-          if (OneSignal.User && OneSignal.User.PushSubscription) {
-            await OneSignal.User.PushSubscription.optIn();
-            console.log('Push optIn called');
+        if (window.OneSignal) {
+          if (!pushEnabled) {
+            const granted = await window.OneSignal.Notifications.requestPermission();
+            if (granted) {
+              if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+                await window.OneSignal.User.PushSubscription.optIn();
+              }
+              setPushEnabled(true);
+            }
+          } else {
+            if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+              await window.OneSignal.User.PushSubscription.optOut();
+            }
+            setPushEnabled(false);
           }
-        });
+        }
       } catch(e) { console.warn('Push error:', e); }
-    },
-    style: {
-      width: '100%',
-      padding: '10px',
-      background: '#0097b2',
-      color: 'white',
-      border: 'none',
-      borderRadius: '6px',
-      fontFamily: "'Barlow Condensed', sans-serif",
-      fontSize: '13px',
-      fontWeight: '700',
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-      cursor: 'pointer',
-      marginBottom: '6px'
     }
-  }, "Enable Push Notifications")), /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement("div", {
     style: {
       height: '1px',
       background: 'rgba(255,255,255,0.06)',
