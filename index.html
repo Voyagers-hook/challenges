@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="VH Challenges">
   <meta name="theme-color" content="#1a1816">
-  <title>Hook Club Members Clubhouse v24</title>
+  <title>Hook Club Members Clubhouse v25</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,7 +74,7 @@
       .admin-panel .badge-error { color: #991b1b !important; background: #fee2e2 !important; }
       .admin-panel .badge { border: none !important; }
       /* Header bar stays dark with white text */
-      .admin-panel .brand-header-bg, .admin-panel .brand-header-bg * { color: #ffffff !important; }
+      .admin-panel .brand-header-bg { background: #1a1816 !important; color: #ffffff !important; } .admin-panel .brand-header-bg * { color: #ffffff !important; }
       /* Semantic colours */
       .admin-panel .text-success { color: #16a34a !important; }
       .admin-panel .text-error { color: #dc2626 !important; }
@@ -82,7 +82,7 @@
       .admin-panel .brand-text-teal { color: #0097b2 !important; }
       /* Delete/error outline button */
       .admin-panel .btn-error { color: #dc2626 !important; border: 1px solid #dc2626 !important; background: transparent !important; }
-      .admin-panel .btn-ghost { color: #111111 !important; background: transparent !important; }
+      .admin-panel .btn-ghost { color: #111111 !important; background: transparent !important; } .admin-panel .brand-header-bg .btn-ghost { color: #ffffff !important; }
       .admin-panel .btn-outline { color: #111111 !important; background: transparent !important; border: 1px solid #cccccc !important; }
       .admin-panel .loading { color: #0097b2 !important; }
       .admin-panel .toggle { appearance: none; width: 48px; height: 26px; border-radius: 13px; background: #ccc !important; position: relative; cursor: pointer; transition: background 0.2s; border: none !important; }
@@ -3831,7 +3831,7 @@ function AdminView({
   const [referrals, setReferrals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sheetUpdateStatus, setSheetUpdateStatus] = useState({});
-  const [referralAwardStatus, setReferralAwardStatus] = useState({});
+  const [referralAwardStatus, setReferralAwardStatus] = useState({}); const [referralPts, setReferralPts] = useState(100);
   const [expandedPhoto, setExpandedPhoto] = useState(null);
   const pending = submissions.filter(s => (s.status || '').toLowerCase() === 'pending');
   const history = submissions.filter(s => (s.status || '').toLowerCase() !== 'pending');
@@ -3902,7 +3902,8 @@ function AdminView({
       await gasPost({
         action: 'awardReferralPoints',
         row: referral.row,
-        referrerMemberNumber: referral.referrerMemberNumber
+        referrerMemberNumber: referral.referrerMemberNumber,
+        points: referralPts
       });
       setReferralAwardStatus(prev => ({
         ...prev,
@@ -4148,7 +4149,7 @@ function AdminView({
     className: loading ? 'animate-spin' : ''
   }))), /*#__PURE__*/React.createElement("p", {
     className: "text-xs text-base-content/50 mb-3"
-  }, "When a member's friend joins, click \"Award 100 pts\" to credit the referrer automatically."), loading ? /*#__PURE__*/React.createElement("div", {
+  }, "When a member's friend joins, use the field below to set how many points to award the referrer, then click the Award button."), loading ? /*#__PURE__*/React.createElement("div", {
     className: "text-center py-12"
   }, /*#__PURE__*/React.createElement("span", {
     className: "loading loading-spinner loading-md"
@@ -4164,7 +4165,20 @@ function AdminView({
     className: "text-sm mt-1"
   }, "Referrals will appear here when members share their links.")) : /*#__PURE__*/React.createElement(React.Fragment, null, pendingReferrals.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "mb-2"
-  }, /*#__PURE__*/React.createElement("p", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2 mb-3",
+    style: { background: '#f9fafb', border: '1px solid #d1d5db', borderRadius: '8px', padding: '8px 12px' }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: { color: '#333333', fontSize: '12px', fontWeight: '600', whiteSpace: 'nowrap' }
+  }, "Points to award:"), /*#__PURE__*/React.createElement("input", {
+    type: "number", min: 1, max: 9999,
+    value: referralPts,
+    onChange: e => setReferralPts(Number(e.target.value)),
+    style: { background: '#ffffff', color: '#111111', border: '1px solid #d1d5db', borderRadius: '6px', padding: '4px 8px', width: '80px', fontSize: '14px', fontWeight: '700' }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: { color: '#666666', fontSize: '11px' }
+  }, "pts per referral")),
+  /*#__PURE__*/React.createElement("p", {
     className: "text-xs font-semibold text-warning uppercase tracking-wide mb-2"
   }, "\u23F3 Awaiting Award"), pendingReferrals.map((ref, i) => {
     const key = ref.referredEmail + '_' + ref.row;
@@ -4205,7 +4219,7 @@ function AdminView({
       className: "btn brand-btn btn-sm w-full mt-3",
       onClick: () => awardReferral(ref),
       disabled: awardStatus === 'updating' || awardStatus === 'done'
-    }, "Award 100 pts to ", ref.referrerName || 'referrer')));
+    }, "Award " + referralPts + " pts to ", ref.referrerName || 'referrer')));
   })), referrals.filter(r => r.status === 'awarded').length > 0 && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     className: "text-xs font-semibold text-success uppercase tracking-wide mb-2"
   }, "\u2705 Awarded"), referrals.filter(r => r.status === 'awarded').map((ref, i) => /*#__PURE__*/React.createElement("div", {
