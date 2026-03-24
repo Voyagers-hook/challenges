@@ -99,7 +99,9 @@
       await OneSignal.init({
         appId: "bb3540cc-9c0e-4fc6-b6e3-9256f7913bb1",
         notifyButton: { enable: false },
-        allowLocalhostAsSecureOrigin: true
+        allowLocalhostAsSecureOrigin: true,
+        serviceWorkerPath: "/challenges/OneSignalSDKWorker.js",
+        serviceWorkerParam: { scope: "/challenges/" }
       });
     });
   </script>
