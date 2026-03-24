@@ -116,6 +116,7 @@
           }
         }
       });
+      window._OS = OneSignal; // Store real SDK ref for use outside deferred
     });
   </script>
 </head>
@@ -3273,26 +3274,23 @@ function MenuDrawer({
     on: pushEnabled,
     onToggle: async function() {
       try {
-        if (window.OneSignal) {
+        if (window._OS) {
+          const OS = window._OS;
           if (!pushEnabled) {
             if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-              if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
-                await window.OneSignal.User.PushSubscription.optIn();
-              }
+              // Permission already granted - just opt in directly
+              await OS.User.PushSubscription.optIn();
               setPushEnabled(true);
             } else {
-              const granted = await window.OneSignal.Notifications.requestPermission();
+              // Need to request permission first - must be direct from tap
+              const granted = await OS.Notifications.requestPermission();
               if (granted) {
-                if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
-                  await window.OneSignal.User.PushSubscription.optIn();
-                }
+                await OS.User.PushSubscription.optIn();
                 setPushEnabled(true);
               }
             }
           } else {
-            if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
-              await window.OneSignal.User.PushSubscription.optOut();
-            }
+            await OS.User.PushSubscription.optOut();
             setPushEnabled(false);
           }
         }
@@ -4504,6 +4502,7 @@ function App() {
           if (m && m.email) await OneSignal.login(m.email);
         });
       } catch(e) { console.warn('OneSignal login error:', e); }
+      window._OS = OneSignal; // Save real SDK ref for use outside deferred
     },
     onAdminLogin: () => setView('admin')
   }), view === 'member' && currentMember && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {

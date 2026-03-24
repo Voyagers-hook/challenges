@@ -1,5 +1,5 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
-const CACHE = 'vh-challenges-v33';
+const CACHE = 'vh-challenges-v34';
 const SHELL = ['./manifest.json'];
 
 // On install: cache non-HTML assets, skip waiting immediately
