@@ -4502,7 +4502,6 @@ function App() {
           if (m && m.email) await OneSignal.login(m.email);
         });
       } catch(e) { console.warn('OneSignal login error:', e); }
-      window._OS = OneSignal; // Save real SDK ref for use outside deferred
     },
     onAdminLogin: () => setView('admin')
   }), view === 'member' && currentMember && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
