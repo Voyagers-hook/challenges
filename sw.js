@@ -1,4 +1,4 @@
-const CACHE = 'vh-challenges-v31';
+const CACHE = 'vh-challenges-v32';
 const SHELL = ['./manifest.json'];
 
 // On install: cache non-HTML assets, skip waiting immediately

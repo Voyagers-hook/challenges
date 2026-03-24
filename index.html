@@ -3275,12 +3275,19 @@ function MenuDrawer({
       try {
         if (window.OneSignal) {
           if (!pushEnabled) {
-            const granted = await window.OneSignal.Notifications.requestPermission();
-            if (granted) {
+            if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
               if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
                 await window.OneSignal.User.PushSubscription.optIn();
               }
               setPushEnabled(true);
+            } else {
+              const granted = await window.OneSignal.Notifications.requestPermission();
+              if (granted) {
+                if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+                  await window.OneSignal.User.PushSubscription.optIn();
+                }
+                setPushEnabled(true);
+              }
             }
           } else {
             if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
