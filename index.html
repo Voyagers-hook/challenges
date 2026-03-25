@@ -493,7 +493,8 @@ async function gasPost(data) {
 async function fetchChallengesFromGAS() {
   try {
     const data = await gasGet({
-      action: 'getChallenges'
+      action: 'getChallenges',
+      _t: Date.now()
     });
     if (data.success && data.challenges && data.challenges.length > 0) return data.challenges;
   } catch (e) {}
@@ -4439,6 +4440,21 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     fetchChallengesFromGAS().then(ch => setChallenges(ch));
+    // Auto-refresh challenges when app comes back into focus
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        fetchChallengesFromGAS().then(ch => setChallenges(ch));
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    // Also refresh every 5 minutes in case app stays open
+    const interval = setInterval(() => {
+      fetchChallengesFromGAS().then(ch => setChallenges(ch));
+    }, 5 * 60 * 1000);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisible);
+      clearInterval(interval);
+    };
   }, []);
   async function refreshChallenges(localData) {
     if (localData) { setChallenges(localData); return; }
