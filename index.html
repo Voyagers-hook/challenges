@@ -4441,18 +4441,19 @@ function App() {
   useEffect(() => {
     fetchChallengesFromGAS().then(ch => setChallenges(ch));
     // Auto-refresh challenges when app comes back into focus
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') {
-        fetchChallengesFromGAS().then(ch => setChallenges(ch));
-      }
-    };
+    const doRefresh = () => fetchChallengesFromGAS().then(ch => setChallenges(ch));
+    const onVisible = () => { if (document.visibilityState === 'visible') doRefresh(); };
+    const onPageShow = (e) => { if (e.persisted) doRefresh(); };
+    // visibilitychange works on desktop, pageshow+focus work on iOS
     document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('pageshow', onPageShow);
+    window.addEventListener('focus', doRefresh);
     // Also refresh every 5 minutes in case app stays open
-    const interval = setInterval(() => {
-      fetchChallengesFromGAS().then(ch => setChallenges(ch));
-    }, 5 * 60 * 1000);
+    const interval = setInterval(doRefresh, 5 * 60 * 1000);
     return () => {
       document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('pageshow', onPageShow);
+      window.removeEventListener('focus', doRefresh);
       clearInterval(interval);
     };
   }, []);
