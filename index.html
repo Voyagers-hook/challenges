@@ -477,7 +477,8 @@ function compressPhoto(file) {
 async function gasGet(params) {
   params._t = Date.now(); const url = GAS_URL + '?' + new URLSearchParams(params).toString();
   const r = await fetch(url, {
-    redirect: 'follow'
+    redirect: 'follow',
+    cache: 'no-store'
   });
   return r.json();
 }
