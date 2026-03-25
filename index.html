@@ -477,8 +477,7 @@ function compressPhoto(file) {
 async function gasGet(params) {
   params._t = Date.now(); const url = GAS_URL + '?' + new URLSearchParams(params).toString();
   const r = await fetch(url, {
-    redirect: 'follow',
-    cache: 'no-store'
+    redirect: 'follow'
   });
   return r.json();
 }
@@ -499,8 +498,9 @@ async function fetchChallengesFromGAS(existing) {
     });
     if (data.success && data.challenges && data.challenges.length > 0) return data.challenges;
   } catch (e) { console.warn('[challenges] fetch failed, keeping existing', e); }
-  // Never overwrite real challenges with hardcoded defaults - keep what we have
-  return existing && existing.length > 0 ? existing : [];
+  // Keep existing if we have them - only use DEFAULT_CHALLENGES on very first load
+  if (existing && existing.length > 0) return existing;
+  return DEFAULT_CHALLENGES;
 }
 async function saveChallengesToGAS(ch, isNew) {
   try {
