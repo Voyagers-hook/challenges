@@ -1,4 +1,4 @@
-const CACHE = 'vh-challenges-v39';
+const CACHE = 'vh-challenges-v40';
 const SHELL = ['./manifest.json'];
 
 // On install: cache non-HTML assets, skip waiting immediately
@@ -20,8 +20,8 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
 
-  // Never cache GAS requests
-  if (url.hostname.includes('script.google.com')) return;
+  // Never cache GAS requests (includes redirect target googleusercontent.com)
+  if (url.hostname.includes('script.google.com') || url.hostname.includes('googleusercontent.com')) return;
 
   // HTML files: NETWORK FIRST — always get fresh content
   if (url.pathname.endsWith('.html') || url.pathname.endsWith('/') || url.pathname === '/challenges' || url.pathname === '/challenges/') {
