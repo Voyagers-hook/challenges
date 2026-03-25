@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="VH Challenges">
   <meta name="theme-color" content="#1a1816">
-  <title>Hook Club Members Clubhouse v25</title>
+  <title>Hook Club Members Clubhouse v45</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -482,13 +482,14 @@ async function gasGet(params) {
   return r.json();
 }
 async function gasPost(data) {
-      var url = GAS_URL + '?action=' + encodeURIComponent(data.action) + '&payload=' + encodeURIComponent(JSON.stringify(data));
-      console.log('[gasPost] URL length:', url.length, 'action:', data.action);
-      var r = await fetch(url, { redirect: 'follow' });
-      if (!r.ok) { console.error('[gasPost] HTTP error:', r.status); throw new Error('HTTP ' + r.status); }
-      var json = await r.json();
-      console.log('[gasPost] Response:', json);
-      return json;
+      var r = await fetch(GAS_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data)
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
     }
 async function fetchChallengesFromGAS(existing) {
   try {
