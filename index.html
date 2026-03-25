@@ -496,7 +496,7 @@ async function fetchChallengesFromGAS(existing) {
       action: 'getChallenges',
       _t: Date.now()
     });
-    if (data.success && data.challenges && data.challenges.length > 0) return data.challenges;
+    if (data.challenges && data.challenges.length > 0) return data.challenges;
   } catch (e) { console.warn('[challenges] fetch failed, keeping existing', e); }
   // Keep existing if we have them - only use DEFAULT_CHALLENGES on very first load
   if (existing && existing.length > 0) return existing;
