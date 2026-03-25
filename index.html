@@ -490,15 +490,16 @@ async function gasPost(data) {
       console.log('[gasPost] Response:', json);
       return json;
     }
-async function fetchChallengesFromGAS() {
+async function fetchChallengesFromGAS(existing) {
   try {
     const data = await gasGet({
       action: 'getChallenges',
       _t: Date.now()
     });
     if (data.success && data.challenges && data.challenges.length > 0) return data.challenges;
-  } catch (e) {}
-  return DEFAULT_CHALLENGES;
+  } catch (e) { console.warn('[challenges] fetch failed, keeping existing', e); }
+  // Never overwrite real challenges with hardcoded defaults - keep what we have
+  return existing && existing.length > 0 ? existing : [];
 }
 async function saveChallengesToGAS(ch, isNew) {
   try {
@@ -4441,7 +4442,7 @@ function App() {
   useEffect(() => {
     fetchChallengesFromGAS().then(ch => setChallenges(ch));
     // Auto-refresh challenges when app comes back into focus
-    const doRefresh = () => fetchChallengesFromGAS().then(ch => setChallenges(ch));
+    const doRefresh = () => fetchChallengesFromGAS(challenges).then(ch => { if (ch && ch.length > 0) setChallenges(ch); });
     const onVisible = () => { if (document.visibilityState === 'visible') doRefresh(); };
     const onPageShow = (e) => { if (e.persisted) doRefresh(); };
     // visibilitychange works on desktop, pageshow+focus work on iOS
@@ -4459,7 +4460,7 @@ function App() {
   }, []);
   async function refreshChallenges(localData) {
     if (localData) { setChallenges(localData); return; }
-    setChallenges(await fetchChallengesFromGAS());
+    const fresh = await fetchChallengesFromGAS(challenges); if (fresh && fresh.length > 0) setChallenges(fresh);
   }
   function handleLogout() {
     setCurrentMember(null);
